@@ -1,0 +1,42 @@
+{
+  "mqtt": {
+    "port": 1883,
+    "brokerPort": 1883
+  },
+  "http": {
+    "port": 3000
+  },
+  "websocket": {
+    "port": 3001
+  },
+  "database": {
+    "path": "./data/warehouse.db"
+  },
+  "sensors": {
+    "threshold": {
+      "temperature": {
+        "min": 5,
+        "max": 35
+      },
+      "humidity": {
+        "min": 30,
+        "max": 80
+      },
+      "co": {
+        "max": 9
+      },
+      "co2": {
+        "max": 1000
+      },
+      "formaldehyde": {
+        "max": 0.1
+      },
+      "waterLevel": {
+        "max": 80
+      },
+      "tilt": {
+        "max": 15
+      }
+    }
+  }
+}

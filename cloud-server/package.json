@@ -1,0 +1,43 @@
+{
+  "name": "warehouse-monitor-server",
+  "version": "2.0.0",
+  "description": "地下仓库环境监测系统 - 双存储版本 (SQLite + Supabase)",
+  "main": "server-dual-storage.js",
+  "scripts": {
+    "start": "node server-dual-storage.js",
+    "dev": "nodemon server-dual-storage.js",
+    "test": "node test-dual-storage.js",
+    "monitor": "node sync-monitor.js monitor",
+    "init": "bash init-dual-storage.sh"
+  },
+  "keywords": [
+    "warehouse",
+    "iot",
+    "mqtt",
+    "supabase",
+    "sqlite",
+    "dual-storage"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mqtt": "^5.3.4",
+    "ws": "^8.16.0",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2",
+    "better-sqlite3": "^9.4.3",
+    "@supabase/supabase-js": "^2.39.3",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  },
+  "engines": {
+    "node": ">=14.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/warehouse-monitor"
+  }
+}

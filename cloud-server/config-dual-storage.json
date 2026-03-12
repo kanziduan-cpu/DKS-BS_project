@@ -1,0 +1,43 @@
+{
+  "server": {
+    "port": 3000,
+    "websocketPort": 3001
+  },
+  "mqtt": {
+    "broker": {
+      "host": "0.0.0.0",
+      "port": 1883,
+      "protocol": "mqtt"
+    },
+    "topics": {
+      "sensorData": "warehouse/+/sensor/data",
+      "deviceStatus": "warehouse/+/device/status",
+      "commands": "warehouse/+/command",
+      "alarms": "warehouse/+/alarm"
+    }
+  },
+  "storage": {
+    "mode": "dual",
+    "description": "dual: SQLite + Supabase (双存储), local: 仅 SQLite, cloud: 仅 Supabase"
+  },
+  "supabase": {
+    "url": "YOUR_SUPABASE_URL_HERE",
+    "key": "YOUR_SUPABASE_ANON_KEY_HERE",
+    "description": "在 .env 文件中配置，不要提交到版本控制"
+  },
+  "dataRetention": {
+    "daysToKeep": 30,
+    "cleanupIntervalHours": 24
+  },
+  "alerts": {
+    "thresholds": {
+      "temperature": { "min": -10, "max": 40 },
+      "humidity": { "min": 10, "max": 90 },
+      "co": { "max": 50 },
+      "co2": { "max": 1000 },
+      "formaldehyde": { "max": 0.1 },
+      "waterLevel": { "max": 80 },
+      "vibration": { "max": 1 }
+    }
+  }
+}

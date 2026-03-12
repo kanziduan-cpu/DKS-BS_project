@@ -1,0 +1,87 @@
+# ===== 通用 =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# ===== 环境变量和配置 =====
+.env
+.env.local
+.env.production
+*.secret
+
+# ===== 数据库 =====
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+data/
+backup/
+
+# ===== 日志 =====
+logs/
+*.log
+npm-debug.log*
+
+# ===== IDE =====
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ===== 操作系统 =====
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ===== 测试覆盖率 =====
+coverage/
+.nyc_output/
+
+# ===== 临时文件 =====
+tmp/
+temp/
+*.tmp
+*.temp
+
+# ===== PM2 =====
+.pm2/
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# ===== Android =====
+app-android/.gradle/
+app-android/app/build/
+app-android/local.properties
+app-android/.externalNativeBuild
+app-android/.cxx/
+app-android/*.iml
+app-android/.idea/
+app-android/build/
+app-android/captures/
+
+# ===== 临时文件和缓存 =====
+app-android/apk/
+app-android/app/release/
+app-android/app/debug/
+
+# ===== 云服务器临时文件 =====
+ecs_instance_list_*.csv
+*.html
+!README.html
+
+# ===== 备份文件 =====
+*_backup.*
+*.bak
+*.old

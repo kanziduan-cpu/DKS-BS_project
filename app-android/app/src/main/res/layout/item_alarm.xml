@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_alarm"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_alarm_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="温度异常"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/tv_alarm_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2026-03-12 10:00:00"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"
+                android:alpha="0.8" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_alarm_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="温度超过上限阈值"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:alpha="0.9"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/btn_resolve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="标记已解决"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:background="@android:color/white"
+            android:padding="8dp 16dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
