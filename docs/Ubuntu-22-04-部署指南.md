@@ -93,12 +93,9 @@ cd /opt/warehouse-monitor
 # 进入项目目录
 cd C:\Users\TSBJ\Documents\BS_project
 
-# 上传文件到服务器
-scp -r cloud-server/* root@你的服务器IP:/opt/warehouse-monitor/
-
 # 如果使用密钥认证
-scp -r cloud-server/* root@你的服务器IP:/opt/warehouse-monitor/
-```
+
+scp -r cloud-server root@120.55.113.226:/opt/warehouse-monitor
 
 **或者在服务器上直接下载**（如果有 Git）：
 
