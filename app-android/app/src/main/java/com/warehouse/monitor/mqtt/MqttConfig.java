@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class MqttConfig {
     // 保持原样，tcp:// 在 Paho 库的 URI 构建中通常会被自动处理，但建议用 mqtt:// 更标准
-    public static final String SERVER_HOST = "43.99.24.178";
+    public static final String SERVER_HOST = "120.55.113.226";
     public static final int SERVER_PORT = 1883;
     
     // 毕设专用账号，简单好记
