@@ -14,29 +14,21 @@
         android:padding="16dp"
         android:gravity="center_vertical">
 
-        <View
-            android:id="@+id/statusIndicator"
-            android:layout_width="4dp"
-            android:layout_height="40dp"
-            android:background="@color/alarm_red" />
-
         <ImageView
-            android:id="@+id/alarmIcon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="12dp"
-            android:src="@drawable/ic_launcher"
-            android:contentDescription="报警图标" />
+            android:id="@+id/deviceIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_launcher" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="16dp"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/alarmTitle"
+                android:id="@+id/deviceName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -44,29 +36,24 @@
                 android:textColor="@color/text_primary" />
 
             <TextView
-                android:id="@+id/alarmMessage"
+                android:id="@+id/deviceParams"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="2dp" />
-
-            <TextView
-                android:id="@+id/alarmTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textColor="@color/text_hint"
-                android:layout_marginTop="4dp" />
+                android:textColor="@color/text_secondary" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/alarmStatus"
+        <View
+            android:id="@+id/statusIndicator"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/ic_launcher" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/deviceSwitch"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="@color/alarm_red"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

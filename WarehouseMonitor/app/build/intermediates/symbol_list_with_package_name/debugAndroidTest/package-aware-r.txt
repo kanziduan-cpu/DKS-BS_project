@@ -1,3 +1,0 @@
-com.warehouse.monitor.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme
