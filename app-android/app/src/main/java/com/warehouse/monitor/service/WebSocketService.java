@@ -2,7 +2,9 @@ package com.warehouse.monitor.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -65,7 +67,7 @@ public class WebSocketService extends Service {
                     notifyDisconnected();
                     
                     // 自动重连
-                    new Handler().postDelayed(() -> {
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
                         if (!isConnected) {
                             connectWebSocket();
                         }

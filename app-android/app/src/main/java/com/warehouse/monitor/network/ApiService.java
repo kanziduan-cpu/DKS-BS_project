@@ -1,13 +1,15 @@
 package com.warehouse.monitor.network;
 
-import com.warehouse.monitor.Config;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.warehouse.monitor.model.Alarm;
-import com.warehouse.monitor.model.CommandRequest;
-import com.warehouse.monitor.model.DeviceStatus;
-import com.warehouse.monitor.model.SensorData;
+import com.warehouse.monitor.model.Device;
+import com.warehouse.monitor.model.EnvironmentData;
+import com.warehouse.monitor.model.User;
+import com.warehouse.monitor.model.Warehouse;
 
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -16,56 +18,208 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.PUT;
-import retrofit2.http.Path;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiService {
-    
-    HttpLoggingInterceptor logging = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
-    
+    // 后端 API 端口: 8001
+    String BASE_URL = "http://120.55.113.226:8001/api/";
+
     OkHttpClient client = new OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .connectTimeout(Config.CONNECT_TIMEOUT, java.util.concurrent.TimeUnit.SECONDS)
-            .readTimeout(Config.READ_TIMEOUT, java.util.concurrent.TimeUnit.SECONDS)
-            .writeTimeout(Config.WRITE_TIMEOUT, java.util.concurrent.TimeUnit.SECONDS)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .build();
+
+    Gson gson = new GsonBuilder()
+            .setLenient()
+            .create();
 
     Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(Config.SERVER_BASE_URL)
+            .baseUrl(BASE_URL)
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
 
-    // 获取最新传感器数据
-    @GET("/sensor/latest/{deviceId}")
-    Call<SensorData> getLatestSensorData(@Path("deviceId") String deviceId);
+    ApiService apiService = retrofit.create(ApiService.class);
 
-    // 获取历史传感器数据
-    @GET("/sensor/history/{deviceId}")
-    Call<List<SensorData>> getSensorHistory(@Path("deviceId") String deviceId, 
-                                            @Query("limit") int limit);
+    // 设备注册接口
+    @POST("register")
+    Call<DeviceRegisterResponse> registerDevice(@Body DeviceRegisterRequest request);
 
-    // 获取指定时间范围数据
-    @GET("/sensor/range/{deviceId}")
-    Call<List<SensorData>> getSensorRange(@Path("deviceId") String deviceId,
-                                          @Query("start") String start,
-                                          @Query("end") String end);
+    // Auth endpoints
+    @POST("login")
+    Call<LoginResponse> login(@Body LoginRequest request);
 
-    // 获取设备状态
-    @GET("/device/status/{deviceId}")
-    Call<DeviceStatus> getDeviceStatus(@Path("deviceId") String deviceId);
+    @POST("register")
+    Call<ApiResponse> register(@Body RegisterRequest request);
 
-    // 发送控制指令
-    @POST("/control/command")
-    Call<Map<String, Object>> sendCommand(@Body CommandRequest command);
+    @POST("auth/logout")
+    Call<ApiResponse> logout(@Body LogoutRequest request);
 
-    // 获取报警记录
-    @GET("/alarms/{deviceId}")
-    Call<List<Alarm>> getAlarms(@Path("deviceId") String deviceId,
-                                @Query("limit") int limit);
+    // Warehouse endpoints
+    @GET("warehouse/list")
+    Call<List<Warehouse>> getWarehouses(@Query("userId") String userId);
 
-    // 标记报警已解决
-    @PUT("/alarms/{id}/resolve")
-    Call<Map<String, Object>> resolveAlarm(@Path("id") int id);
+    @POST("warehouse/bind")
+    Call<ApiResponse> bindWarehouse(@Body BindWarehouseRequest request);
+
+    @POST("warehouse/unbind")
+    Call<ApiResponse> unbindWarehouse(@Body UnbindWarehouseRequest request);
+
+    // Device endpoints
+    @GET("device/list")
+    Call<List<Device>> getDevices(@Query("warehouseId") String warehouseId);
+
+    @POST("device/control")
+    Call<ApiResponse> controlDevice(@Body ControlDeviceRequest request);
+
+    @GET("device/status")
+    Call<Device> getDeviceStatus(@Query("deviceId") String deviceId);
+
+    // Environment data endpoints
+    @GET("environment/current")
+    Call<EnvironmentData> getCurrentData(@Query("warehouseId") String warehouseId);
+
+    @GET("environment/history")
+    Call<List<EnvironmentData>> getHistoryData(
+            @Query("warehouseId") String warehouseId,
+            @Query("startTime") long startTime,
+            @Query("endTime") long endTime,
+            @Query("paramType") String paramType
+    );
+
+    // Alarm endpoints
+    @GET("alarm/list")
+    Call<List<Alarm>> getAlarms(@Query("warehouseId") String warehouseId);
+
+    @GET("alarm/unread")
+    Call<Integer> getUnreadAlarmCount(@Query("warehouseId") String warehouseId);
+
+    @POST("alarm/read")
+    Call<ApiResponse> markAlarmRead(@Body MarkAlarmReadRequest request);
+
+    @POST("alarm/read-all")
+    Call<ApiResponse> markAllAlarmsRead(@Query("warehouseId") String warehouseId);
+
+    // Request/Response classes
+    // 设备注册请求
+    class DeviceRegisterRequest {
+        String username;
+        String device_id;
+        String device_type;
+
+        public DeviceRegisterRequest(String username, String device_id, String device_type) {
+            this.username = username;
+            this.device_id = device_id;
+            this.device_type = device_type;
+        }
+    }
+
+    // 设备注册响应
+    class DeviceRegisterResponse {
+        int code;
+        String message;
+        DeviceRegisterData data;
+    }
+
+    class DeviceRegisterData {
+        String mqtt_username;
+        String mqtt_password;
+        String client_id;
+    }
+
+    class LoginRequest {
+        String username;
+        String password;
+
+        public LoginRequest(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+    }
+
+    class LoginResponse {
+        int code;
+        String message;
+        LoginData data;
+    }
+
+    class LoginData {
+        String token;
+        String user_id;
+        long expire_at;
+    }
+
+    class RegisterRequest {
+        String username;
+        String password;
+        String nickname;
+        String phone;
+        String email;
+
+        public RegisterRequest(String username, String password, String nickname, String phone, String email) {
+            this.username = username;
+            this.password = password;
+            this.nickname = nickname;
+            this.phone = phone;
+            this.email = email;
+        }
+    }
+
+    class LogoutRequest {
+        String token;
+
+        public LogoutRequest(String token) {
+            this.token = token;
+        }
+    }
+
+    class BindWarehouseRequest {
+        String userId;
+        String warehouseId;
+        String accessCode;
+
+        public BindWarehouseRequest(String userId, String warehouseId, String accessCode) {
+            this.userId = userId;
+            this.warehouseId = warehouseId;
+            this.accessCode = accessCode;
+        }
+    }
+
+    class UnbindWarehouseRequest {
+        String userId;
+        String warehouseId;
+
+        public UnbindWarehouseRequest(String userId, String warehouseId) {
+            this.userId = userId;
+            this.warehouseId = warehouseId;
+        }
+    }
+
+    class ControlDeviceRequest {
+        String deviceId;
+        String action; // "turn_on", "turn_off", "set_speed"
+        String value;
+
+        public ControlDeviceRequest(String deviceId, String action, String value) {
+            this.deviceId = deviceId;
+            this.action = action;
+            this.value = value;
+        }
+    }
+
+    class MarkAlarmReadRequest {
+        String alarmId;
+
+        public MarkAlarmReadRequest(String alarmId) {
+            this.alarmId = alarmId;
+        }
+    }
+
+    class ApiResponse {
+        boolean success;
+        String message;
+    }
 }

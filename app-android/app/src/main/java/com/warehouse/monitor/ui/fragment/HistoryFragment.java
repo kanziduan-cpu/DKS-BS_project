@@ -15,6 +15,7 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.warehouse.monitor.Config;
 import com.warehouse.monitor.R;
 import com.warehouse.monitor.model.SensorData;
@@ -63,19 +64,19 @@ public class HistoryFragment extends Fragment {
         chart.setPinchZoom(true);
         chart.setDrawGridBackground(false);
         
-        LineDataSet dataSetTemp = new LineDataSet(null, "温度 (°C)");
+        LineDataSet dataSetTemp = new LineDataSet(new ArrayList<>(), "温度 (°C)");
         dataSetTemp.setColor(0xFFFF5722);
         dataSetTemp.setLineWidth(2f);
         dataSetTemp.setCircleRadius(3f);
         dataSetTemp.setValueTextSize(8f);
         
-        LineDataSet dataSetHumidity = new LineDataSet(null, "湿度 (%)");
+        LineDataSet dataSetHumidity = new LineDataSet(new ArrayList<>(), "湿度 (%)");
         dataSetHumidity.setColor(0xFF2196F3);
         dataSetHumidity.setLineWidth(2f);
         dataSetHumidity.setCircleRadius(3f);
         dataSetHumidity.setValueTextSize(8f);
         
-        List<LineDataSet> dataSets = new ArrayList<>();
+        List<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(dataSetTemp);
         dataSets.add(dataSetHumidity);
         

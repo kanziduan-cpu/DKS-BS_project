@@ -2,7 +2,7 @@ package com.warehouse.monitor;
 
 public class Config {
     // 服务器配置
-    public static final String SERVER_BASE_URL = "http://192.168.1.100:3000/api";
+    public static final String SERVER_BASE_URL = "http://192.168.1.100:3000/api/";
     public static final String WEBSOCKET_URL = "ws://192.168.1.100:3001";
     
     // 设备ID（根据实际设备修改）
