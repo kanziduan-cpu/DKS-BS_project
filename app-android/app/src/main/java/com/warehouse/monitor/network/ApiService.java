@@ -22,8 +22,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiService {
-    // 后端 API 端口: 8001
-    String BASE_URL = "http://120.55.113.226:8001/api/";
+    // 后端 API 端口: 3001
+    String BASE_URL = "http://120.55.113.226:3001/api/";
 
     OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
