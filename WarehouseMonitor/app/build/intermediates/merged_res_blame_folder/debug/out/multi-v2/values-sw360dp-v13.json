@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.warehouse.monitor.app-mergeDebugResources-41:/values-sw360dp-v13/values-sw360dp-v13.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\TSBJ\\.gradle\\caches\\transforms-3\\66ca316ee15fb63fce116cbe32e64377\\transformed\\preference-1.2.0\\res\\values-sw360dp-v13\\values-sw360dp-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "71",
+                        "endOffsets": "122"
+                    }
+                }
+            ]
+        }
+    ]
+}

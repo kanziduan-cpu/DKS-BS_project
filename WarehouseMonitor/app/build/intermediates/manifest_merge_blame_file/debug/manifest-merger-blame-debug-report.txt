@@ -1,0 +1,283 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.warehouse.monitor"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="33" />
+10
+11    <!-- Network Permissions -->
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:6:5-67
+12-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:6:22-64
+13    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+13-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:7:5-79
+13-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:7:22-76
+14    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+14-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:8:5-76
+14-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:8:22-73
+15    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+15-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:9:5-76
+15-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:9:22-73
+16    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+16-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:10:5-79
+16-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:10:22-76
+17
+18    <!-- Location Permissions -->
+19    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+19-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:13:5-79
+19-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:13:22-76
+20    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+20-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:14:5-81
+20-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:14:22-78
+21    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+21-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:15:5-85
+21-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:15:22-82
+22
+23    <!-- Storage Permissions -->
+24    <uses-permission
+24-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:18:5-19:38
+25        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+25-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:18:22-78
+26        android:maxSdkVersion="28" />
+26-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:19:9-35
+27    <uses-permission
+27-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:20:5-21:38
+28        android:name="android.permission.READ_EXTERNAL_STORAGE"
+28-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:20:22-77
+29        android:maxSdkVersion="32" />
+29-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:21:9-35
+30
+31    <!-- Notification Permissions -->
+32    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+32-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:24:5-77
+32-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:24:22-74
+33    <uses-permission android:name="android.permission.VIBRATE" />
+33-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:25:5-66
+33-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:25:22-63
+34    <uses-permission android:name="android.permission.WAKE_LOCK" />
+34-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:26:5-68
+34-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:26:22-65
+35
+36    <!-- MQTT Service -->
+37    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+37-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:29:5-81
+37-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:29:22-78
+38    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+38-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:30:5-77
+38-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:30:22-74
+39    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+39-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:31:5-87
+39-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:31:22-84
+40
+41    <permission
+41-->[androidx.core:core:1.10.1] C:\Users\TSBJ\.gradle\caches\transforms-3\8bbff6c3d283c20e01d916d7ea33e027\transformed\core-1.10.1\AndroidManifest.xml:22:5-24:47
+42        android:name="com.warehouse.monitor.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+42-->[androidx.core:core:1.10.1] C:\Users\TSBJ\.gradle\caches\transforms-3\8bbff6c3d283c20e01d916d7ea33e027\transformed\core-1.10.1\AndroidManifest.xml:23:9-81
+43        android:protectionLevel="signature" />
+43-->[androidx.core:core:1.10.1] C:\Users\TSBJ\.gradle\caches\transforms-3\8bbff6c3d283c20e01d916d7ea33e027\transformed\core-1.10.1\AndroidManifest.xml:24:9-44
+44
+45    <uses-permission android:name="com.warehouse.monitor.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+45-->[androidx.core:core:1.10.1] C:\Users\TSBJ\.gradle\caches\transforms-3\8bbff6c3d283c20e01d916d7ea33e027\transformed\core-1.10.1\AndroidManifest.xml:26:5-97
+45-->[androidx.core:core:1.10.1] C:\Users\TSBJ\.gradle\caches\transforms-3\8bbff6c3d283c20e01d916d7ea33e027\transformed\core-1.10.1\AndroidManifest.xml:26:22-94
+46
+47    <application
+47-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:33:5-117:19
+48        android:allowBackup="true"
+48-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:34:9-35
+49        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+49-->[androidx.core:core:1.10.1] C:\Users\TSBJ\.gradle\caches\transforms-3\8bbff6c3d283c20e01d916d7ea33e027\transformed\core-1.10.1\AndroidManifest.xml:28:18-86
+50        android:dataExtractionRules="@xml/data_extraction_rules"
+50-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:35:9-65
+51        android:debuggable="true"
+52        android:extractNativeLibs="false"
+53        android:fullBackupContent="@xml/backup_rules"
+53-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:36:9-54
+54        android:icon="@drawable/ic_app_logo"
+54-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:37:9-45
+55        android:label="@string/app_name"
+55-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:38:9-41
+56        android:networkSecurityConfig="@xml/network_security_config"
+56-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:42:9-69
+57        android:requestLegacyExternalStorage="true"
+57-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:44:9-52
+58        android:roundIcon="@drawable/ic_app_logo"
+58-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:39:9-50
+59        android:supportsRtl="true"
+59-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:40:9-35
+60        android:testOnly="true"
+61        android:theme="@style/Theme.WarehouseMonitor"
+61-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:41:9-54
+62        android:usesCleartextTraffic="true" >
+62-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:43:9-44
+63
+64        <!-- Splash Activity - Launcher -->
+65        <activity
+65-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:48:9-57:20
+66            android:name="com.warehouse.monitor.ui.SplashActivity"
+66-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:49:13-46
+67            android:exported="true"
+67-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:50:13-36
+68            android:screenOrientation="portrait"
+68-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:51:13-49
+69            android:theme="@style/Theme.WarehouseMonitor.NoActionBar" >
+69-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:52:13-70
+70            <intent-filter>
+70-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:53:13-56:29
+71                <action android:name="android.intent.action.MAIN" />
+71-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:54:17-69
+71-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:54:25-66
+72
+73                <category android:name="android.intent.category.LAUNCHER" />
+73-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:55:17-77
+73-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:55:27-74
+74            </intent-filter>
+75        </activity>
+76
+77        <!-- Main Activity -->
+78        <activity
+78-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:60:9-64:61
+79            android:name="com.warehouse.monitor.ui.MainActivity"
+79-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:61:13-44
+80            android:exported="false"
+80-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:62:13-37
+81            android:screenOrientation="portrait"
+81-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:63:13-49
+82            android:theme="@style/Theme.WarehouseMonitor" />
+82-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:64:13-58
+83
+84        <!-- Login Activity -->
+85        <activity
+85-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:67:9-71:73
+86            android:name="com.warehouse.monitor.ui.LoginActivity"
+86-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:68:13-45
+87            android:exported="false"
+87-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:69:13-37
+88            android:screenOrientation="portrait"
+88-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:70:13-49
+89            android:theme="@style/Theme.WarehouseMonitor.NoActionBar" />
+89-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:71:13-70
+90
+91        <!-- Register Activity -->
+92        <activity
+92-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:74:9-78:73
+93            android:name="com.warehouse.monitor.ui.RegisterActivity"
+93-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:75:13-48
+94            android:exported="false"
+94-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:76:13-37
+95            android:screenOrientation="portrait"
+95-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:77:13-49
+96            android:theme="@style/Theme.WarehouseMonitor.NoActionBar" />
+96-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:78:13-70
+97
+98        <!-- Account Security Activity -->
+99        <activity
+99-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:81:9-85:36
+100            android:name="com.warehouse.monitor.ui.AccountSecurityActivity"
+100-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:82:13-55
+101            android:exported="false"
+101-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:83:13-37
+102            android:label="账号安全"
+102-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:85:13-33
+103            android:screenOrientation="portrait" />
+103-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:84:13-49
+104
+105        <!-- Warehouse Management Activity -->
+106        <activity
+106-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:88:9-92:36
+107            android:name="com.warehouse.monitor.ui.WarehouseManageActivity"
+107-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:89:13-55
+108            android:exported="false"
+108-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:90:13-37
+109            android:label="仓库管理"
+109-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:92:13-33
+110            android:screenOrientation="portrait" />
+110-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:91:13-49
+111
+112        <!-- Settings Activity -->
+113        <activity
+113-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:95:9-98:52
+114            android:name="com.warehouse.monitor.ui.SettingsActivity"
+114-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:96:13-48
+115            android:exported="false"
+115-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:97:13-37
+116            android:screenOrientation="portrait" />
+116-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:98:13-49
+117
+118        <!-- Device Management Activity -->
+119        <activity
+119-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:101:9-105:36
+120            android:name="com.warehouse.monitor.ui.DeviceManageActivity"
+120-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:102:13-52
+121            android:exported="false"
+121-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:103:13-37
+122            android:label="设备管理"
+122-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:105:13-33
+123            android:screenOrientation="portrait" />
+123-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:104:13-49
+124
+125        <!-- MQTT Service -->
+126        <service android:name="org.eclipse.paho.android.service.MqttService" />
+126-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:108:9-80
+126-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:108:18-77
+127
+128        <!-- Custom MQTT Service -->
+129        <service
+129-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:111:9-115:56
+130            android:name="com.warehouse.monitor.service.MqttService"
+130-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:112:13-48
+131            android:enabled="true"
+131-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:113:13-35
+132            android:exported="false"
+132-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:114:13-37
+133            android:foregroundServiceType="dataSync" />
+133-->C:\Users\TSBJ\Documents\WarehouseMonitor\app\src\main\AndroidManifest.xml:115:13-53
+134
+135        <provider
+135-->[androidx.emoji2:emoji2:1.2.0] C:\Users\TSBJ\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+136            android:name="androidx.startup.InitializationProvider"
+136-->[androidx.emoji2:emoji2:1.2.0] C:\Users\TSBJ\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+137            android:authorities="com.warehouse.monitor.androidx-startup"
+137-->[androidx.emoji2:emoji2:1.2.0] C:\Users\TSBJ\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+138            android:exported="false" >
+138-->[androidx.emoji2:emoji2:1.2.0] C:\Users\TSBJ\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+139            <meta-data
+139-->[androidx.emoji2:emoji2:1.2.0] C:\Users\TSBJ\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+140                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+140-->[androidx.emoji2:emoji2:1.2.0] C:\Users\TSBJ\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+141                android:value="androidx.startup" />
+141-->[androidx.emoji2:emoji2:1.2.0] C:\Users\TSBJ\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+142            <meta-data
+142-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\TSBJ\.gradle\caches\transforms-3\985a628a1f5b5ddc7202e86f547851a5\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+143                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+143-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\TSBJ\.gradle\caches\transforms-3\985a628a1f5b5ddc7202e86f547851a5\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+144                android:value="androidx.startup" />
+144-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\TSBJ\.gradle\caches\transforms-3\985a628a1f5b5ddc7202e86f547851a5\transformed\jetified-lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+145        </provider>
+146
+147        <uses-library
+147-->[androidx.window:window:1.0.0] C:\Users\TSBJ\.gradle\caches\transforms-3\59cf89d76baf82c9c8f87ebdd2d957a4\transformed\jetified-window-1.0.0\AndroidManifest.xml:25:9-27:40
+148            android:name="androidx.window.extensions"
+148-->[androidx.window:window:1.0.0] C:\Users\TSBJ\.gradle\caches\transforms-3\59cf89d76baf82c9c8f87ebdd2d957a4\transformed\jetified-window-1.0.0\AndroidManifest.xml:26:13-54
+149            android:required="false" />
+149-->[androidx.window:window:1.0.0] C:\Users\TSBJ\.gradle\caches\transforms-3\59cf89d76baf82c9c8f87ebdd2d957a4\transformed\jetified-window-1.0.0\AndroidManifest.xml:27:13-37
+150        <uses-library
+150-->[androidx.window:window:1.0.0] C:\Users\TSBJ\.gradle\caches\transforms-3\59cf89d76baf82c9c8f87ebdd2d957a4\transformed\jetified-window-1.0.0\AndroidManifest.xml:28:9-30:40
+151            android:name="androidx.window.sidecar"
+151-->[androidx.window:window:1.0.0] C:\Users\TSBJ\.gradle\caches\transforms-3\59cf89d76baf82c9c8f87ebdd2d957a4\transformed\jetified-window-1.0.0\AndroidManifest.xml:29:13-51
+152            android:required="false" />
+152-->[androidx.window:window:1.0.0] C:\Users\TSBJ\.gradle\caches\transforms-3\59cf89d76baf82c9c8f87ebdd2d957a4\transformed\jetified-window-1.0.0\AndroidManifest.xml:30:13-37
+153
+154        <service
+154-->[androidx.room:room-runtime:2.5.2] C:\Users\TSBJ\.gradle\caches\transforms-3\7afdc504cafaecf29424301ca1f879cf\transformed\room-runtime-2.5.2\AndroidManifest.xml:24:9-28:63
+155            android:name="androidx.room.MultiInstanceInvalidationService"
+155-->[androidx.room:room-runtime:2.5.2] C:\Users\TSBJ\.gradle\caches\transforms-3\7afdc504cafaecf29424301ca1f879cf\transformed\room-runtime-2.5.2\AndroidManifest.xml:25:13-74
+156            android:directBootAware="true"
+156-->[androidx.room:room-runtime:2.5.2] C:\Users\TSBJ\.gradle\caches\transforms-3\7afdc504cafaecf29424301ca1f879cf\transformed\room-runtime-2.5.2\AndroidManifest.xml:26:13-43
+157            android:exported="false" />
+157-->[androidx.room:room-runtime:2.5.2] C:\Users\TSBJ\.gradle\caches\transforms-3\7afdc504cafaecf29424301ca1f879cf\transformed\room-runtime-2.5.2\AndroidManifest.xml:27:13-37
+158    </application>
+159
+160</manifest>

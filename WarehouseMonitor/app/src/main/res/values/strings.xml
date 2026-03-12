@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">仓库监控</string>
+    
+    <!-- Bottom Navigation Tabs -->
+    <string name="nav_home">首页</string>
+    <string name="nav_devices">设备</string>
+    <string name="nav_alarms">报警</string>
+    <string name="nav_profile">我的</string>
+    
+    <!-- Common -->
+    <string name="loading">加载中...</string>
+    <string name="refresh">刷新</string>
+    <string name="settings">设置</string>
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="save">保存</string>
+    <string name="delete">删除</string>
+    <string name="edit">编辑</string>
+    <string name="done">完成</string>
+    <string name="back">返回</string>
+    
+    <!-- Login -->
+    <string name="login_title">登录</string>
+    <string name="register_title">注册</string>
+    <string name="username_hint">请输入用户名</string>
+    <string name="password_hint">请输入密码</string>
+    <string name="login_btn">登录</string>
+    <string name="register_btn">注册</string>
+    <string name="forget_password">忘记密码?</string>
+    <string name="remember_password">记住密码</string>
+    <string name="no_account">还没有账号?</string>
+    <string name="create_account">立即注册</string>
+    <string name="has_account">已有账号?</string>
+    <string name="go_login">立即登录</string>
+    
+    <!-- Home -->
+    <string name="realtime_data">实时数据</string>
+    <string name="temperature">温度</string>
+    <string name="humidity">湿度</string>
+    <string name="ammonia">氨气</string>
+    <string name="pm25">PM2.5</string>
+    <string name="sulfides">硫化物</string>
+    <string name="benzene">苯气</string>
+    <string name="formaldehyde">甲醛</string>
+    <string name="co">一氧化碳</string>
+    <string name="co2">二氧化碳</string>
+    <string name="aqi">空气质量指数</string>
+    <string name="device_status">设备状态</string>
+    <string name="online">在线</string>
+    <string name="offline">离线</string>
+    <string name="normal">正常</string>
+    <string name="abnormal">异常</string>
+    <string name="home_title_prefix">智慧仓库监控</string>
+    <string name="mqtt_connected_suffix"> (已连接)</string>
+    <string name="mqtt_connecting_suffix"> (连接中...)</string>
+
+    <!-- Status Labels -->
+    <string name="status_low">偏低</string>
+    <string name="status_high">偏高</string>
+    <string name="status_dry">干燥</string>
+    <string name="status_wet">潮湿</string>
+    <string name="status_comfort">舒适</string>
+    <string name="status_excellent">优</string>
+    <string name="status_good">良</string>
+    <string name="status_notice">注意</string>
+    <string name="status_light">轻度</string>
+    <string name="status_pollution">污染</string>
+
+    <!-- Data Detail -->
+    <string name="data_history">历史数据</string>
+    <string name="data_chart">数据图表</string>
+    <string name="last_24h">近24小时</string>
+    <string name="last_7days">近7天</string>
+    <string name="custom_time">自定义时间</string>
+    
+    <!-- Devices -->
+    <string name="ventilation_fan">通风扇</string>
+    <string name="dehumidifier">除湿机</string>
+    <string name="exhaust_device">排气装置</string>
+    <string name="device_control">设备控制</string>
+    <string name="turn_on">开启</string>
+    <string name="turn_off">关闭</string>
+    <string name="speed">风速</string>
+    <string name="intensity">强度</string>
+    <string name="low">低</string>
+    <string name="medium">中</string>
+    <string name="high">高</string>
+    <string name="sending_cmd">指令发送中...</string>
+    <string name="cmd_success">操作成功</string>
+    <string name="cmd_failed">操作失败</string>
+    
+    <!-- Alarms -->
+    <string name="alarm_list">报警列表</string>
+    <string name="alarm_notification">报警通知</string>
+    <string name="environment_alarm">环境异常</string>
+    <string name="device_alarm">设备异常</string>
+    <string name="system_alarm">系统异常</string>
+    <string name="alarm_processed">已处理</string>
+    <string name="alarm_unprocessed">未处理</string>
+    <string name="mark_all_read">全部标为已读</string>
+    <string name="no_alarms">暂无报警记录</string>
+    
+    <!-- Profile -->
+    <string name="profile">个人中心</string>
+    <string name="account_security">账号安全</string>
+    <string name="warehouse_management">仓库管理</string>
+    <string name="system_settings">系统设置</string>
+    <string name="about">关于系统</string>
+    <string name="logout">退出登录</string>
+    <string name="logout_confirm">确定要退出登录吗?</string>
+    <string name="warehouse_count">绑定仓库</string>
+    
+    <!-- Warehouse Management -->
+    <string name="warehouse_list">仓库列表</string>
+    <string name="add_warehouse">添加仓库</string>
+    <string name="warehouse_name">仓库名称</string>
+    <string name="warehouse_id">仓库ID</string>
+    <string name="bind_warehouse">绑定仓库</string>
+    <string name="unbind_warehouse">解绑仓库</string>
+    <string name="unbind_confirm">确定要解绑此仓库吗?</string>
+    
+    <!-- Settings -->
+    <string name="alarm_threshold">报警阈值</string>
+    <string name="data_upload_freq">数据上传频率</string>
+    <string name="personalization">个性化设置</string>
+    <string name="notification_settings">通知管理</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="version_info">版本信息</string>
+    
+    <!-- Threshold Settings -->
+    <string name="temp_upper_limit">温度上限(℃)</string>
+    <string name="temp_lower_limit">温度下限(℃)</string>
+    <string name="humidity_upper_limit">湿度上限(%)</string>
+    <string name="humidity_lower_limit">湿度下限(%)</string>
+    <string name="formaldehyde_limit">甲醛阈值(mg/m³)</string>
+    <string name="co_limit">一氧化碳阈值(ppm)</string>
+    <string name="co2_limit">二氧化碳阈值(ppm)</string>
+    <string name="aqi_limit">空气质量阈值</string>
+    <string name="reset_default">恢复默认</string>
+    
+    <!-- Upload Frequency -->
+    <string name="freq_10s">10秒</string>
+    <string name="freq_30s">30秒</string>
+    <string name="freq_1min">1分钟</string>
+    <string name="freq_5min">5分钟</string>
+    
+    <!-- Personalization -->
+    <string name="theme_mode">主题模式</string>
+    <string name="theme_light">浅色</string>
+    <string name="theme_dark">深色</string>
+    <string name="temp_unit">温度单位</string>
+    <string name="sound_enabled">提示音</string>
+    
+    <!-- Network -->
+    <string name="network_error">网络连接失败</string>
+    <string name="network_unavailable">网络不可用</string>
+    <string name="request_timeout">请求超时</string>
+    <string name="server_error">服务器错误</string>
+    <string name="no_data">暂无数据</string>
+    
+    <!-- MQTT -->
+    <string name="mqtt_connecting">MQTT连接中...</string>
+    <string name="mqtt_connected">MQTT已连接</string>
+    <string name="mqtt_disconnected">MQTT已断开</string>
+    <string name="mqtt_connect_failed">MQTT连接失败</string>
+
+    <!-- Scenes -->
+    <string name="scene_execute_toast">执行场景：%s</string>
+    <string name="scene_home">回家模式</string>
+    <string name="scene_away">离家模式</string>
+    <string name="scene_sleep">睡眠模式</string>
+    <string name="scene_custom">自定义</string>
+
+    <!-- Toast Messages -->
+    <string name="login_success">登录成功</string>
+    <string name="login_failed">登录失败</string>
+    <string name="register_success">注册成功</string>
+    <string name="register_failed">注册失败</string>
+    <string name="save_success">保存成功</string>
+    <string name="save_failed">保存失败</string>
+    <string name="delete_success">删除成功</string>
+    <string name="delete_failed">删除失败</string>
+    <string name="cache_cleared">缓存已清除</string>
+    <string name="not_impl">功能开发中</string>
+    <string name="data_updated_toast">实时监控数据已更新</string>
+
+    <!-- Units -->
+    <string name="unit_celsius">℃</string>
+    <string name="unit_fahrenheit">℉</string>
+    <string name="unit_percent">%</string>
+    <string name="unit_mg_m3">mg/m³</string>
+    <string name="unit_ppm">ppm</string>
+    
+    <!-- Version -->
+    <string name="version">版本</string>
+    <string name="current_version">当前版本 %s</string>
+</resources>

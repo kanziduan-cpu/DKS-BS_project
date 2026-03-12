@@ -1,0 +1,82 @@
+[
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/item_parameter.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/item_parameter.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/dialog_change_password.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/dialog_change_password.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/activity_splash.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/activity_splash.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/activity_settings.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/item_warehouse.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/item_warehouse.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/activity_warehouse_manage.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/activity_warehouse_manage.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/fragment_devices.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/fragment_devices.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/activity_device_manage.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/activity_device_manage.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/fragment_profile.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/fragment_profile.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/fragment_alarms.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/fragment_alarms.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/activity_login.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/item_alarm.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/item_alarm.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/dialog_add_warehouse.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/dialog_add_warehouse.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/activity_register.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/activity_register.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/skeleton_device_list.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/skeleton_device_list.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/dialog_bind_device.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/dialog_bind_device.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/activity_account_security.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/activity_account_security.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/item_device.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/item_device.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/activity_main.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-42:/layout/fragment_home.xml",
+        "source": "com.warehouse.monitor.app-main-45:/layout/fragment_home.xml"
+    }
+]
