@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import com.warehouse.monitor.utils.AppLogger;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -28,7 +29,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MqttManager implements MqttCallback {
-    private static final String TAG = "MqttManager";
     private static MqttManager instance;
     
     private final Context context;
@@ -95,7 +95,7 @@ public class MqttManager implements MqttCallback {
     
     public void connect() {
         if (isConnected()) {
-            Log.d(TAG, "Already connected");
+            AppLogger.mqtt("Already connected");
             return;
         }
         
@@ -110,19 +110,19 @@ public class MqttManager implements MqttCallback {
             mqttClient.connect(mqttOptions, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.d(TAG, "MQTT连接成功");
+                    AppLogger.mqtt("MQTT连接成功");
                     updateConnectionStatus(ConnectionStatus.CONNECTED, "连接成功");
                     subscribeToTopics();
                 }
                 
-                @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Log.e(TAG, "MQTT连接失败: " + exception.getMessage());
-                    updateConnectionStatus(ConnectionStatus.ERROR, "连接失败: " + exception.getMessage());
-                }
+    @Override
+    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+        AppLogger.mqtt("MQTT连接失败: " + exception.getMessage());
+        updateConnectionStatus(ConnectionStatus.ERROR, "连接失败: " + exception.getMessage());
+    }
             });
         } catch (MqttException e) {
-            Log.e(TAG, "MQTT连接异常: " + e.getMessage());
+            AppLogger.error("MQTT", "MQTT连接异常: " + e.getMessage());
             updateConnectionStatus(ConnectionStatus.ERROR, "连接异常: " + e.getMessage());
         }
     }
@@ -137,17 +137,17 @@ public class MqttManager implements MqttCallback {
                 mqttClient.disconnect(null, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
-                        Log.d(TAG, "MQTT断开连接成功");
+                        AppLogger.mqtt("MQTT断开连接成功");
                         updateConnectionStatus(ConnectionStatus.DISCONNECTED, "已断开连接");
                     }
                     
                     @Override
                     public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                        Log.e(TAG, "MQTT断开连接失败: " + exception.getMessage());
+                        AppLogger.error("MQTT", "MQTT断开连接失败: " + exception.getMessage());
                     }
                 });
             } catch (MqttException e) {
-                Log.e(TAG, "MQTT断开连接异常: " + e.getMessage());
+                AppLogger.error("MQTT", "MQTT断开连接异常: " + e.getMessage());
             }
         }
     }
@@ -166,12 +166,12 @@ public class MqttManager implements MqttCallback {
             mqttClient.subscribe(MqttConfig.TOPIC_ENVIRONMENT, MqttConfig.QOS_AT_LEAST_ONCE, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.d(TAG, "订阅主题成功: " + MqttConfig.TOPIC_ENVIRONMENT);
+                    AppLogger.mqtt("订阅主题成功: " + MqttConfig.TOPIC_ENVIRONMENT);
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Log.e(TAG, "订阅主题失败: " + MqttConfig.TOPIC_ENVIRONMENT);
+                    AppLogger.error("MQTT", "订阅主题失败: " + MqttConfig.TOPIC_ENVIRONMENT);
                 }
             });
 
@@ -187,9 +187,9 @@ public class MqttManager implements MqttCallback {
                     Log.e(TAG, "订阅主题失败: " + MqttConfig.TOPIC_DEVICE_STATUS);
                 }
             });
-        } catch (MqttException e) {
-            Log.e(TAG, "订阅异常: " + e.getMessage());
-        }
+            } catch (MqttException e) {
+                AppLogger.error("MQTT", "订阅异常: " + e.getMessage());
+            }
     }
 
     public void publishDeviceControl(String deviceId, String action, String value) {
@@ -201,13 +201,13 @@ public class MqttManager implements MqttCallback {
             json.addProperty("timestamp", System.currentTimeMillis());
             publishMessage(MqttConfig.TOPIC_DEVICE_CONTROL, json.toString());
         } catch (Exception e) {
-            Log.e(TAG, "发布指令失败: " + e.getMessage());
+            AppLogger.error("MQTT", "发布指令失败: " + e.getMessage());
         }
     }
     
     public void publishMessage(String topic, String payload) {
         if (!isConnected()) {
-            Log.w(TAG, "MQTT未连接");
+            AppLogger.warn("MQTT", "MQTT未连接");
             return;
         }
         
@@ -216,7 +216,7 @@ public class MqttManager implements MqttCallback {
             message.setQos(MqttConfig.QOS_AT_LEAST_ONCE);
             mqttClient.publish(topic, message, null, null);
         } catch (MqttException e) {
-            Log.e(TAG, "发送消息异常: " + e.getMessage());
+            AppLogger.error("MQTT", "发送消息异常: " + e.getMessage());
         }
     }
     
@@ -252,7 +252,7 @@ public class MqttManager implements MqttCallback {
                 notifyAlarmListeners(alarm);
             }
         } catch (Exception e) {
-            Log.e(TAG, "处理消息异常: " + e.getMessage());
+            AppLogger.error("MQTT", "处理消息异常: " + e.getMessage());
         }
     }
     
