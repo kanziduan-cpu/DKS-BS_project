@@ -7,6 +7,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
 
+import com.warehouse.monitor.mqtt.MqttConfig;
 import com.warehouse.monitor.utils.AppLogger;
 
 /**

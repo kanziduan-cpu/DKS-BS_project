@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sensorItem"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="8dp">
+
+    <!-- 数值 -->
+    <TextView
+        android:id="@+id/sensorValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="25.5"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        android:fontFamily="sans-serif-light"/>
+
+    <!-- 单位 -->
+    <TextView
+        android:id="@+id/sensorUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="℃"
+        android:textSize="11sp"
+        android:textColor="@color/text_hint"
+        android:layout_marginTop="-2dp"/>
+
+    <!-- 名称 -->
+    <TextView
+        android:id="@+id/sensorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="温度"
+        android:textSize="11sp"
+        android:textColor="@color/text_secondary"
+        android:layout_marginTop="2dp"/>
+
+</LinearLayout>

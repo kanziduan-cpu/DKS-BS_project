@@ -1,10 +1,15 @@
 package com.warehouse.monitor.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Alarm {
     public enum AlarmType {
         ENVIRONMENT,    // 环境异常
         DEVICE,         // 设备异常
-        SYSTEM          // 系统异常
+        SYSTEM,          // 系统异常
+        TEMPERATURE,
+        HUMIDITY,
+        CO
     }
 
     public enum AlarmStatus {
@@ -12,10 +17,12 @@ public class Alarm {
         PROCESSED       // 已处理
     }
 
+    @SerializedName("id")
     private String id;
     private String warehouseId;
     private String deviceId;
-    private AlarmType type;
+    private String type; // String type for flexible matching
+    private String level; // WARNING, CRITICAL
     private String alarmTitle;
     private String alarmMessage;
     private String alarmValue;
@@ -27,16 +34,17 @@ public class Alarm {
 
     public Alarm() {
         this.status = AlarmStatus.UNPROCESSED;
-        this.type = AlarmType.SYSTEM; // Default type to avoid null
     }
 
-    public Alarm(String id, String warehouseId, AlarmType type, String alarmTitle) {
+    public Alarm(String id, String warehouseId, String deviceId, String type, String level, String alarmMessage, long timestamp) {
         this.id = id;
         this.warehouseId = warehouseId;
+        this.deviceId = deviceId;
         this.type = type;
-        this.alarmTitle = alarmTitle;
+        this.level = level;
+        this.alarmMessage = alarmMessage;
+        this.timestamp = timestamp;
         this.status = AlarmStatus.UNPROCESSED;
-        this.timestamp = System.currentTimeMillis();
     }
 
     public String getId() {
@@ -45,6 +53,10 @@ public class Alarm {
 
     public void setId(String id) {
         this.id = id;
+    }
+    
+    public String getAlarmId() {
+        return id;
     }
 
     public String getWarehouseId() {
@@ -63,12 +75,20 @@ public class Alarm {
         this.deviceId = deviceId;
     }
 
-    public AlarmType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(AlarmType type) {
+    public void setType(String type) {
         this.type = type;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getAlarmTitle() {
@@ -137,16 +157,7 @@ public class Alarm {
 
     public String getTypeDisplayName() {
         if (type == null) return "系统告警";
-        switch (type) {
-            case ENVIRONMENT:
-                return "环境异常";
-            case DEVICE:
-                return "设备异常";
-            case SYSTEM:
-                return "系统异常";
-            default:
-                return "未知报警";
-        }
+        return type;
     }
 
     public String getStatusDisplayName() {

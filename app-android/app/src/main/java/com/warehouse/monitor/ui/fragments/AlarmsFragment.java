@@ -55,7 +55,7 @@ public class AlarmsFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
     
     private void initViews(View view) {
-        recyclerView = view.findViewById(R.id.alarmsRecyclerView);
+        recyclerView = view.findViewById(R.id.alarmRecyclerView);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
     }
     
@@ -81,7 +81,7 @@ public class AlarmsFragment extends Fragment implements SwipeRefreshLayout.OnRef
     
     private void setupSwipeRefresh() {
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(R.color.primary);
+        swipeRefreshLayout.setColorSchemeResources(R.color.mi_blue);
     }
     
     private void initData() {
@@ -164,7 +164,7 @@ public class AlarmsFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private void showAlarmDetails(Alarm alarm) {
         String message = String.format(
                 "报警详情:\n\n类型: %s\n级别: %s\n设备: %s\n时间: %s\n\n%s",
-                alarm.getType(),
+                alarm.getTypeDisplayName(),
                 alarm.getLevel(),
                 alarm.getDeviceId(),
                 new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -224,7 +224,7 @@ public class AlarmsFragment extends Fragment implements SwipeRefreshLayout.OnRef
         AppLogger.business("收到新报警: " + newAlarm.getAlarmMessage());
         
         // 在主线程更新UI
-        dataHandler = new Handler(Looper.getMainLooper());
+        if (dataHandler == null) dataHandler = new Handler(Looper.getMainLooper());
         dataHandler.post(() -> {
             // 添加新报警到列表顶部
             alarmList.add(0, newAlarm);

@@ -34,8 +34,13 @@ public class Device {
     private boolean isRunning;
     private String warehouseId;
 
+    // 舵机控制（0-180度）
+    private int servoAngle;
+
     public Device() {
         this.deviceId = "";
+        this.status = DeviceStatus.OFFLINE;
+        this.servoAngle = 0;
     }
 
     @Ignore
@@ -45,6 +50,7 @@ public class Device {
         this.type = type;
         this.status = DeviceStatus.ONLINE;
         this.isRunning = false;
+        this.servoAngle = 0;
     }
 
     @NonNull
@@ -59,12 +65,23 @@ public class Device {
 
     public DeviceStatus getStatus() { return status; }
     public void setStatus(DeviceStatus status) { this.status = status; }
+    
+    public boolean isOnline() {
+        return status == DeviceStatus.ONLINE;
+    }
+    
+    public void setOnline(boolean online) {
+        this.status = online ? DeviceStatus.ONLINE : DeviceStatus.OFFLINE;
+    }
 
     public boolean isRunning() { return isRunning; }
     public void setRunning(boolean running) { isRunning = running; }
 
     public String getWarehouseId() { return warehouseId; }
     public void setWarehouseId(String warehouseId) { this.warehouseId = warehouseId; }
+
+    public int getServoAngle() { return servoAngle; }
+    public void setServoAngle(int servoAngle) { this.servoAngle = servoAngle; }
 
     public String getTypeDisplayName() {
         if (type == null) return "未知设备";

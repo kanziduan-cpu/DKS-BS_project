@@ -48,20 +48,28 @@ public class SupabaseClient {
      */
     public boolean uploadEnvironmentData(EnvironmentData data) {
         try {
-            // 创建请求体
+            // 创建完整的传感器数据上传对象
             SensorDataUpload uploadData = new SensorDataUpload(
                     data.getDeviceId(),
                     null, // machine_code
                     data.getTemperature(),
-                    data.getHumidity()
+                    data.getHumidity(),
+                    data.getCo(),
+                    data.getCo2(),
+                    data.getFormaldehyde(),
+                    data.getWaterLevel(),
+                    data.getVibration(),
+                    data.getTiltX(),
+                    data.getTiltY(),
+                    data.getTiltZ()
             );
-            
+
             String jsonBody = gson.toJson(uploadData);
             RequestBody body = RequestBody.create(
                     jsonBody,
                     MediaType.parse("application/json; charset=utf-8")
             );
-            
+
             // 创建请求
             Request request = new Request.Builder()
                     .url(SUPABASE_URL + SENSOR_DATA_ENDPOINT)
@@ -70,9 +78,9 @@ public class SupabaseClient {
                     .addHeader("Content-Type", "application/json")
                     .post(body)
                     .build();
-            
+
             AppLogger.network("上传环境数据到Supabase: " + jsonBody);
-            
+
             // 发送请求
             try (Response response = client.newCall(request).execute()) {
                 if (response.isSuccessful()) {
@@ -145,12 +153,30 @@ public class SupabaseClient {
         String machine_code;
         Double temp;
         Double hum;
-        
-        public SensorDataUpload(String deviceId, String machineCode, Double temp, Double hum) {
+        Double co;
+        Double co2;
+        Double formaldehyde;
+        Double water_level;
+        Integer vibration;
+        Double tilt_x;
+        Double tilt_y;
+        Double tilt_z;
+
+        public SensorDataUpload(String deviceId, String machineCode, Double temp, Double hum,
+                              Double co, Double co2, Double formaldehyde, Double waterLevel,
+                              Integer vibration, Double tiltX, Double tiltY, Double tiltZ) {
             this.device_id = deviceId;
             this.machine_code = machineCode;
             this.temp = temp;
             this.hum = hum;
+            this.co = co;
+            this.co2 = co2;
+            this.formaldehyde = formaldehyde;
+            this.water_level = waterLevel;
+            this.vibration = vibration;
+            this.tilt_x = tiltX;
+            this.tilt_y = tiltY;
+            this.tilt_z = tiltZ;
         }
     }
 }

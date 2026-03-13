@@ -51,6 +51,12 @@ public class ParameterAdapter extends RecyclerView.Adapter<ParameterAdapter.View
         this.context = context;
     }
 
+    public void updateData(List<ParameterItem> newItems) {
+        this.items.clear();
+        this.items.addAll(newItems);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

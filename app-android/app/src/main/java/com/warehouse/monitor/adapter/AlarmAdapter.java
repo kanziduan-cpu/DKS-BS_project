@@ -105,7 +105,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
         }
 
         public void bind(Alarm alarm, int position) {
-            alarmTitle.setText(alarm.getAlarmTitle());
+            alarmTitle.setText(alarm.getAlarmTitle() != null ? alarm.getAlarmTitle() : alarm.getTypeDisplayName());
             alarmMessage.setText(alarm.getAlarmMessage());
             
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
@@ -130,15 +130,19 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
             statusIndicator.setBackgroundColor(indicatorColor);
             
             int iconRes = R.drawable.ic_alarms_filled;
-            if (alarm.getType() != null) {
-                switch (alarm.getType()) {
-                    case ENVIRONMENT:
+            String type = alarm.getType();
+            if (type != null) {
+                switch (type) {
+                    case "ENVIRONMENT":
+                    case "TEMPERATURE":
+                    case "HUMIDITY":
+                    case "CO":
                         iconRes = R.drawable.ic_weather;
                         break;
-                    case DEVICE:
+                    case "DEVICE":
                         iconRes = R.drawable.ic_devices;
                         break;
-                    case SYSTEM:
+                    case "SYSTEM":
                         iconRes = R.drawable.ic_alarms;
                         break;
                 }
