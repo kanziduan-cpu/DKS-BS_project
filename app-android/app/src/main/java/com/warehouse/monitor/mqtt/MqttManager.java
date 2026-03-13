@@ -3,14 +3,12 @@ package com.warehouse.monitor.mqtt;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import com.warehouse.monitor.utils.AppLogger;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.warehouse.monitor.model.Alarm;
-import com.warehouse.monitor.model.Device;
 import com.warehouse.monitor.model.EnvironmentData;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -37,7 +35,6 @@ public class MqttManager implements MqttCallback {
     private final Gson gson;
     private final Handler mainHandler;
     private final ExecutorService executorService;
-    private Runnable connectionTimeoutRunnable;
     
     private ConnectionStatus connectionStatus = ConnectionStatus.DISCONNECTED;
     private final List<OnConnectionStatusListener> connectionListeners = new ArrayList<>();
@@ -115,11 +112,11 @@ public class MqttManager implements MqttCallback {
                     subscribeToTopics();
                 }
                 
-    @Override
-    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-        AppLogger.mqtt("MQTT连接失败: " + exception.getMessage());
-        updateConnectionStatus(ConnectionStatus.ERROR, "连接失败: " + exception.getMessage());
-    }
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    AppLogger.mqtt("MQTT连接失败: " + exception.getMessage());
+                    updateConnectionStatus(ConnectionStatus.ERROR, "连接失败: " + exception.getMessage());
+                }
             });
         } catch (MqttException e) {
             AppLogger.error("MQTT", "MQTT连接异常: " + e.getMessage());
@@ -179,17 +176,17 @@ public class MqttManager implements MqttCallback {
             mqttClient.subscribe(MqttConfig.TOPIC_DEVICE_STATUS, MqttConfig.QOS_AT_LEAST_ONCE, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.d(TAG, "订阅主题成功: " + MqttConfig.TOPIC_DEVICE_STATUS);
+                    AppLogger.mqtt("订阅主题成功: " + MqttConfig.TOPIC_DEVICE_STATUS);
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    Log.e(TAG, "订阅主题失败: " + MqttConfig.TOPIC_DEVICE_STATUS);
+                    AppLogger.error("MQTT", "订阅主题失败: " + MqttConfig.TOPIC_DEVICE_STATUS);
                 }
             });
-            } catch (MqttException e) {
-                AppLogger.error("MQTT", "订阅异常: " + e.getMessage());
-            }
+        } catch (MqttException e) {
+            AppLogger.error("MQTT", "订阅异常: " + e.getMessage());
+        }
     }
 
     public void publishDeviceControl(String deviceId, String action, String value) {

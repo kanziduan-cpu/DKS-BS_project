@@ -1,20 +1,20 @@
 package com.warehouse.monitor.network;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.warehouse.monitor.model.Alarm;
 import com.warehouse.monitor.model.Device;
 import com.warehouse.monitor.model.EnvironmentData;
-import com.warehouse.monitor.model.User;
 import com.warehouse.monitor.model.Warehouse;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import android.util.Log;
-import okhttp3.Interceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -32,23 +32,20 @@ public interface ApiService {
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .addInterceptor(new okhttp3.Interceptor() {
-                @Override
-                public okhttp3.Response intercept(Chain chain) throws IOException {
-                    long startTime = System.currentTimeMillis();
-                    okhttp3.Request request = chain.request();
-                    
-                    Log.d("HttpInterceptor", "发送请求: " + request.url());
-                    Log.d("HttpInterceptor", "请求方法: " + request.method());
-                    
-                    okhttp3.Response response = chain.proceed(request);
-                    long endTime = System.currentTimeMillis();
-                    
-                    Log.d("HttpInterceptor", "收到响应: " + response.code() + " " + response.message());
-                    Log.d("HttpInterceptor", "请求耗时: " + (endTime - startTime) + "ms");
-                    
-                    return response;
-                }
+            .addInterceptor(chain -> {
+                long startTime = System.currentTimeMillis();
+                okhttp3.Request request = chain.request();
+                
+                Log.d("HttpInterceptor", "发送请求: " + request.url());
+                Log.d("HttpInterceptor", "请求方法: " + request.method());
+                
+                okhttp3.Response response = chain.proceed(request);
+                long endTime = System.currentTimeMillis();
+                
+                Log.d("HttpInterceptor", "收到响应: " + response.code() + " " + response.message());
+                Log.d("HttpInterceptor", "请求耗时: " + (endTime - startTime) + "ms");
+                
+                return response;
             })
             .build();
 
