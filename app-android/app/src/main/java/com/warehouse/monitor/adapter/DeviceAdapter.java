@@ -71,7 +71,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         TextView deviceName;
         TextView deviceParams;
         SwitchMaterial deviceSwitch;
-        View statusIndicator;
         RotateAnimation rotateAnim;
         ObjectAnimator waterFlowAnim;
 
@@ -81,7 +80,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
             deviceName = itemView.findViewById(R.id.deviceName);
             deviceParams = itemView.findViewById(R.id.deviceParams);
             deviceSwitch = itemView.findViewById(R.id.deviceSwitch);
-            statusIndicator = itemView.findViewById(R.id.statusIndicator);
 
             // 风扇旋转动画
             rotateAnim = new RotateAnimation(0f, 360f, 
@@ -118,28 +116,37 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
             // 米家风格深度适配逻辑
             if (device.getType() == Device.DeviceType.VENTILATION_FAN || device.getDeviceId().contains("FAN")) {
                 deviceIcon.setImageResource(R.drawable.ic_fan);
-                deviceIcon.setColorFilter(context.getColor(R.color.fan_blue), PorterDuff.Mode.SRC_IN);
+                deviceIcon.setColorFilter(context.getColor(R.color.mi_blue), PorterDuff.Mode.SRC_IN);
                 if (device.isRunning()) deviceIcon.startAnimation(rotateAnim);
             } else if (device.getType() == Device.DeviceType.WATER_PUMP || device.getDeviceId().contains("PUMP")) {
                 deviceIcon.setImageResource(R.drawable.ic_pump);
-                deviceIcon.setColorFilter(context.getColor(R.color.water_flow), PorterDuff.Mode.SRC_IN);
+                deviceIcon.setColorFilter(context.getColor(R.color.mi_blue), PorterDuff.Mode.SRC_IN);
                 if (device.isRunning()) waterFlowAnim.start();
             } else if (device.getType() == Device.DeviceType.LIGHTING || device.getDeviceId().contains("LIGHT")) {
-                deviceIcon.setImageResource(R.drawable.ic_info); 
+                deviceIcon.setImageResource(R.drawable.ic_light); 
                 if (device.isRunning()) {
                     deviceIcon.setColorFilter(context.getColor(R.color.bulb_on), PorterDuff.Mode.SRC_IN);
                 } else {
                     deviceIcon.setColorFilter(context.getColor(R.color.offline), PorterDuff.Mode.SRC_IN);
                 }
+            } else if (device.getType() == Device.DeviceType.DEHUMIDIFIER || device.getDeviceId().contains("DH")) {
+                deviceIcon.setImageResource(R.drawable.ic_dehumidifier);
+                deviceIcon.setColorFilter(context.getColor(R.color.mi_blue), PorterDuff.Mode.SRC_IN);
             } else {
                 deviceIcon.setImageResource(R.drawable.ic_devices);
                 deviceIcon.setColorFilter(context.getColor(R.color.device_icon_grey), PorterDuff.Mode.SRC_IN);
             }
 
-            deviceParams.setText(device.isRunning() ? "已开启" : "已关闭");
+            // 更新状态描述
+            String statusDesc = device.isRunning() ? "已开启" : "已关闭";
+            if (device.getStatus() == Device.DeviceStatus.OFFLINE) {
+                statusDesc = "离线";
+            }
+            deviceParams.setText(statusDesc);
+            
             deviceParams.setTextColor(device.isRunning() ? 
                 context.getColor(R.color.mi_blue) : 
-                context.getColor(R.color.text_hint));
+                context.getColor(R.color.text_secondary));
             
             deviceSwitch.setOnCheckedChangeListener(null);
             deviceSwitch.setChecked(device.isRunning());
@@ -153,14 +160,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                     listener.onControlClick(device, isChecked, position);
                 }
             });
-            
-            if (statusIndicator != null) {
-                statusIndicator.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
-                    device.getStatus() == Device.DeviceStatus.ONLINE ? 
-                    context.getColor(R.color.online) : 
-                    context.getColor(R.color.offline)
-                ));
-            }
         }
     }
 }

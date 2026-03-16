@@ -59,7 +59,7 @@ if command -v ufw &> /dev/null; then
     echo "配置UFW防火墙规则..."
     ufw allow 22/tcp    # SSH
     ufw allow 1883/tcp  # MQTT
-    ufw allow 3000/tcp  # HTTP API
+    ufw allow 3001/tcp  # HTTP API
     ufw allow 3001/tcp  # WebSocket
     ufw --force enable
     echo -e "${GREEN}防火墙配置完成${NC}"
@@ -128,7 +128,7 @@ pm2 status warehouse-server
 echo ""
 echo "服务端口:"
 echo "  - MQTT:     1883"
-echo "  - HTTP API: 3000"
+echo "  - HTTP API: 3001"
 echo "  - WebSocket: 3001"
 echo ""
 echo "公网IP: 43.99.24.178"
@@ -142,10 +142,10 @@ echo ""
 echo "⚠️  重要提示："
 echo "  1. 请在阿里云控制台配置安全组，开放以下端口："
 echo "     - 1883 (MQTT)"
-echo "     - 3000 (HTTP API)"
+echo "     - 3001 (HTTP API)"
 echo "     - 3001 (WebSocket)"
 echo ""
 echo "  2. 修改Android APP配置中的服务器地址为:"
-echo "     SERVER_BASE_URL = \"http://43.99.24.178:3000/api\""
+echo "     SERVER_BASE_URL = \"http://43.99.24.178:3001/api\""
 echo "     WEBSOCKET_URL = \"ws://43.99.24.178:3001\""
 echo ""

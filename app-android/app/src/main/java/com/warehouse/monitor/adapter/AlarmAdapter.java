@@ -70,7 +70,6 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder {
         MaterialCardView cardView;
-        View statusIndicator;
         ImageView alarmIcon;
         TextView alarmTitle;
         TextView alarmMessage;
@@ -80,7 +79,6 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             cardView = (MaterialCardView) itemView;
-            statusIndicator = itemView.findViewById(R.id.statusIndicator);
             alarmIcon = itemView.findViewById(R.id.alarmIcon);
             alarmTitle = itemView.findViewById(R.id.alarmTitle);
             alarmMessage = itemView.findViewById(R.id.alarmMessage);
@@ -112,22 +110,22 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
             alarmTime.setText(sdf.format(new Date(alarm.getTimestamp())));
 
             int statusColor;
-            int indicatorColor;
             String statusText;
+            int badgeRes;
             
             if (alarm.getStatus() == Alarm.AlarmStatus.UNPROCESSED) {
-                statusColor = context.getColor(R.color.alarm_red);
-                indicatorColor = context.getColor(R.color.alarm_red);
+                statusColor = context.getColor(R.color.mi_red);
                 statusText = "未处理";
+                badgeRes = R.drawable.mi_alarm_badge_red;
             } else {
                 statusColor = context.getColor(R.color.text_hint);
-                indicatorColor = context.getColor(R.color.text_hint);
                 statusText = "已处理";
+                badgeRes = R.drawable.mi_alarm_badge_gray;
             }
             
             alarmStatus.setText(statusText);
             alarmStatus.setTextColor(statusColor);
-            statusIndicator.setBackgroundColor(indicatorColor);
+            alarmStatus.setBackgroundResource(badgeRes);
             
             int iconRes = R.drawable.ic_alarms_filled;
             String type = alarm.getType();
@@ -148,7 +146,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
                 }
             }
             alarmIcon.setImageResource(iconRes);
-            alarmIcon.setColorFilter(indicatorColor);
+            alarmIcon.setColorFilter(statusColor);
         }
     }
 

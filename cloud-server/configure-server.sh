@@ -23,8 +23,8 @@ fi
 echo ""
 
 echo "[3/4] 配置防火墙..."
-firewall-cmd --permanent --add-port=3000/tcp 2>/dev/null || ufw allow 3000/tcp 2>/dev/null || echo "防火墙配置跳过"
-echo "端口 3000 已开放"
+firewall-cmd --permanent --add-port=3001/tcp 2>/dev/null || ufw allow 3001/tcp 2>/dev/null || echo "防火墙配置跳过"
+echo "端口 3001 已开放"
 echo ""
 
 echo "========================================"

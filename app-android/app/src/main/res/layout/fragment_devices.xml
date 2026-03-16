@@ -1,56 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/mi_bg_grey">
 
-    <!-- 顶部沉浸式标题栏 -->
-    <com.google.android.material.appbar.AppBarLayout
+    <!-- 米家风格顶部标题 -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:elevation="0dp">
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title="设备管理"
-            app:titleCentered="true"
-            app:titleTextColor="@color/text_primary" />
-    </com.google.android.material.appbar.AppBarLayout>
+        android:orientation="vertical"
+        android:padding="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设备管理"
+            android:textSize="24sp"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="管理所有智能设备"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
 
-    <!-- 下拉刷新 + 网格列表 -->
+    <!-- 设备列表区 -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/deviceRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingHorizontal="10dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="100dp"
             android:clipToPadding="false"
+            android:padding="16dp"
             android:scrollbars="none" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <!-- 右下角添加按钮 -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addDeviceFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="24dp"
-        android:src="@drawable/ic_home"
-        app:tint="@color/white"
-        app:backgroundTint="@color/qq_blue"
-        app:elevation="6dp"
-        app:pressedTranslationZ="12dp"
-        app:fabSize="normal" />
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

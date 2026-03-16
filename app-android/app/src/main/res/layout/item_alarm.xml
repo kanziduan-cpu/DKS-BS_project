@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="6dp"
+    android:layout_marginBottom="12dp"
     app:cardElevation="0dp"
-    app:cardCornerRadius="16dp"
+    app:cardCornerRadius="12dp"
     app:cardBackgroundColor="@color/white"
     app:strokeWidth="0dp">
 
@@ -17,29 +16,22 @@
         android:padding="16dp"
         android:gravity="center_vertical">
 
-        <!-- 状态指示器 -->
-        <View
-            android:id="@+id/statusIndicator"
-            android:layout_width="4dp"
-            android:layout_height="40dp"
-            android:background="@color/alarm_red"/>
-
-        <!-- 图标 -->
+        <!-- 米家风格左侧图标 -->
         <ImageView
             android:id="@+id/alarmIcon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="12dp"
             android:src="@drawable/ic_alarms_filled"
-            app:tint="@color/alarm_red"
-            android:padding="8dp"/>
+            app:tint="@color/mi_red"
+            android:background="@drawable/mi_alarm_icon_background"
+            android:padding="8dp"
+            android:layout_marginEnd="16dp"/>
 
-        <!-- 内容 -->
+        <!-- 内容区 -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="12dp"
             android:orientation="vertical">
 
             <TextView
@@ -47,9 +39,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="温度异常报警"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary"/>
+                android:textColor="@color/text_primary"
+                android:maxLines="1"
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/alarmMessage"
@@ -57,16 +51,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="核心区域温度超过阈值 35°C"
-                android:textSize="13sp"
-                android:textColor="@color/text_secondary"/>
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:maxLines="2"
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/alarmTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="2024-03-04 14:30:25"
-                android:textSize="11sp"
+                android:layout_marginTop="6dp"
+                android:text="2024-03-04 14:30"
+                android:textSize="12sp"
                 android:textColor="@color/text_hint"/>
 
         </LinearLayout>
@@ -79,8 +75,8 @@
             android:text="未处理"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="@color/alarm_red"
-            android:paddingHorizontal="8dp"
+            android:textColor="@color/mi_red"
+            android:paddingHorizontal="10dp"
             android:paddingVertical="4dp"
             android:background="@drawable/mi_alarm_badge_red"/>
 

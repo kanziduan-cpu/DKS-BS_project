@@ -36,7 +36,7 @@ npm install
     "port": 1883
   },
   "http": {
-    "port": 3000
+    "port": 3001
   },
   "websocket": {
     "port": 3001
@@ -183,7 +183,7 @@ Topic: `warehouse/{device_id}/control`
 ## 端口说明
 
 - MQTT Broker: 1883
-- HTTP API: 3000
+- HTTP API: 3001
 - WebSocket: 3001
 
 ## 注意事项

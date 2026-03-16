@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mi_sky_gradient">
+    android:background="@color/mi_bg_grey">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -14,197 +14,310 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="80dp">
+            android:paddingBottom="100dp">
 
-            <!-- Mi Home Style Header -->
-            <RelativeLayout
+            <!-- 米家风格顶部区域 -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="48dp"
-                android:paddingHorizontal="20dp"
-                android:layout_marginBottom="16dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-                        <TextView
-                            android:id="@+id/warehouseTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="主仓库"
-                            android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/white" />
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/ic_arrow_right"
-                            android:rotation="90"
-                            app:tint="@color/white"
-                            android:layout_marginStart="4dp"/>
-                    </LinearLayout>
-
-                    <!-- MQTT 连接状态指示器 -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="4dp">
-                        <View
-                            android:id="@+id/mqttStatusDot"
-                            android:layout_width="8dp"
-                            android:layout_height="8dp"
-                            android:background="@drawable/mi_status_indicator"
-                            android:backgroundTint="@color/offline" />
-                        <TextView
-                            android:id="@+id/mqttStatusText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:text="正在连接服务器..."
-                            android:textSize="12sp"
-                            android:textColor="#CCFFFFFF" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:gravity="center_vertical">
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_home"
-                        app:tint="@color/white"
-                        android:layout_marginEnd="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="12°"
-                        android:textSize="18sp"
-                        android:textColor="@color/white" />
-                </LinearLayout>
-            </RelativeLayout>
-
-            <!-- Horizontal Tab Bar -->
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none"
-                android:layout_marginBottom="24dp">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="20dp">
-                    <TextView style="@style/MiTabItem" android:text="场景" android:alpha="1.0" android:textStyle="bold"/>
-                    <TextView style="@style/MiTabItem" android:text="全库" />
-                    <TextView style="@style/MiTabItem" android:text="东区" />
-                    <TextView style="@style/MiTabItem" android:text="西区" />
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <!-- Environment Section -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="环境 >"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="4dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="传感器阵列实时监测中"
-                android:textSize="12sp"
-                android:textColor="#CCFFFFFF"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="12dp"/>
-
-            <!-- Small Quick Env Cards -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/parameterRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                android:clipToPadding="false"
                 android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:nestedScrollingEnabled="false"
-                android:layout_marginBottom="16dp"/>
+                android:padding="16dp">
 
-            <!-- Large Chart Card -->
+                <!-- 仓库名称和状态 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+                    <TextView
+                        android:id="@+id/warehouseTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="我的家"
+                        android:textSize="24sp"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold"/>
+                    <ImageView
+                        android:id="@+id/mqttStatusDot"
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:background="@drawable/mi_status_badge"
+                        android:backgroundTint="@color/mi_green"/>
+                </LinearLayout>
+
+                <!-- 实时数据卡片 -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/mi_blue"
+                    app:strokeWidth="0dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="20dp">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="温度"
+                                android:textSize="14sp"
+                                android:textColor="@android:color/white"
+                                android:alpha="0.8"/>
+                            <TextView
+                                android:id="@+id/temperatureValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="26°C"
+                                android:textSize="42sp"
+                                android:textColor="@android:color/white"
+                                android:textStyle="bold"
+                                android:layout_marginTop="8dp"/>
+                            <TextView
+                                android:id="@+id/temperatureStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="舒适"
+                                android:textSize="14sp"
+                                android:textColor="@android:color/white"
+                                android:layout_marginTop="4dp"/>
+                        </LinearLayout>
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="60dp"
+                            android:background="@android:color/white"
+                            android:alpha="0.3"
+                            android:layout_marginTop="20dp"/>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_marginStart="20dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="湿度"
+                                android:textSize="14sp"
+                                android:textColor="@android:color/white"
+                                android:alpha="0.8"/>
+                            <TextView
+                                android:id="@+id/humidityValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="65%"
+                                android:textSize="42sp"
+                                android:textColor="@android:color/white"
+                                android:textStyle="bold"
+                                android:layout_marginTop="8dp"/>
+                            <TextView
+                                android:id="@+id/humidityStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="适宜"
+                                android:textSize="14sp"
+                                android:textColor="@android:color/white"
+                                android:layout_marginTop="4dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <!-- 设备快捷卡片 -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                app:cardCornerRadius="20dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/mi_translucent_white"
-                app:strokeWidth="0dp">
+                app:cardBackgroundColor="@color/white">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="常用设备"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="查看全部"
+                        android:textSize="14sp"
+                        android:textColor="@color/mi_blue"
+                        android:drawableEnd="@drawable/ic_arrow_right"
+                        android:drawablePadding="4dp"
+                        android:gravity="center_vertical"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- 场景卡片 -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-                    <RelativeLayout
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="• 核心区域"
-                            android:textSize="12sp"
-                            android:textColor="@color/text_secondary"/>
-                        <TextView
-                            android:id="@+id/chartParamSpinner"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:text="温度 ▾"
-                            android:textSize="12sp"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="4dp"
-                            android:background="@drawable/badge_background"
-                            android:textColor="@color/text_primary"/>
-                    </RelativeLayout>
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/lineChart"
+                        android:layout_height="wrap_content"
+                        android:text="智能场景"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp"/>
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:layout_marginTop="12dp"/>
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/tabScene"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="回家"
+                            android:textSize="14sp"
+                            android:textColor="@color/mi_blue"
+                            android:gravity="center"
+                            android:paddingVertical="12dp"
+                            android:background="@drawable/mi_chip_background"/>
+                        <TextView
+                            android:id="@+id/tabAll"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="离家"
+                            android:textSize="14sp"
+                            android:textColor="@color/text_secondary"
+                            android:gravity="center"
+                            android:paddingVertical="12dp"
+                            android:background="@drawable/mi_chip_background"/>
+                        <TextView
+                            android:id="@+id/tabEast"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="睡眠"
+                            android:textSize="14sp"
+                            android:textColor="@color/text_secondary"
+                            android:gravity="center"
+                            android:paddingVertical="12dp"
+                            android:background="@drawable/mi_chip_background"/>
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Grouped Sections -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="自动化控制 >"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="12dp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/quickDeviceRecyclerView"
+            <!-- 数据趋势卡片 -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="12dp"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false" />
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="温度趋势"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:id="@+id/timeFilter1h"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1h"
+                            android:textSize="12sp"
+                            android:textColor="@color/mi_blue"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="6dp"
+                            android:background="@drawable/mi_chip_background"/>
+                        <TextView
+                            android:id="@+id/timeFilter24h"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="24h"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="6dp"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/mi_chip_background"/>
+                        <TextView
+                            android:id="@+id/timeFilter7d"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7d"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="6dp"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/mi_chip_background"/>
+                    </LinearLayout>
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/lineChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- 快捷操作按钮 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/automationControlButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="智能控制"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    style="@style/Widget.App.Button.Primary"
+                    app:icon="@drawable/ic_automation"
+                    app:iconPadding="8dp"
+                    app:iconGravity="start"/>
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

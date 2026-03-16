@@ -3,7 +3,7 @@
 // 测试HTTP API的脚本
 const http = require('http');
 
-const BASE_URL = 'http://localhost:3000/api';
+const BASE_URL = 'http://localhost:3001/api';
 const DEVICE_ID = 'warehouse_device_001';
 
 // 颜色输出

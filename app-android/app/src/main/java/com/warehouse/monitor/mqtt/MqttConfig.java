@@ -7,7 +7,7 @@ public class MqttConfig {
     // 私网: 172.17.68.3
     // 公网: 120.55.113.226
     public static final String SERVER_HOST = "120.55.113.226";
-    public static final int SERVER_PORT = 1884; // MQTT 服务端口
+    public static final int SERVER_PORT = 1883; // MQTT 服务端口
 
     // MQTT 账号密码（根据服务器 mosquitto 配置设置）
     // 如果 mosquitto 未配置认证，可以为空
@@ -24,13 +24,13 @@ public class MqttConfig {
 
     public static final boolean AUTO_RECONNECT = true;
 
-    // 话题配置 - 使用 sensor 主题前缀
-    public static final String TOPIC_PREFIX = "sensor/";
-    public static final String TOPIC_ENVIRONMENT = "sensor/data";
-    public static final String TOPIC_DEVICE_STATUS = "sensor/status";
-    public static final String TOPIC_DEVICE_CONTROL = "sensor/control";
-    public static final String TOPIC_ALARM = "sensor/alarm";
-    public static final String TOPIC_WILDCARD = "sensor/#";
+    // 话题配置 - 使用 warehouse 主题前缀
+    public static final String TOPIC_PREFIX = "warehouse/";
+    public static final String TOPIC_ENVIRONMENT = "warehouse/+/sensor/data";
+    public static final String TOPIC_DEVICE_STATUS = "warehouse/+/device/status";
+    public static final String TOPIC_DEVICE_CONTROL = "warehouse/+/command";
+    public static final String TOPIC_ALARM = "warehouse/+/alarm";
+    public static final String TOPIC_WILDCARD = "warehouse/#";
 
     public static final int QOS_AT_MOST_ONCE = 0;
     public static final int QOS_AT_LEAST_ONCE = 1; // 建议用 1，保证数据不丢

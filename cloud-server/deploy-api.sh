@@ -10,8 +10,8 @@ echo "云端 API 服务部署脚本"
 echo "========================================="
 echo ""
 echo "部署路径: /opt/warehouse-monitor/cloud-server"
-echo "API 端口: 3000"
-echo "MQTT 端口: 1884"
+echo "API 端口: 3001"
+echo "MQTT 端口: 1883"
 echo ""
 
 # 进入项目目录
