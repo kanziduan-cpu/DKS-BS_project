@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/deviceCard"
-    android:layout_width="match_parent"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="4dp"
-    android:layout_marginBottom="8dp"
-    app:cardElevation="0dp"
+    android:layout_columnWeight="1"
+    android:layout_margin="6dp"
     app:cardCornerRadius="20dp"
+    app:cardElevation="0dp"
     app:cardBackgroundColor="@color/white">
 
     <LinearLayout
@@ -20,40 +19,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
-                android:id="@+id/deviceIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:id="@+id/controlIcon"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:src="@drawable/ic_stm32"
                 app:tint="@color/mi_blue" />
-            
+
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/deviceSwitch"
+                android:id="@+id/controlSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
                 app:useMaterialThemeColors="true"/>
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/deviceName"
+            android:id="@+id/controlTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ESP8266 边缘端"
-            android:textSize="16sp"
+            android:text="控制项"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginTop="16dp"
-            android:maxLines="1"
-            android:ellipsize="end" />
+            android:layout_marginTop="20dp"/>
 
         <TextView
-            android:id="@+id/deviceParams"
+            android:id="@+id/controlStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="在线 | 运行正常"
+            android:text="就绪"
             android:textSize="12sp"
             android:textColor="@color/text_secondary"
-            android:layout_marginTop="4dp" />
+            android:layout_marginTop="2dp"/>
 
     </LinearLayout>
 

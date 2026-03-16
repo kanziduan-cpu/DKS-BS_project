@@ -4,10 +4,9 @@
     android:id="@+id/deviceCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="4dp"
-    android:layout_marginBottom="8dp"
-    app:cardElevation="0dp"
+    android:layout_margin="6dp"
     app:cardCornerRadius="20dp"
+    app:cardElevation="0dp"
     app:cardBackgroundColor="@color/white">
 
     <LinearLayout
@@ -21,17 +20,17 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/deviceIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:src="@drawable/ic_stm32"
                 app:tint="@color/mi_blue" />
-            
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/deviceSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                app:useMaterialThemeColors="true"/>
+                android:scaleX="0.8"
+                android:scaleY="0.8"/>
         </RelativeLayout>
 
         <TextView
@@ -39,21 +38,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ESP8266 边缘端"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
             android:layout_marginTop="16dp"
             android:maxLines="1"
-            android:ellipsize="end" />
+            android:ellipsize="end"/>
 
         <TextView
             android:id="@+id/deviceParams"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="在线 | 运行正常"
+            android:text="在线 | 信号强"
             android:textSize="12sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginTop="4dp" />
+            android:textColor="@color/mi_green"
+            android:layout_marginTop="2dp"/>
 
     </LinearLayout>
 

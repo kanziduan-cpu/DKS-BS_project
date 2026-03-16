@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mi_bg_grey">
+    android:background="@drawable/mi_sky_gradient"
+    android:fitsSystemWindows="true">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -16,306 +17,170 @@
             android:orientation="vertical"
             android:paddingBottom="100dp">
 
-            <!-- 米家风格顶部区域 -->
+            <!-- 顶部紧凑标题栏 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="24dp"
+                android:paddingBottom="12dp"
+                android:paddingHorizontal="24dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="环境监测"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary"/>
+                    <TextView
+                        android:id="@+id/homeSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="设备状态：实时同步中"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="2dp"
+                        android:alpha="0.7"/>
+                </LinearLayout>
+                <ImageView
+                    android:id="@+id/mqttStatusDot"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/mi_status_badge"
+                    app:tint="@color/mi_green"/>
+            </RelativeLayout>
+
+            <!-- 2x2 完全铺满网格：使用嵌套权重布局确保 100% 填满 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingHorizontal="12dp">
 
-                <!-- 仓库名称和状态 -->
+                <!-- 第一行 -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="12dp">
-                    <TextView
-                        android:id="@+id/warehouseTitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="我的家"
-                        android:textSize="24sp"
-                        android:textColor="@color/text_primary"
-                        android:textStyle="bold"/>
-                    <ImageView
-                        android:id="@+id/mqttStatusDot"
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
-                        android:background="@drawable/mi_status_badge"
-                        android:backgroundTint="@color/mi_green"/>
+                    android:orientation="horizontal">
+                    <include layout="@layout/item_sensor_square" android:id="@+id/cardTemp" />
+                    <include layout="@layout/item_sensor_square" android:id="@+id/cardHumi" />
                 </LinearLayout>
 
-                <!-- 实时数据卡片 -->
-                <com.google.android.material.card.MaterialCardView
+                <!-- 第二行 -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/mi_blue"
-                    app:strokeWidth="0dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="20dp">
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="温度"
-                                android:textSize="14sp"
-                                android:textColor="@android:color/white"
-                                android:alpha="0.8"/>
-                            <TextView
-                                android:id="@+id/temperatureValue"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="26°C"
-                                android:textSize="42sp"
-                                android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                android:layout_marginTop="8dp"/>
-                            <TextView
-                                android:id="@+id/temperatureStatus"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="舒适"
-                                android:textSize="14sp"
-                                android:textColor="@android:color/white"
-                                android:layout_marginTop="4dp"/>
-                        </LinearLayout>
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="60dp"
-                            android:background="@android:color/white"
-                            android:alpha="0.3"
-                            android:layout_marginTop="20dp"/>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="20dp">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="湿度"
-                                android:textSize="14sp"
-                                android:textColor="@android:color/white"
-                                android:alpha="0.8"/>
-                            <TextView
-                                android:id="@+id/humidityValue"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="65%"
-                                android:textSize="42sp"
-                                android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                android:layout_marginTop="8dp"/>
-                            <TextView
-                                android:id="@+id/humidityStatus"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="适宜"
-                                android:textSize="14sp"
-                                android:textColor="@android:color/white"
-                                android:layout_marginTop="4dp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                    android:orientation="horizontal">
+                    <include layout="@layout/item_sensor_square" android:id="@+id/cardWater" />
+                    <include layout="@layout/item_sensor_square" android:id="@+id/cardTilt" />
+                </LinearLayout>
 
             </LinearLayout>
 
-            <!-- 设备快捷卡片 -->
+            <!-- 动态预警条 -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
+                android:layout_marginHorizontal="18dp"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardBackgroundColor="#FFF0E6">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:paddingVertical="12dp"
+                    android:paddingHorizontal="16dp"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_alarms"
+                        app:tint="#FF7D00"/>
                     <TextView
+                        android:id="@+id/vibrationStatus"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="常用设备"
-                        android:textSize="16sp"
-                        android:textColor="@color/text_primary"
+                        android:text="地面震动监测中..."
+                        android:textColor="#FF7D00"
+                        android:layout_marginStart="12dp"
+                        android:textSize="13sp"
                         android:textStyle="bold"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="查看全部"
-                        android:textSize="14sp"
-                        android:textColor="@color/mi_blue"
-                        android:drawableEnd="@drawable/ic_arrow_right"
-                        android:drawablePadding="4dp"
-                        android:gravity="center_vertical"/>
+                    <ProgressBar
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:indeterminate="true"
+                        android:indeterminateTint="#FF7D00"
+                        style="?android:attr/progressBarStyleSmall"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 场景卡片 -->
+            <!-- 趋势分析 -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp"
+                android:layout_marginHorizontal="18dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="1dp"
                 app:cardBackgroundColor="@color/white">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
-                    <TextView
+                    android:padding="20dp">
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="智能场景"
-                        android:textSize="16sp"
-                        android:textColor="@color/text_primary"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="12dp"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content">
                         <TextView
-                            android:id="@+id/tabScene"
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="回家"
-                            android:textSize="14sp"
-                            android:textColor="@color/mi_blue"
-                            android:gravity="center"
-                            android:paddingVertical="12dp"
-                            android:background="@drawable/mi_chip_background"/>
-                        <TextView
-                            android:id="@+id/tabAll"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="离家"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_secondary"
-                            android:gravity="center"
-                            android:paddingVertical="12dp"
-                            android:background="@drawable/mi_chip_background"/>
-                        <TextView
-                            android:id="@+id/tabEast"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="睡眠"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_secondary"
-                            android:gravity="center"
-                            android:paddingVertical="12dp"
-                            android:background="@drawable/mi_chip_background"/>
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- 数据趋势卡片 -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/white">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="12dp">
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="温度趋势"
-                            android:textSize="16sp"
+                            android:text="趋势动态"
+                            android:textStyle="bold"
                             android:textColor="@color/text_primary"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:id="@+id/timeFilter1h"
+                            android:textSize="16sp"/>
+                        <Spinner
+                            android:id="@+id/chartParamSpinner"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1h"
-                            android:textSize="12sp"
-                            android:textColor="@color/mi_blue"
+                            android:layout_height="32dp"
+                            android:layout_alignParentEnd="true"
+                            android:background="@drawable/mi_chip_background"
                             android:paddingHorizontal="12dp"
-                            android:paddingVertical="6dp"
-                            android:background="@drawable/mi_chip_background"/>
-                        <TextView
-                            android:id="@+id/timeFilter24h"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="24h"
-                            android:textSize="12sp"
-                            android:textColor="@color/text_secondary"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="6dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/mi_chip_background"/>
-                        <TextView
-                            android:id="@+id/timeFilter7d"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="7d"
-                            android:textSize="12sp"
-                            android:textColor="@color/text_secondary"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="6dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/mi_chip_background"/>
-                    </LinearLayout>
+                            android:spinnerMode="dropdown"/>
+                    </RelativeLayout>
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/lineChart"
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"/>
+                        android:layout_height="160dp"
+                        android:layout_marginTop="16dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 快捷操作按钮 -->
-            <LinearLayout
+            <!-- 快捷控制 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="常用快捷控制"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="24dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/homeDeviceRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="16dp">
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/automationControlButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="智能控制"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    style="@style/Widget.App.Button.Primary"
-                    app:icon="@drawable/ic_automation"
-                    app:iconPadding="8dp"
-                    app:iconGravity="start"/>
-            </LinearLayout>
+                android:padding="12dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

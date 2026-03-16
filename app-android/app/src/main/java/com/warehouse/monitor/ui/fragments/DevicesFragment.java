@@ -61,7 +61,10 @@ public class DevicesFragment extends Fragment {
         
         deviceAdapter.setOnDeviceClickListener(new DeviceAdapter.OnDeviceClickListener() {
             @Override
-            public void onDeviceClick(Device device) { }
+            public void onDeviceClick(Device device) {
+                // 显示设备详情（防止空实现导致的问题）
+                Toast.makeText(requireContext(), "设备: " + device.getName(), Toast.LENGTH_SHORT).show();
+            }
 
             @Override
             public void onControlClick(Device device, boolean isChecked, int position) {

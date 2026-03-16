@@ -78,6 +78,17 @@
     <string name="ventilation_fan">通风扇</string>
     <string name="dehumidifier">除湿机</string>
     <string name="exhaust_device">排气装置</string>
+    <string name="air_circulation">空气循环系统</string>
+    <string name="temperature_control">温控设备</string>
+    <string name="humidity_control">湿度控制器</string>
+    <string name="air_purifier">空气净化器</string>
+    <string name="ventilation_damper">通风风阀</string>
+    <string name="cooling_fan">冷风机</string>
+    <string name="exhaust_fan">排风扇</string>
+    <string name="air_quality_sensor">空气质量传感器</string>
+    <string name="fire_alarm">火灾报警器</string>
+    <string name="emergency_light">应急照明</string>
+    <string name="security_camera">安防摄像头</string>
     <string name="device_control">设备控制</string>
     <string name="turn_on">开启</string>
     <string name="turn_off">关闭</string>

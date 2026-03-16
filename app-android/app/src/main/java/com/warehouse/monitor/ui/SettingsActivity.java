@@ -1,25 +1,27 @@
 package com.warehouse.monitor.ui;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.slider.Slider;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.warehouse.monitor.R;
+import com.warehouse.monitor.mqtt.MqttManager;
 import com.warehouse.monitor.utils.SharedPreferencesHelper;
+
+import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private SharedPreferencesHelper prefs;
-    private SwitchMaterial autoDrainSwitch;
-    private Slider drainThresholdSlider;
-    private ChipGroup fanSpeedChipGroup;
-    private Button saveButton;
+    private com.google.android.material.textfield.TextInputEditText newPasswordEditText;
+    private Slider waterThresholdSlider, waterRecoverSlider;
+    private Button updatePasswordButton, saveAllSettingsButton;
+    private MqttManager mqttManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,17 +29,19 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         prefs = new SharedPreferencesHelper(this);
+        mqttManager = MqttManager.getInstance(this);
+        
         initViews();
         setupToolbar();
-        loadSettings();
         setupClickListeners();
     }
 
     private void initViews() {
-        autoDrainSwitch = findViewById(R.id.autoDrainSwitch);
-        drainThresholdSlider = findViewById(R.id.drainThresholdSlider);
-        fanSpeedChipGroup = findViewById(R.id.fanSpeedChipGroup);
-        saveButton = findViewById(R.id.saveButton);
+        newPasswordEditText = findViewById(R.id.newPasswordEditText);
+        updatePasswordButton = findViewById(R.id.updatePasswordButton);
+        waterThresholdSlider = findViewById(R.id.waterThresholdSlider);
+        waterRecoverSlider = findViewById(R.id.waterRecoverSlider);
+        saveAllSettingsButton = findViewById(R.id.saveAllSettingsButton);
     }
 
     private void setupToolbar() {
@@ -46,34 +50,35 @@ public class SettingsActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setDisplayShowHomeEnabled(true);
+                getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
             }
             toolbar.setNavigationOnClickListener(v -> finish());
         }
     }
 
-    private void loadSettings() {
-        // Load settings from SharedPreferences
-        // Set default values for now as placeholders
-        if (autoDrainSwitch != null) autoDrainSwitch.setChecked(true);
-        if (drainThresholdSlider != null) drainThresholdSlider.setValue(5.0f);
-    }
-
     private void setupClickListeners() {
-        if (saveButton != null) {
-            saveButton.setOnClickListener(v -> saveSettings());
-        }
-    }
+        updatePasswordButton.setOnClickListener(v -> {
+            String newPass = newPasswordEditText.getText().toString();
+            if (TextUtils.isEmpty(newPass) || newPass.length() < 6) {
+                Toast.makeText(this, "密码长度不能少于6位", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            prefs.putString("user_password", newPass);
+            Toast.makeText(this, "密码修改成功", Toast.LENGTH_SHORT).show();
+            newPasswordEditText.setText("");
+        });
 
-    private void saveSettings() {
-        // Save logic for STM32 settings
-        Toast.makeText(this, "系统配置已保存并同步至单片机", Toast.LENGTH_SHORT).show();
-        finish();
-    }
+        saveAllSettingsButton.setOnClickListener(v -> {
+            float limit = waterThresholdSlider.getValue();
+            float recover = waterRecoverSlider.getValue();
+            
+            // 下发多参数 JSON 至单片机
+            String payload = String.format(Locale.getDefault(), 
+                "{\"water_limit\":%.1f, \"water_recover\":%.1f}", limit, recover);
+            mqttManager.publishMessage("sensor/config", payload);
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
+            Toast.makeText(this, "多参数已同步至单片机", Toast.LENGTH_SHORT).show();
+            finish();
+        });
     }
 }

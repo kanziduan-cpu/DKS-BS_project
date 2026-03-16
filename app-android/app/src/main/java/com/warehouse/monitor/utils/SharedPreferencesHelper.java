@@ -22,13 +22,14 @@ public class SharedPreferencesHelper {
     private static final String KEY_WAREHOUSES = "warehouses";
     private static final String KEY_CURRENT_WAREHOUSE = "current_warehouse";
     private static final String KEY_ALARMS = "alarms";
-    private static final String KEY_DEVICES = "devices"; // Added key
+    private static final String KEY_DEVICES = "devices"; 
     private static final String KEY_REMEMBER_PASSWORD = "remember_password";
     private static final String KEY_USERNAME = "saved_username";
     private static final String KEY_PASSWORD = "saved_password";
     private static final String KEY_THEME = "theme";
     private static final String KEY_TEMP_UNIT = "temp_unit";
     private static final String KEY_SOUND_ENABLED = "sound_enabled";
+    private static final String KEY_USER_PASSWORD = "user_password";
 
     private SharedPreferences prefs;
     private Gson gson;
@@ -36,6 +37,15 @@ public class SharedPreferencesHelper {
     public SharedPreferencesHelper(Context context) {
         prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         gson = new Gson();
+    }
+
+    // Generic String methods
+    public void putString(String key, String value) {
+        prefs.edit().putString(key, value).apply();
+    }
+
+    public String getString(String key, String defaultValue) {
+        return prefs.getString(key, defaultValue);
     }
 
     // User

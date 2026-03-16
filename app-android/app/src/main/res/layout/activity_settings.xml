@@ -3,40 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/qq_bg">
+    android:background="@drawable/mi_sky_gradient">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsingToolbar"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:contentScrim="@color/qq_blue"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="系统深度配置">
-
-            <!-- 使用普通 ImageView 替代 Lottie，确保编译通过 -->
-            <ImageView
-                android:id="@+id/settingsHeaderImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_warehouse_logo"
-                android:scaleType="centerInside"
-                android:padding="48dp"
-                app:layout_collapseMode="parallax" />
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/ic_back" />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            android:layout_height="?attr/actionBarSize"
+            app:title="系统设置"
+            app:titleTextColor="@color/text_primary"
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@color/text_primary" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -50,61 +31,12 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- 排水系统设置 -->
+            <!-- 安全修改密码 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="排水系统配置"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:layout_marginBottom="12dp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="16dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="自动排水模式"
-                            android:textColor="@color/text_primary" />
-                        <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/autoDrainSwitch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/drainThresholdSlider"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:valueFrom="0.0"
-                        android:valueTo="100.0"
-                        android:value="5.0" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- 通风系统设置 -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="通风循环配置"
-                android:textSize="15sp"
+                android:text="账户安全"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
                 android:layout_marginBottom="12dp" />
@@ -113,49 +45,107 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#CCFFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/fanSpeedChipGroup"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:singleSelection="true">
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipLow"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
+                        android:hint="新密码"
+                        app:passwordToggleEnabled="true"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/newPasswordEditText"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="静音" />
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipMid"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="标准"
-                            android:checked="true" />
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipHigh"
-                            style="@style/Widget.MaterialComponents.Chip.Choice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="强力" />
-                    </com.google.android.material.chip.ChipGroup>
+                            android:inputType="textPassword"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/updatePasswordButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="54dp"
+                        android:layout_marginTop="16dp"
+                        android:text="更新密码"
+                        app:cornerRadius="27dp"
+                        android:backgroundTint="@color/mi_blue"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <Button
-                android:id="@+id/saveButton"
+            <!-- 硬件水位阈值设置 - 仅保留水位多参数 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="水位预警配置"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="12dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="#CCFFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="报警高度阈值 (cm)"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_primary"/>
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/waterThresholdSlider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:valueFrom="0.0"
+                        android:valueTo="100.0"
+                        android:value="20.0"
+                        app:thumbColor="@color/mi_blue"
+                        app:trackColorActive="@color/mi_blue"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="恢复高度 (cm)"
+                        android:textSize="14sp"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginTop="12dp"/>
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/waterRecoverSlider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:valueFrom="0.0"
+                        android:valueTo="100.0"
+                        android:value="10.0" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveAllSettingsButton"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:text="保存并同步至硬件"
+                android:text="同步参数至单片机"
                 app:cornerRadius="28dp"
-                style="@style/Widget.MaterialComponents.Button" />
+                android:backgroundTint="@color/mi_blue"
+                android:textColor="@color/white" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

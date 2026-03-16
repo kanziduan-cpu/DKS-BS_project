@@ -115,7 +115,7 @@ public class AlarmsFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 "SENSOR_01",
                 "TEMPERATURE",
                 "WARNING",
-                "温度超过阈值: 31.5℃",
+                "温度超过阈值: 45℃",
                 System.currentTimeMillis() - 3600000 // 1小时前
         );
         
