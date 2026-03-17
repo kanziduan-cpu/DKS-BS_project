@@ -1,20 +1,15 @@
 package com.warehouse.monitor.ui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.warehouse.monitor.R;
 import com.warehouse.monitor.adapter.MainViewPagerAdapter;
 import com.warehouse.monitor.mqtt.MqttManager;
@@ -34,25 +29,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        // 1. 【核心修复】设置沉浸式并开启“深色图标”模式
+        // 因为背景是浅色的豆沙绿，必须用深色图标（黑色的时间、电量等）
         StatusBarUtils.setTransparentStatusBar(this);
-        StatusBarUtils.setLightStatusBar(this, false);
+        StatusBarUtils.setLightStatusBar(this, true); 
 
         setContentView(R.layout.activity_main);
 
         prefs = new SharedPreferencesHelper(this);
 
-        // 1. 登录校验
         if (prefs.getUser() == null) {
             navigateToLogin();
             return;
         }
 
-        // 2. 初始化 UI
         initViews();
         setupViewPager();
         setupBottomNavigation();
-
-        // 3. 【关键】启动 MQTT 连接并监听状态
         initMqtt();
     }
 
@@ -88,26 +81,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initMqtt() {
-        Log.d(TAG, "Initializing MQTT Connection...");
         mqttManager = MqttManager.getInstance(this);
-        
-        // 添加全局状态监听，方便在 Logcat 中查看
-        mqttManager.addConnectionStatusListener((status, message) -> {
-            Log.d("MQTT_STATUS", "Status: " + status + " | Msg: " + message);
-        });
-
-        // 检查网络连接状态再启动
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager != null) {
-            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-            if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
-                mqttManager.connect();
-            } else {
-                Log.w(TAG, "No network connection available, delaying MQTT connection");
-                // 显示网络连接提示
-                Toast.makeText(this, "无网络连接，请检查网络设置", Toast.LENGTH_SHORT).show();
-            }
-        }
+        mqttManager.connect();
     }
 
     private void navigateToLogin() {
@@ -115,14 +90,5 @@ public class MainActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // 只有在 Activity 真正销毁时才断开连接，建议常驻连接则可不断开
-        if (mqttManager != null) {
-            // mqttManager.disconnect(); 
-        }
     }
 }

@@ -5,13 +5,13 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.warehouse.monitor.model.Alarm;
 import com.warehouse.monitor.model.EnvironmentData;
 import com.warehouse.monitor.utils.AppLogger;
 
-// 切换到 Paho 核心库的 AsyncClient 以解决 Android 14 兼容性问题
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
@@ -29,11 +29,14 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * MQTT管理器 - 优化逻辑，增强Android 14稳定性
+ */
 public class MqttManager implements MqttCallback {
     private static MqttManager instance;
 
     private final Context context;
-    private MqttAsyncClient mqttClient; // 改用 MqttAsyncClient
+    private MqttAsyncClient mqttClient;
     private MqttConnectOptions mqttOptions;
     private final Gson gson;
     private final Handler mainHandler;
@@ -82,9 +85,16 @@ public class MqttManager implements MqttCallback {
 
     private void initMqttOptions() {
         mqttOptions = new MqttConnectOptions();
-        mqttOptions.setUserName(MqttConfig.USERNAME);
-        mqttOptions.setPassword(MqttConfig.PASSWORD != null && !MqttConfig.PASSWORD.isEmpty() 
-                ? MqttConfig.PASSWORD.toCharArray() : null);
+        
+        // 安全处理认证信息
+        if (MqttConfig.USERNAME != null && !MqttConfig.USERNAME.trim().isEmpty()) {
+            mqttOptions.setUserName(MqttConfig.USERNAME);
+        }
+        
+        if (MqttConfig.PASSWORD != null && !MqttConfig.PASSWORD.isEmpty()) {
+            mqttOptions.setPassword(MqttConfig.PASSWORD.toCharArray());
+        }
+
         mqttOptions.setKeepAliveInterval(MqttConfig.KEEP_ALIVE_INTERVAL);
         mqttOptions.setConnectionTimeout(MqttConfig.CONNECTION_TIMEOUT);
         mqttOptions.setCleanSession(MqttConfig.CLEAN_SESSION);
@@ -92,41 +102,38 @@ public class MqttManager implements MqttCallback {
     }
 
     public void connect() {
-        if (isConnected()) {
-            AppLogger.mqtt("Already connected");
+        if (mqttClient != null && mqttClient.isConnected()) {
+            AppLogger.mqtt("MQTT already connected.");
             return;
         }
 
         String clientId = MqttConfig.getClientId();
         String serverUri = MqttConfig.getServerUri();
 
-        AppLogger.mqtt("Connecting to: " + serverUri);
-
         try {
-            // 【关键修复】使用 TimerPingSender 替换 MqttAndroidClient 默认的 AlarmPingSender
-            // 这将避免在 Android 14 上因缺少 RECEIVER_EXPORTED 标志而导致的 BroadcastReceiver 注册崩溃
+            // 使用 MemoryPersistence 和 TimerPingSender 确保 Android 14 兼容性
             mqttClient = new MqttAsyncClient(serverUri, clientId, new MemoryPersistence(), new TimerPingSender());
             mqttClient.setCallback(this);
 
-            updateConnectionStatus(ConnectionStatus.CONNECTING, "正在连接...");
+            updateConnectionStatus(ConnectionStatus.CONNECTING, "正在尝试建立连接...");
 
             mqttClient.connect(mqttOptions, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    AppLogger.mqtt("MQTT Connected");
-                    updateConnectionStatus(ConnectionStatus.CONNECTED, "连接成功");
+                    AppLogger.mqtt("Connected to " + serverUri);
+                    updateConnectionStatus(ConnectionStatus.CONNECTED, "网络连接成功");
                     subscribeToTopics();
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    AppLogger.mqtt("MQTT Connect Failed: " + exception.getMessage());
-                    updateConnectionStatus(ConnectionStatus.ERROR, "连接失败: " + exception.getMessage());
+                    AppLogger.error("MQTT", "Connect failed: " + (exception != null ? exception.getMessage() : "unknown"));
+                    updateConnectionStatus(ConnectionStatus.ERROR, "网络连接失败");
                 }
             });
         } catch (MqttException e) {
-            AppLogger.error("MQTT", "Exception: " + e.getMessage());
-            updateConnectionStatus(ConnectionStatus.ERROR, "异常: " + e.getMessage());
+            AppLogger.error("MQTT", "Connect error: " + e.getMessage());
+            updateConnectionStatus(ConnectionStatus.ERROR, "连接异常: " + e.getMessage());
         }
     }
 
@@ -140,19 +147,21 @@ public class MqttManager implements MqttCallback {
                 mqttClient.disconnect(null, new IMqttActionListener() {
                     @Override
                     public void onSuccess(IMqttToken asyncActionToken) {
-                        updateConnectionStatus(ConnectionStatus.DISCONNECTED, "已断开");
+                        updateConnectionStatus(ConnectionStatus.DISCONNECTED, "已手动断开连接");
                     }
                     @Override
-                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) { }
+                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {}
                 });
             } catch (MqttException e) {
-                e.printStackTrace();
+                AppLogger.error("MQTT", "Disconnect error: " + e.getMessage());
             }
         }
     }
 
     public void cleanup() {
-        disconnect();
+        if (isConnected()) {
+            try { mqttClient.disconnect(); } catch (Exception ignored) {}
+        }
         connectionListeners.clear();
         environmentListeners.clear();
         deviceStatusListeners.clear();
@@ -163,62 +172,99 @@ public class MqttManager implements MqttCallback {
     private void subscribeToTopics() {
         if (mqttClient == null || !mqttClient.isConnected()) return;
         try {
+            // 订阅环境数据
             mqttClient.subscribe(MqttConfig.TOPIC_ENVIRONMENT, MqttConfig.QOS_AT_LEAST_ONCE, null, new IMqttActionListener() {
-                @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    AppLogger.mqtt("Subscribed: " + MqttConfig.TOPIC_ENVIRONMENT);
-                }
-                @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    AppLogger.error("MQTT", "Subscribe failed");
-                }
+                @Override public void onSuccess(IMqttToken t) { AppLogger.mqtt("Subscribed to Data"); }
+                @Override public void onFailure(IMqttToken t, Throwable e) { AppLogger.error("MQTT", "Data sub error"); }
             });
-
+            // 订阅状态数据
             mqttClient.subscribe(MqttConfig.TOPIC_DEVICE_STATUS, MqttConfig.QOS_AT_LEAST_ONCE, null, new IMqttActionListener() {
-                @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    AppLogger.mqtt("Subscribed: " + MqttConfig.TOPIC_DEVICE_STATUS);
-                }
-                @Override
-                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    AppLogger.error("MQTT", "Subscribe failed");
-                }
+                @Override public void onSuccess(IMqttToken t) { AppLogger.mqtt("Subscribed to Status"); }
+                @Override public void onFailure(IMqttToken t, Throwable e) { AppLogger.error("MQTT", "Status sub error"); }
             });
         } catch (MqttException e) {
-            e.printStackTrace();
+            AppLogger.error("MQTT", "Subscribe exception: " + e.getMessage());
         }
     }
 
+    // --- 指令发送函数族 ---
+
+    public void sendVentControl(String deviceId, int angle) {
+        if (deviceId == null) return;
+        JsonObject json = new JsonObject();
+        json.addProperty("type", "vent");
+        json.addProperty("angle", angle);
+        json.addProperty("timestamp", System.currentTimeMillis());
+        String topic = MqttConfig.TOPIC_DEVICE_CONTROL.replace("+", deviceId);
+        publishMessage(topic, json.toString());
+    }
+
+    public void sendAlarmControl(String deviceId, boolean isOn, int mode) {
+        if (deviceId == null) return;
+        JsonObject json = new JsonObject();
+        json.addProperty("type", "alarm");
+        json.addProperty("state", isOn ? 1 : 0);
+        json.addProperty("mode", mode);
+        String topic = MqttConfig.TOPIC_DEVICE_CONTROL.replace("+", deviceId);
+        publishMessage(topic, json.toString());
+    }
+
+    public void sendThresholdConfig(String deviceId, String configJson) {
+        if (deviceId == null || configJson == null) return;
+        try {
+            JsonObject json = new JsonObject();
+            json.addProperty("type", "config");
+            json.add("payload", JsonParser.parseString(configJson));
+            String topic = MqttConfig.TOPIC_DEVICE_CONTROL.replace("+", deviceId);
+            publishMessage(topic, json.toString());
+        } catch (Exception e) {
+            AppLogger.error("MQTT", "Config JSON error: " + e.getMessage());
+        }
+    }
+
+    public void sendCalibrationRequest(String deviceId, String sensorType) {
+        if (deviceId == null || sensorType == null) return;
+        JsonObject json = new JsonObject();
+        json.addProperty("type", "calibration");
+        json.addProperty("target", sensorType);
+        String topic = MqttConfig.TOPIC_DEVICE_CONTROL.replace("+", deviceId);
+        publishMessage(topic, json.toString());
+    }
+
     public void publishDeviceControl(String deviceId, String action, String value) {
-        if (!isConnected()) return;
+        if (deviceId == null) return;
         try {
             JsonObject json = new JsonObject();
             json.addProperty("deviceId", deviceId);
             json.addProperty("action", action);
             json.addProperty("value", value);
             json.addProperty("timestamp", System.currentTimeMillis());
-
             String topic = MqttConfig.TOPIC_DEVICE_CONTROL.replace("+", deviceId);
             publishMessage(topic, json.toString());
         } catch (Exception e) {
-            e.printStackTrace();
+            AppLogger.error("MQTT", "Publish error: " + e.getMessage());
         }
     }
 
     public void publishMessage(String topic, String payload) {
-        if (!isConnected()) return;
+        if (!isConnected()) {
+            AppLogger.warn("MQTT", "Cannot publish: Not connected");
+            return;
+        }
         try {
             MqttMessage message = new MqttMessage(payload.getBytes(StandardCharsets.UTF_8));
             message.setQos(MqttConfig.QOS_AT_LEAST_ONCE);
             mqttClient.publish(topic, message);
+            AppLogger.mqtt("Published to " + topic);
         } catch (MqttException e) {
-            e.printStackTrace();
+            AppLogger.error("MQTT", "Message publish error: " + e.getMessage());
         }
     }
 
     @Override
     public void connectionLost(Throwable cause) {
-        updateConnectionStatus(ConnectionStatus.DISCONNECTED, "连接丢失: " + (cause != null ? cause.getMessage() : "unknown"));
+        AppLogger.warn("MQTT", "Connection lost: " + (cause != null ? cause.getMessage() : "unknown"));
+        updateConnectionStatus(ConnectionStatus.DISCONNECTED, "网络连接已断开");
     }
 
     @Override
@@ -229,34 +275,35 @@ public class MqttManager implements MqttCallback {
 
     private void processMessage(String topic, String payload) {
         try {
-            JsonObject json = JsonParser.parseString(payload).getAsJsonObject();
+            JsonElement element = JsonParser.parseString(payload);
+            if (!element.isJsonObject()) return;
+            JsonObject json = element.getAsJsonObject();
 
             if (topic.contains("sensor/data") || topic.contains("environment")) {
                 EnvironmentData data = gson.fromJson(json, EnvironmentData.class);
-                if (data != null) {
-                    notifyEnvironmentListeners(data);
-                }
-            } else if (topic.contains("status") && !topic.contains("alarm")) {
+                if (data != null) notifyEnvironmentListeners(data);
+            } else if (topic.contains("status")) {
                 String deviceId = json.has("deviceId") ? json.get("deviceId").getAsString() : "";
-                boolean isOnline = json.has("status") && "ONLINE".equals(json.get("status").getAsString());
-                boolean isRunning = json.has("isRunning") && json.get("isRunning").getAsBoolean();
-                notifyDeviceStatusListeners(deviceId, isOnline, isRunning);
+                boolean online = json.has("status") && "ONLINE".equals(json.get("status").getAsString());
+                boolean run = json.has("isRunning") && json.get("isRunning").getAsBoolean();
+                notifyDeviceStatusListeners(deviceId, online, run);
             } else if (topic.contains("alarm")) {
                 Alarm alarm = gson.fromJson(json, Alarm.class);
-                notifyAlarmListeners(alarm);
+                if (alarm != null) notifyAlarmListeners(alarm);
             }
         } catch (Exception e) {
-            AppLogger.error("MQTT", "Parse error: " + e.getMessage());
+            AppLogger.error("MQTT", "Parse error on topic " + topic + ": " + e.getMessage());
         }
     }
 
-    @Override
-    public void deliveryComplete(IMqttDeliveryToken token) {}
+    @Override public void deliveryComplete(IMqttDeliveryToken token) {}
+
+    // --- 监听器分发逻辑 (主线程) ---
 
     private void updateConnectionStatus(ConnectionStatus status, String message) {
         connectionStatus = status;
         mainHandler.post(() -> {
-            for (OnConnectionStatusListener listener : connectionListeners) {
+            for (OnConnectionStatusListener listener : new ArrayList<>(connectionListeners)) {
                 listener.onConnectionStatusChanged(status, message);
             }
         });
@@ -264,50 +311,34 @@ public class MqttManager implements MqttCallback {
 
     private void notifyEnvironmentListeners(EnvironmentData data) {
         mainHandler.post(() -> {
-            for (OnEnvironmentDataListener listener : environmentListeners) {
+            for (OnEnvironmentDataListener listener : new ArrayList<>(environmentListeners)) {
                 listener.onEnvironmentDataReceived(data);
             }
         });
     }
 
-    private void notifyDeviceStatusListeners(String deviceId, boolean isOnline, boolean isRunning) {
+    private void notifyDeviceStatusListeners(String deviceId, boolean online, boolean run) {
         mainHandler.post(() -> {
-            for (OnDeviceStatusListener listener : deviceStatusListeners) {
-                listener.onDeviceStatusReceived(deviceId, isOnline, isRunning);
+            for (OnDeviceStatusListener listener : new ArrayList<>(deviceStatusListeners)) {
+                listener.onDeviceStatusReceived(deviceId, online, run);
             }
         });
     }
 
     private void notifyAlarmListeners(Alarm alarm) {
         mainHandler.post(() -> {
-            for (OnAlarmListener listener : alarmListeners) {
+            for (OnAlarmListener listener : new ArrayList<>(alarmListeners)) {
                 listener.onAlarmReceived(alarm);
             }
         });
     }
 
-    public void addConnectionStatusListener(OnConnectionStatusListener listener) {
-        if (listener != null && !connectionListeners.contains(listener)) connectionListeners.add(listener);
-    }
-    public void removeConnectionStatusListener(OnConnectionStatusListener listener) {
-        connectionListeners.remove(listener);
-    }
-    public void addEnvironmentDataListener(OnEnvironmentDataListener listener) {
-        if (listener != null && !environmentListeners.contains(listener)) environmentListeners.add(listener);
-    }
-    public void removeEnvironmentDataListener(OnEnvironmentDataListener listener) {
-        environmentListeners.remove(listener);
-    }
-    public void addDeviceStatusListener(OnDeviceStatusListener listener) {
-        if (listener != null && !deviceStatusListeners.contains(listener)) deviceStatusListeners.add(listener);
-    }
-    public void removeDeviceStatusListener(OnDeviceStatusListener listener) {
-        deviceStatusListeners.remove(listener);
-    }
-    public void addAlarmListener(OnAlarmListener listener) {
-        if (listener != null && !alarmListeners.contains(listener)) alarmListeners.add(listener);
-    }
-    public void removeAlarmListener(OnAlarmListener listener) {
-        alarmListeners.remove(listener);
-    }
+    public void addConnectionStatusListener(OnConnectionStatusListener l) { if (l != null && !connectionListeners.contains(l)) connectionListeners.add(l); }
+    public void removeConnectionStatusListener(OnConnectionStatusListener l) { connectionListeners.remove(l); }
+    public void addEnvironmentDataListener(OnEnvironmentDataListener l) { if (l != null && !environmentListeners.contains(l)) environmentListeners.add(l); }
+    public void removeEnvironmentDataListener(OnEnvironmentDataListener l) { environmentListeners.remove(l); }
+    public void addDeviceStatusListener(OnDeviceStatusListener l) { if (l != null && !deviceStatusListeners.contains(l)) deviceStatusListeners.add(l); }
+    public void removeDeviceStatusListener(OnDeviceStatusListener l) { deviceStatusListeners.remove(l); }
+    public void addAlarmListener(OnAlarmListener l) { if (l != null && !alarmListeners.contains(l)) alarmListeners.add(l); }
+    public void removeAlarmListener(OnAlarmListener l) { alarmListeners.remove(l); }
 }

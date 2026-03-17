@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +24,7 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.warehouse.monitor.R;
 import com.warehouse.monitor.adapter.DeviceAdapter;
 import com.warehouse.monitor.db.AppDatabase;
@@ -39,11 +39,15 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * 工业监控主页面Fragment - 已增加空气质量指标并优化网格布局
+ * 工业监控主页面Fragment - 已修复抽象方法实现问题
  */
-public class HomeFragment extends Fragment implements MockDataManager.OnDataUpdateListener {
+public class HomeFragment extends Fragment implements 
+        MockDataManager.OnDataUpdateListener, 
+        MqttManager.OnEnvironmentDataListener {
     
-    private TextView tempValue, humiValue, waterValue, tiltValue, vibrationStatus;
+    private TextView tempValue, humiValue, waterValue, tiltValue, vibrationStatus, homeSubtitle;
+    private TextView dataSourceLabel;
+    private SwitchMaterial dataSourceSwitch;
     private RecyclerView homeDeviceRecyclerView;
     private DeviceAdapter deviceAdapter;
     private LineChart lineChart;
@@ -53,10 +57,8 @@ public class HomeFragment extends Fragment implements MockDataManager.OnDataUpda
 
     private List<EnvironmentData> environmentDataList = new ArrayList<>();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
-    
-    // 增加了“空气质量”
-    private String[] chartParams = {"实时温度", "环境湿度", "水位高度", "姿态倾角", "空气质量"};
     private int currentChartIndex = 0;
+    private boolean isRealTimeMode = false; 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,22 +73,18 @@ public class HomeFragment extends Fragment implements MockDataManager.OnDataUpda
         initViews(view);
         initData();
         setupDeviceRecyclerView();
+        setupDataSourceSwitch();
     }
     
     private void initViews(View view) {
+        homeSubtitle = view.findViewById(R.id.homeSubtitle);
         vibrationStatus = view.findViewById(R.id.vibrationStatus);
+        dataSourceLabel = view.findViewById(R.id.dataSourceLabel);
+        dataSourceSwitch = view.findViewById(R.id.dataSourceSwitch);
         
-        // 映射 2x2 传感器卡片
-        setupSensorCard(view.findViewById(R.id.cardTemp), "温度", R.drawable.ic_light, Color.parseColor("#FF7D00"));
         tempValue = view.findViewById(R.id.cardTemp).findViewById(R.id.sensorValue);
-
-        setupSensorCard(view.findViewById(R.id.cardHumi), "湿度", R.drawable.ic_water_level, Color.parseColor("#1677FF"));
         humiValue = view.findViewById(R.id.cardHumi).findViewById(R.id.sensorValue);
-
-        setupSensorCard(view.findViewById(R.id.cardWater), "水位", R.drawable.ic_pump, Color.parseColor("#4CAF50"));
         waterValue = view.findViewById(R.id.cardWater).findViewById(R.id.sensorValue);
-
-        setupSensorCard(view.findViewById(R.id.cardTilt), "姿态", R.drawable.ic_tilt, Color.parseColor("#9C27B0"));
         tiltValue = view.findViewById(R.id.cardTilt).findViewById(R.id.sensorValue);
 
         homeDeviceRecyclerView = view.findViewById(R.id.homeDeviceRecyclerView);
@@ -97,69 +95,61 @@ public class HomeFragment extends Fragment implements MockDataManager.OnDataUpda
         setupSpinner();
     }
 
-    private void setupDeviceRecyclerView() {
-        homeDeviceRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
-        List<Device> displayDevices = new ArrayList<>();
-        deviceAdapter = new DeviceAdapter(displayDevices, requireContext());
-        homeDeviceRecyclerView.setAdapter(deviceAdapter);
+    private void setupDataSourceSwitch() {
+        if (dataSourceSwitch == null) return;
+        
+        if (!isRealTimeMode) {
+            MockDataManager.getInstance().startDataGeneration();
+        }
 
-        database.deviceDao().getAllDevicesLive().observe(getViewLifecycleOwner(), devices -> {
-            if (devices != null) {
-                List<Device> coreDevices = new ArrayList<>();
-                for (Device d : devices) {
-                    if (d.getDeviceId().contains("FAN") || d.getDeviceId().contains("PUMP") || d.getDeviceId().contains("ALARM")) {
-                        coreDevices.add(d);
-                    }
-                }
-                deviceAdapter.updateDevices(coreDevices);
+        dataSourceSwitch.setOnCheckedChangeListener((btn, isChecked) -> {
+            isRealTimeMode = isChecked;
+            updateModeUI();
+            resetAllDisplayData();
+            
+            if (isChecked) {
+                MockDataManager.getInstance().stopDataGeneration();
+            } else {
+                MockDataManager.getInstance().startDataGeneration();
             }
-        });
-
-        deviceAdapter.setOnDeviceClickListener(new DeviceAdapter.OnDeviceClickListener() {
-            @Override 
-            public void onDeviceClick(Device device) {
-                // 显示设备详情（防止空实现导致的问题）
-                Toast.makeText(requireContext(), "设备: " + device.getName(), Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void onControlClick(Device device, boolean isChecked, int position) {
-                new Thread(() -> {
-                    device.setRunning(isChecked);
-                    database.deviceDao().updateDevice(device);
-                    String action = isChecked ? "turn_on" : "turn_off";
-                    mqttManager.publishDeviceControl(device.getDeviceId(), action, "1");
-                }).start();
-            }
+            
+            String msg = isChecked ? "实时模式：已建立云端链路监听" : "演示模式：本地模拟器已启动";
+            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
         });
     }
 
-    private void setupSensorCard(View card, String title, int icon, int tint) {
-        if (card == null) return;
-        ((TextView) card.findViewById(R.id.sensorTitle)).setText(title);
-        ImageView iv = card.findViewById(R.id.sensorIcon);
-        iv.setImageResource(icon);
-        iv.setColorFilter(tint);
-    }
-    
-    private void setupSpinner() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), 
-                android.R.layout.simple_spinner_item, chartParams);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        chartParamSpinner.setAdapter(adapter);
-        chartParamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                currentChartIndex = position;
-                updateChartData();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+    private void resetAllDisplayData() {
+        environmentDataList.clear();
+        lineChart.clear();
+        tempValue.setText("--");
+        humiValue.setText("--");
+        waterValue.setText("--");
+        tiltValue.setText("--");
+        
+        if (isRealTimeMode) {
+            homeSubtitle.setText("实时链路：等待第一条数据包...");
+            vibrationStatus.setText("正在建立握手...");
+        } else {
+            homeSubtitle.setText("演示模式：本地数据生成中");
+        }
     }
 
-    @Override
-    public void onEnvironmentDataUpdate(EnvironmentData data) {
-        if (!isAdded()) return;
+    private void updateModeUI() {
+        if (dataSourceLabel != null) {
+            dataSourceLabel.setText(isRealTimeMode ? "实时数据" : "模拟数据");
+            dataSourceLabel.setTextColor(isRealTimeMode ? Color.parseColor("#4CAF50") : Color.parseColor("#1677FF"));
+        }
+    }
+
+    @Override public void onEnvironmentDataReceived(EnvironmentData data) { if (isRealTimeMode) processDataUpdate(data); }
+    @Override public void onEnvironmentDataUpdate(EnvironmentData data) { if (!isRealTimeMode) processDataUpdate(data); }
+
+    // 实现 OnDataUpdateListener 的其他必须方法
+    @Override public void onDeviceStatusUpdate(String deviceId, boolean isOnline, boolean isRunning) { }
+    @Override public void onAlarmTriggered(Alarm alarm) { }
+
+    private void processDataUpdate(EnvironmentData data) {
+        if (!isAdded() || data == null) return;
         environmentDataList.add(0, data);
         if (environmentDataList.size() > 50) environmentDataList.remove(environmentDataList.size() - 1);
 
@@ -170,14 +160,53 @@ public class HomeFragment extends Fragment implements MockDataManager.OnDataUpda
             waterValue.setText(String.format(Locale.getDefault(), "%.1f cm", data.getWaterLevel())); 
             tiltValue.setText(String.format(Locale.getDefault(), "%.1f°", data.getBenzene())); 
             
+            homeSubtitle.setText(isRealTimeMode ? "实时状态：单片机在线" : "演示状态：本地波动");
+            
             if (data.getCoConcentration() > 40) {
-                vibrationStatus.setText("⚠ 异常：检测到地面剧烈震动");
+                vibrationStatus.setText("⚠ 震动警告：检测到剧烈晃动");
                 vibrationStatus.setTextColor(Color.YELLOW);
             } else {
-                vibrationStatus.setText("状态：地面稳定性监测正常");
+                vibrationStatus.setText(isRealTimeMode ? "云端：地面稳定性监测正常" : "演示：地面震动监测正常");
                 vibrationStatus.setTextColor(Color.WHITE);
             }
             updateChartData();
+        });
+    }
+
+    private void setupDeviceRecyclerView() {
+        homeDeviceRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+        deviceAdapter = new DeviceAdapter(new ArrayList<>(), requireContext());
+        homeDeviceRecyclerView.setAdapter(deviceAdapter);
+        database.deviceDao().getAllDevicesLive().observe(getViewLifecycleOwner(), devices -> {
+            if (devices != null) {
+                List<Device> coreDevices = new ArrayList<>();
+                for (Device d : devices) {
+                    if (d.getDeviceId().contains("FAN") || d.getDeviceId().contains("ALARM")) coreDevices.add(d);
+                }
+                deviceAdapter.updateDevices(coreDevices);
+            }
+        });
+        deviceAdapter.setOnDeviceClickListener(new DeviceAdapter.OnDeviceClickListener() {
+            @Override public void onDeviceClick(Device device) {}
+            @Override public void onControlClick(Device device, boolean isChecked, int pos) {
+                new Thread(() -> {
+                    device.setRunning(isChecked);
+                    database.deviceDao().updateDevice(device);
+                    if (device.getDeviceId().contains("FAN")) mqttManager.sendVentControl(device.getDeviceId(), isChecked ? 90 : 0);
+                    else if (device.getDeviceId().contains("ALARM")) mqttManager.sendAlarmControl(device.getDeviceId(), isChecked, isChecked ? 2 : 0);
+                }).start();
+            }
+        });
+    }
+
+    private void setupSpinner() {
+        String[] chartParams = {"实时温度", "环境湿度", "水位高度", "姿态倾角", "空气质量"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, chartParams);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        chartParamSpinner.setAdapter(adapter);
+        chartParamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> p, View v, int pos, long id) { currentChartIndex = pos; updateChartData(); }
+            @Override public void onNothingSelected(AdapterView<?> p) {}
         });
     }
 
@@ -200,30 +229,29 @@ public class HomeFragment extends Fragment implements MockDataManager.OnDataUpda
             else if (currentChartIndex == 1) val = (float) data.getHumidity();
             else if (currentChartIndex == 2) val = (float) data.getWaterLevel();
             else if (currentChartIndex == 3) val = (float) data.getBenzene();
-            else val = (float) data.getAqi(); // 空气质量
-            
+            else val = (float) data.getAqi();
             entries.add(0, new Entry(size - 1 - i, val));
         }
-        LineDataSet set = new LineDataSet(entries, chartParams[currentChartIndex]);
+        LineDataSet set = new LineDataSet(entries, "趋势分析");
         set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         set.setLineWidth(2.5f);
         set.setDrawCircles(false);
         set.setDrawValues(false);
-        int[] colors = {Color.parseColor("#FF7D00"), Color.parseColor("#1677FF"), 
-                        Color.parseColor("#4CAF50"), Color.parseColor("#9C27B0"), Color.parseColor("#00B42A")};
+        int[] colors = {Color.parseColor("#FF7D00"), Color.parseColor("#1677FF"), Color.parseColor("#4CAF50"), Color.parseColor("#9C27B0"), Color.parseColor("#00B42A")};
         set.setColor(colors[currentChartIndex]);
         lineChart.setData(new LineData(set));
         lineChart.invalidate();
     }
 
-    private void initData() {
-        MockDataManager.getInstance().addDataListener(this);
+    private void initData() { 
+        MockDataManager.getInstance().addDataListener(this); 
+        mqttManager.addEnvironmentDataListener(this);
     }
 
-    @Override public void onDeviceStatusUpdate(String id, boolean online, boolean run) {}
-    @Override public void onAlarmTriggered(Alarm alarm) {}
-    @Override public void onDestroy() {
-        super.onDestroy();
-        MockDataManager.getInstance().removeDataListener(this);
+    @Override public void onDestroy() { 
+        super.onDestroy(); 
+        MockDataManager.getInstance().stopDataGeneration();
+        MockDataManager.getInstance().removeDataListener(this); 
+        mqttManager.removeEnvironmentDataListener(this);
     }
 }

@@ -34,7 +34,6 @@ public class MqttConfig {
     }
 
     public static String getServerUri() {
-        // 【关键修复】Paho 库标准协议头为 tcp:// 而非 mqtt://
         return "tcp://" + SERVER_HOST + ":" + SERVER_PORT;
     }
 }

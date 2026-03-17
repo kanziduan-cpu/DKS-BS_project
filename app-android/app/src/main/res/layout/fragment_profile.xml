@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mi_sky_gradient">
+    android:background="@drawable/mi_sky_gradient"
+    android:fitsSystemWindows="true">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -16,11 +17,12 @@
             android:orientation="vertical"
             android:paddingBottom="80dp">
 
-            <!-- 个人信息头部 -->
+            <!-- 个人信息头部：移除冗余信息 -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="60dp"
+                android:paddingTop="40dp"
+                android:paddingBottom="24dp"
                 android:paddingHorizontal="24dp">
 
                 <LinearLayout
@@ -28,53 +30,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_centerVertical="true"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:layout_centerVertical="true">
                     <TextView
                         android:id="@+id/nickname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="admin >"
-                        android:textSize="24sp"
+                        android:text="管理员 >"
+                        android:textSize="26sp"
                         android:textStyle="bold"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/text_primary"/>
                     <TextView
+                        android:id="@+id/userStatusTag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="管理账号、会员权益等"
+                        android:text="账号状态：正常"
                         android:textSize="12sp"
-                        android:textColor="@color/text_secondary"
-                        android:layout_marginTop="4dp"/>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="12dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1个家庭"
-                            android:textSize="11sp"
-                            android:textColor="@color/text_secondary"
-                            android:background="@drawable/mi_chip_background"
-                            android:backgroundTint="#E0E0E0"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="2dp"
-                            android:layout_marginEnd="8dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="4个智能设备"
-                            android:textSize="11sp"
-                            android:textColor="@color/text_secondary"
-                            android:background="@drawable/mi_chip_background"
-                            android:backgroundTint="#E0E0E0"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="2dp"/>
-                    </LinearLayout>
+                        android:textColor="@color/mi_green"
+                        android:layout_marginTop="4dp"
+                        android:background="#E8F5E9"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"/>
                 </LinearLayout>
 
+                <!-- 点击头像自定义 -->
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/avatar"
                     android:layout_width="80dp"
@@ -82,141 +60,50 @@
                     android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_profile_filled"
                     app:shapeAppearanceOverlay="@style/CircleAppearance"
-                    android:background="#D1D9B0"
-                    android:padding="8dp"/>
+                    android:background="#F0F9F0"
+                    android:padding="4dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
             </RelativeLayout>
 
-            <!-- 家卡片 -->
+            <!-- 常用功能列表 -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="24dp"
-                app:cardCornerRadius="20dp"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="24dp"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/white">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="监控中心"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1个成员"
-                            android:textSize="12sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="4dp"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:gravity="center_vertical">
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_profile_filled"
-                            app:tint="#D1D9B0"/>
-                        <ImageView
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:src="@drawable/ic_add"
-                            app:tint="@color/text_secondary"
-                            android:layout_marginStart="12dp"
-                            android:background="@drawable/mi_chip_background"
-                            android:padding="6dp"/>
-                    </LinearLayout>
-                </RelativeLayout>
-            </com.google.android.material.card.MaterialCardView>
+                app:cardBackgroundColor="#CCFFFFFF">
 
-            <!-- 功能列表 -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="12dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/white">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingVertical="8dp">
 
-                    <!-- 系统设置 / 修改密码入口 -->
-                    <LinearLayout
-                        android:id="@+id/settingsItem"
-                        android:layout_width="match_parent"
-                        android:layout_height="64dp"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="20dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true">
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_settings"
-                            app:tint="@color/text_primary"/>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="系统设置与安全"
-                            android:textSize="16sp"
-                            android:textColor="@color/text_primary"
-                            android:layout_marginStart="16dp"/>
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/ic_arrow_right"
-                            app:tint="#D0D0D0"/>
-                    </LinearLayout>
+                    <include layout="@layout/item_profile_list_new" android:id="@+id/itemAccount" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" android:layout_marginHorizontal="20dp"/>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/mi_bg_grey" android:layout_marginHorizontal="20dp"/>
+                    <include layout="@layout/item_profile_list_new" android:id="@+id/itemClearCache" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" android:layout_marginHorizontal="20dp"/>
 
-                    <!-- 退出登录 -->
-                    <LinearLayout
-                        android:id="@+id/logoutItem"
-                        android:layout_width="match_parent"
-                        android:layout_height="64dp"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="20dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true">
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_back"
-                            app:tint="@color/mi_red"/>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="退出登录"
-                            android:textSize="16sp"
-                            android:textColor="@color/mi_red"
-                            android:layout_marginStart="16dp"/>
-                    </LinearLayout>
-
+                    <include layout="@layout/item_profile_list_new" android:id="@+id/itemAbout" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
+
+            <!-- 退出登录按钮 -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/logoutButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="32dp"
+                android:text="退出当前账号"
+                android:textColor="#F53F3F"
+                app:cornerRadius="28dp"
+                android:backgroundTint="#FDF2F2"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
