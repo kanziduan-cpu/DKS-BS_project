@@ -1,9 +1,13 @@
 package com.warehouse.monitor.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -92,8 +96,18 @@ public class MainActivity extends AppCompatActivity {
             Log.d("MQTT_STATUS", "Status: " + status + " | Msg: " + message);
         });
 
-        // 启动连接
-        mqttManager.connect();
+        // 检查网络连接状态再启动
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+            if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
+                mqttManager.connect();
+            } else {
+                Log.w(TAG, "No network connection available, delaying MQTT connection");
+                // 显示网络连接提示
+                Toast.makeText(this, "无网络连接，请检查网络设置", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void navigateToLogin() {

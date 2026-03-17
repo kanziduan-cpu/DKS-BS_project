@@ -96,8 +96,8 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
             waterFlowAnim.setRepeatMode(ValueAnimator.REVERSE);
             
             itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && listener != null) {
+                int position = getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && position < deviceList.size() && listener != null) {
                     Device device = deviceList.get(position);
                     listener.onDeviceClick(device);
                 }
@@ -139,7 +139,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
 
             // 更新状态描述
             String statusDesc = device.isRunning() ? "已开启" : "已关闭";
-            if (device.getStatus() == Device.DeviceStatus.OFFLINE) {
+            if (device.getStatus() != null && device.getStatus() == Device.DeviceStatus.OFFLINE) {
                 statusDesc = "离线";
             }
             deviceParams.setText(statusDesc);
@@ -150,11 +150,11 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
             
             deviceSwitch.setOnCheckedChangeListener(null);
             deviceSwitch.setChecked(device.isRunning());
-            deviceSwitch.setEnabled(device.getStatus() == Device.DeviceStatus.ONLINE);
+            deviceSwitch.setEnabled(device.getStatus() != null && device.getStatus() == Device.DeviceStatus.ONLINE);
             
             deviceSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && listener != null) {
+                int position = getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && position < deviceList.size() && listener != null) {
                     device.setRunning(isChecked);
                     bind(device);
                     listener.onControlClick(device, isChecked, position);

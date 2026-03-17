@@ -4,6 +4,8 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.warehouse.monitor.db.AppDatabase;
 import com.warehouse.monitor.mqtt.MqttManager;
@@ -18,9 +20,30 @@ public class WarehouseMonitorApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        createNotificationChannels();
-        AppDatabase.getInstance(this);
-        initMqtt();
+        try {
+            createNotificationChannels();
+            
+            // 初始化数据库（延迟加载）
+            new Thread(() -> {
+                try {
+                    AppDatabase.getInstance(WarehouseMonitorApp.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+            
+            // 延迟初始化MQTT，避免启动时立即连接失败
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                try {
+                    initMqtt();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }, 2000);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 避免初始化失败导致应用崩溃
+        }
     }
 
     private void createNotificationChannels() {
@@ -56,7 +79,12 @@ public class WarehouseMonitorApp extends Application {
     }
 
     private void initMqtt() {
-        MqttManager.getInstance(this);
-        MqttService.startConnect(this);
+        try {
+            MqttManager.getInstance(this);
+            MqttService.startConnect(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 避免因 MQTT 初始化失败导致应用崩溃
+        }
     }
 }

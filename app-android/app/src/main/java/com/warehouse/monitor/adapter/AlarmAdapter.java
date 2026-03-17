@@ -86,15 +86,15 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
             alarmStatus = itemView.findViewById(R.id.alarmStatus);
 
             itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && listener != null) {
+                int position = getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && position < alarmList.size() && listener != null) {
                     listener.onAlarmClick(alarmList.get(position));
                 }
             });
 
             itemView.setOnLongClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && actionListener != null) {
+                int position = getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && position < alarmList.size() && actionListener != null) {
                     actionListener.onMarkAsRead(alarmList.get(position), position);
                     return true;
                 }

@@ -82,15 +82,15 @@ public class WarehouseAdapter extends RecyclerView.Adapter<WarehouseAdapter.View
             unbindButton = itemView.findViewById(R.id.unbindButton);
 
             warehouseCard.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && listener != null) {
+                int position = getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && position < warehouseList.size() && listener != null) {
                     listener.onWarehouseClick(warehouseList.get(position));
                 }
             });
 
             unbindButton.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && listener != null) {
+                int position = getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && position < warehouseList.size() && listener != null) {
                     listener.onUnbindClick(warehouseList.get(position), position);
                 }
             });
