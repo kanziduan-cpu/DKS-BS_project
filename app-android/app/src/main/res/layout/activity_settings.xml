@@ -31,7 +31,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- 安全修改密码 -->
+            <!-- 账户安全 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,11 +79,11 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- 硬件水位阈值设置 - 仅保留水位多参数 -->
+            <!-- 单片机参数 -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="水位预警配置"
+                android:text="单片机参数"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -104,48 +104,27 @@
                     android:padding="20dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="报警高度阈值 (cm)"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_primary"/>
-
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/waterThresholdSlider"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:valueFrom="0.0"
-                        android:valueTo="100.0"
-                        android:value="20.0"
-                        app:thumbColor="@color/mi_blue"
-                        app:trackColorActive="@color/mi_blue"/>
+                        android:text="将阈值、自动控制和灵敏度参数单独管理，避免与账号安全混合。"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="恢复高度 (cm)"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_primary"
-                        android:layout_marginTop="12dp"/>
-
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/waterRecoverSlider"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/openThresholdSettingsButton"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:valueFrom="0.0"
-                        android:valueTo="100.0"
-                        android:value="10.0" />
+                        android:layout_height="52dp"
+                        android:layout_marginTop="16dp"
+                        android:text="进入单片机阈值设置"
+                        app:cornerRadius="26dp"
+                        android:backgroundTint="@color/mi_blue"
+                        android:textColor="@color/white" />
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/saveAllSettingsButton"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="同步参数至单片机"
-                app:cornerRadius="28dp"
-                android:backgroundTint="@color/mi_blue"
-                android:textColor="@color/white" />
+                android:layout_height="24dp"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

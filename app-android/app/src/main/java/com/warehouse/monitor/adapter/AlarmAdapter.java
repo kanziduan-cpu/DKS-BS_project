@@ -24,16 +24,10 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
     private List<Alarm> alarmList;
     private Context context;
     private OnAlarmClickListener listener;
-    private OnAlarmActionListener actionListener;
 
     public interface OnAlarmClickListener {
         void onAlarmClick(Alarm alarm);
-        void onMarkReadClick(Alarm alarm);
-    }
-
-    public interface OnAlarmActionListener {
-        void onMarkAsRead(Alarm alarm, int position);
-        void onDelete(Alarm alarm, int position);
+        void onStatusBadgeClick(Alarm alarm);
     }
 
     public AlarmAdapter(List<Alarm> alarmList, Context context) {
@@ -43,10 +37,6 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
 
     public void setOnAlarmClickListener(OnAlarmClickListener listener) {
         this.listener = listener;
-    }
-
-    public void setOnAlarmActionListener(OnAlarmActionListener actionListener) {
-        this.actionListener = actionListener;
     }
 
     @NonNull
@@ -60,7 +50,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Alarm alarm = alarmList.get(position);
-        holder.bind(alarm, position);
+        holder.bind(alarm);
     }
 
     @Override
@@ -92,17 +82,16 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
                 }
             });
 
-            itemView.setOnLongClickListener(v -> {
+            // 点击“未处理”状态标签直接触发已读逻辑
+            alarmStatus.setOnClickListener(v -> {
                 int position = getBindingAdapterPosition();
-                if (position != RecyclerView.NO_POSITION && position < alarmList.size() && actionListener != null) {
-                    actionListener.onMarkAsRead(alarmList.get(position), position);
-                    return true;
+                if (position != RecyclerView.NO_POSITION && position < alarmList.size() && listener != null) {
+                    listener.onStatusBadgeClick(alarmList.get(position));
                 }
-                return false;
             });
         }
 
-        public void bind(Alarm alarm, int position) {
+        public void bind(Alarm alarm) {
             alarmTitle.setText(alarm.getAlarmTitle() != null ? alarm.getAlarmTitle() : alarm.getTypeDisplayName());
             alarmMessage.setText(alarm.getAlarmMessage());
             
@@ -117,10 +106,12 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
                 statusColor = context.getColor(R.color.mi_red);
                 statusText = "未处理";
                 badgeRes = R.drawable.mi_alarm_badge_red;
+                alarmStatus.setEnabled(true);
             } else {
                 statusColor = context.getColor(R.color.text_hint);
                 statusText = "已处理";
                 badgeRes = R.drawable.mi_alarm_badge_gray;
+                alarmStatus.setEnabled(false);
             }
             
             alarmStatus.setText(statusText);
@@ -135,13 +126,11 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
                     case "TEMPERATURE":
                     case "HUMIDITY":
                     case "CO":
-                        iconRes = R.drawable.ic_weather;
+                    case "VIBRATION":
+                        iconRes = R.drawable.ic_alarms_filled;
                         break;
                     case "DEVICE":
                         iconRes = R.drawable.ic_devices;
-                        break;
-                    case "SYSTEM":
-                        iconRes = R.drawable.ic_alarms;
                         break;
                 }
             }

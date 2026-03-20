@@ -40,14 +40,14 @@ public abstract class AppDatabase extends RoomDatabase {
                                         SceneDao sceneDao = database.sceneDao();
                                         
                                         // 插入设备
-                                        deviceDao.insertDevice(new Device("FAN_SYS", "智能通风系统", Device.DeviceType.VENTILATION_FAN));
-                                        deviceDao.insertDevice(new Device("PUMP_SYS", "防涝排水机组", Device.DeviceType.WATER_PUMP));
-                                        deviceDao.insertDevice(new Device("DH_SYS", "工业除湿系统", Device.DeviceType.DEHUMIDIFIER));
-                                        deviceDao.insertDevice(new Device("LIGHT_SYS", "全库照明网络", Device.DeviceType.LIGHTING));
-                                        deviceDao.insertDevice(new Device("STM32_MAIN", "STM32 边缘网关", Device.DeviceType.STM32_EDGE));
+                                        deviceDao.insertDevice(new Device("FAN_SYS", "舵机开关", Device.DeviceType.VENTILATION_FAN));
+                                        deviceDao.insertDevice(new Device("PUMP_SYS", "舵机开关", Device.DeviceType.WATER_PUMP));
+                                        deviceDao.insertDevice(new Device("DH_SYS", "风扇开关", Device.DeviceType.DEHUMIDIFIER));
+                                        deviceDao.insertDevice(new Device("LIGHT_SYS", "灯光开关", Device.DeviceType.LIGHTING));
+                                        deviceDao.insertDevice(new Device("STM32_MAIN", "STM32 边缘网关开关", Device.DeviceType.STM32_EDGE));
                                         
-                                        // 插入默认场景 - 修复了引号转义错误
-                                        sceneDao.insert(new Scene("回家模式", "home", 0xFF009BFF, "[\"LIGHT_SYS\",\"FAN_SYS\"]", "[\"true\",\"true\"]"));
+                                        // 插入默认场景 - 切换为暖色调
+                                        sceneDao.insert(new Scene("回家模式", "home", 0xFFFF8C00, "[\"LIGHT_SYS\",\"FAN_SYS\"]", "[\"true\",\"true\"]"));
                                         sceneDao.insert(new Scene("离家模式", "profile", 0xFFFF9500, "[\"LIGHT_SYS\"]", "[\"false\"]"));
                                         sceneDao.insert(new Scene("睡眠模式", "alarms", 0xFF9C27B0, "[\"LIGHT_SYS\",\"FAN_SYS\"]", "[\"false\",\"true\"]"));
                                         sceneDao.insert(new Scene("自定义", "devices", 0xFF4CAF50, "[]", "[]"));

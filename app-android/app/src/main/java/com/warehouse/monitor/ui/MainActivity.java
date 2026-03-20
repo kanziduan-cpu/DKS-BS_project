@@ -2,9 +2,6 @@ package com.warehouse.monitor.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -12,18 +9,15 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.warehouse.monitor.R;
 import com.warehouse.monitor.adapter.MainViewPagerAdapter;
-import com.warehouse.monitor.mqtt.MqttManager;
 import com.warehouse.monitor.utils.SharedPreferencesHelper;
 import com.warehouse.monitor.utils.StatusBarUtils;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
     private ViewPager2 viewPager;
     private BottomNavigationView bottomNavigation;
     private MainViewPagerAdapter adapter;
     private SharedPreferencesHelper prefs;
-    private MqttManager mqttManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         setupViewPager();
         setupBottomNavigation();
-        initMqtt();
     }
 
     private void initViews() {
@@ -78,11 +71,6 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
-    }
-
-    private void initMqtt() {
-        mqttManager = MqttManager.getInstance(this);
-        mqttManager.connect();
     }
 
     private void navigateToLogin() {

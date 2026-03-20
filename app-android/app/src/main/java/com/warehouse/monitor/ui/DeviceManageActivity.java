@@ -99,8 +99,12 @@ public class DeviceManageActivity extends AppCompatActivity {
                 new Thread(() -> {
                     device.setRunning(isChecked);
                     database.deviceDao().updateDevice(device);
-                    // Sync with MQTT
-                    mqttManager.publishDeviceControl(device.getDeviceId(), isChecked ? "turn_on" : "turn_off", "1");
+                    if (mqttManager.isConnected()) {
+                        mqttManager.publishDeviceControl(device.getDeviceId(), isChecked ? "turn_on" : "turn_off", "1");
+                    } else {
+                        runOnUiThread(() ->
+                                Toast.makeText(DeviceManageActivity.this, "未连接云端：请先在首页开启「实时模式」", Toast.LENGTH_SHORT).show());
+                    }
                 }).start();
             }
         });

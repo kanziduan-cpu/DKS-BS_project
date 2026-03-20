@@ -71,6 +71,7 @@ public class MockDataManager {
         double temp = 22.0 + random.nextDouble() * 8.0;
         double hum = 45.0 + random.nextDouble() * 25.0;
         int aqi = 30 + random.nextInt(60);
+        double co2 = 420 + random.nextDouble() * 380;
         double waterLevel = 5.0 + random.nextDouble() * 10.0;
 
         // 【新增】完善倾斜参数模拟 (MPU6050)
@@ -80,16 +81,14 @@ public class MockDataManager {
 
         EnvironmentData data = new EnvironmentData(null, deviceId, temp, hum, 20.0, System.currentTimeMillis());
         data.setAqi(aqi);
+        data.setCo2(co2);
         data.setWaterLevel(waterLevel);
-        
-        // 关键对接：将合成角度存入 Benzene 供首页“姿态”模块显示
-        data.setBenzene(combinedTilt); 
         data.setTiltX(tiltX);
         data.setTiltY(tiltY);
-        
-        // 模拟震动值 (0-100)
-        double vibration = random.nextDouble() * 100;
-        data.setCoConcentration(vibration); 
+
+        // 模拟震动值 (0-100)，与首页字段保持一致
+        int vibration = random.nextInt(101);
+        data.setVibration(vibration);
 
         for (OnDataUpdateListener listener : dataListeners) {
             listener.onEnvironmentDataUpdate(data);
@@ -97,7 +96,9 @@ public class MockDataManager {
 
         // 随机触发复杂告警，用于测试报警页布局
         if (random.nextDouble() < 0.08) {
-            String msg = vibration > 80 ? "严重：监测到地面正在剧烈震动，请立即撤离人员！" : "警告：单片机上报姿态倾斜异常";
+            String msg = vibration > 80 || combinedTilt > 10
+                    ? "严重：监测到地面正在剧烈震动或倾斜异常，请立即撤离人员！"
+                    : "警告：单片机上报姿态轻微异常";
             Alarm alarm = new Alarm("ALM_" + System.currentTimeMillis(), "WH_01", deviceId, 
                 "VIBRATION", "CRITICAL", msg, System.currentTimeMillis());
             for (OnDataUpdateListener listener : dataListeners) listener.onAlarmTriggered(alarm);

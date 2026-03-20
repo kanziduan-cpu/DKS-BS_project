@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 工业监控APP专属色彩体系 -->
-    <!-- 主色 - 标准蓝色 -->
-    <color name="primary_color">#1677FF</color>
-    <color name="primary_light">#E6F7FF</color>
+    <!-- 工业监控APP专属色彩体系 - 暖色调升级 -->
+    <!-- 主色 - 温暖橙色 -->
+    <color name="primary_color">#FF8C00</color>
+    <color name="primary_light">#FFF4E5</color>
     <!-- 告警色 - 高饱和红色 -->
     <color name="alarm_color">#F53F3F</color>
     <color name="alarm_light">#FFF5F5</color>
@@ -17,18 +17,18 @@
     <!-- 文字色 -->
     <color name="text_primary">#1D2129</color>
     <color name="text_secondary">#86909C</color>
-    <!-- 背景色 -->
-    <color name="background_color">#F2F3F5</color>
+    <!-- 背景色 - 柔和米色/暖灰 -->
+    <color name="background_color">#FAF9F6</color>
     <color name="card_background">#FFFFFF</color>
     <color name="mi_light_grey">#F7F8FA</color>
     <color name="mi_card_grey">#FFFFFF</color>
 
-    <!-- Mi Home / WeChat Hybrid Style -->
-    <color name="mi_blue">#1677FF</color>
-    <color name="mi_blue_2">#2196F3</color>
-    <color name="mi_blue_light">#E3F2FD</color>
-    <color name="mi_blue_gradient_end">#BBDEFB</color>
-    <color name="mi_bg_grey">#F2F3F5</color>
+    <!-- Mi Home / WeChat Hybrid Style - Warm Theme -->
+    <color name="mi_blue">#FF8C00</color>
+    <color name="mi_blue_2">#FF6B00</color>
+    <color name="mi_blue_light">#FFF4E5</color>
+    <color name="mi_blue_gradient_end">#FFE0B2</color>
+    <color name="mi_bg_grey">#FAF9F6</color>
     <color name="mi_translucent_white">#CCFFFFFF</color>
 
     <color name="status_connecting">#FFF3E0</color>
@@ -52,19 +52,19 @@
     <color name="grey_divider">#EEEEEE</color>
     <color name="divider_light">#F5F5F5</color>
 
-    <!-- Legacy / Compatibility -->
-    <color name="primary">#1677FF</color>
-    <color name="primary_dark">#1166E6</color>
-    <color name="qq_blue">#1677FF</color>
-    <color name="qq_bg">#F2F3F5</color>
-    <color name="background">#F2F3F5</color>
+    <!-- Legacy / Compatibility - Mapped to Warm Palette -->
+    <color name="primary">#FF8C00</color>
+    <color name="primary_dark">#E67E00</color>
+    <color name="qq_blue">#FF8C00</color>
+    <color name="qq_bg">#FAF9F6</color>
+    <color name="background">#FAF9F6</color>
     <color name="online">#00B42A</color>
     <color name="offline">#86909C</color>
     <color name="bulb_on">#FFD600</color>
     <color name="bulb_off">#BDBDBD</color>
-    <color name="water_flow">#1677FF</color>
-    <color name="fan_blue">#1677FF</color>
-    <color name="tab_selected">#1677FF</color>
+    <color name="water_flow">#FF8C00</color>
+    <color name="fan_blue">#FF8C00</color>
+    <color name="tab_selected">#FF8C00</color>
     <color name="tab_normal">#86909C</color>
     <color name="divider">#E8E9EB</color>
     <color name="alarm_red">#F53F3F</color>

@@ -4,12 +4,7 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-
 import com.warehouse.monitor.db.AppDatabase;
-import com.warehouse.monitor.mqtt.MqttManager;
-import com.warehouse.monitor.service.MqttService;
 
 public class WarehouseMonitorApp extends Application {
 
@@ -31,23 +26,17 @@ public class WarehouseMonitorApp extends Application {
                     e.printStackTrace();
                 }
             }).start();
-            
-            // 延迟初始化MQTT，避免启动时立即连接失败
-            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                try {
-                    initMqtt();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }, 2000);
         } catch (Exception e) {
             e.printStackTrace();
-            // 避免初始化失败导致应用崩溃
         }
     }
 
     private void createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager == null) return;
+
+            // 报警渠道：高优先级
             NotificationChannel alarmChannel = new NotificationChannel(
                     CHANNEL_ID_ALARM,
                     "报警通知",
@@ -55,36 +44,24 @@ public class WarehouseMonitorApp extends Application {
             );
             alarmChannel.setDescription("环境异常和设备报警通知");
 
+            // 数据服务渠道：默认优先级（解决 Android 14 闪退关键点）
             NotificationChannel dataChannel = new NotificationChannel(
                     CHANNEL_ID_DATA,
-                    "数据更新通知",
-                    NotificationManager.IMPORTANCE_LOW
+                    "监控服务状态",
+                    NotificationManager.IMPORTANCE_DEFAULT
             );
-            dataChannel.setDescription("环境数据更新通知");
+            dataChannel.setDescription("维持实时数据采集的前台服务");
 
+            // MQTT 状态渠道
             NotificationChannel mqttChannel = new NotificationChannel(
                     CHANNEL_ID_MQTT,
-                    "MQTT服务",
+                    "MQTT服务状态",
                     NotificationManager.IMPORTANCE_LOW
             );
-            mqttChannel.setDescription("MQTT连接状态通知");
 
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            if (manager != null) {
-                manager.createNotificationChannel(alarmChannel);
-                manager.createNotificationChannel(dataChannel);
-                manager.createNotificationChannel(mqttChannel);
-            }
-        }
-    }
-
-    private void initMqtt() {
-        try {
-            MqttManager.getInstance(this);
-            MqttService.startConnect(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // 避免因 MQTT 初始化失败导致应用崩溃
+            manager.createNotificationChannel(alarmChannel);
+            manager.createNotificationChannel(dataChannel);
+            manager.createNotificationChannel(mqttChannel);
         }
     }
 }

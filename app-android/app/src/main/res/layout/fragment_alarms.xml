@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/mi_bg_grey">
 
-    <!-- 米家风格顶部标题 -->
+    <!-- 米家风格顶部标题 - 优化了字体颜色以提高在浅色背景下的可见度 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,7 +27,8 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_alarms"
-                android:tint="@color/white"
+                app:tint="@color/text_primary"
+                android:contentDescription="@null"
                 android:layout_marginEnd="12dp"/>
             
             <LinearLayout
@@ -36,20 +37,22 @@
                 android:orientation="vertical">
                 
                 <TextView
+                    android:id="@+id/alarmHeaderTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="安全报警中心"
                     android:textSize="20sp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_primary"
                     android:textStyle="bold"
                     android:letterSpacing="0.02"/>
                 
                 <TextView
+                    android:id="@+id/alarmHeaderSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="共收到3条未读报警 · 请及时处理"
+                    android:text="请及时处理未读报警"
                     android:textSize="14sp"
-                    android:textColor="@color/mi_translucent_white"
+                    android:textColor="@color/text_secondary"
                     android:layout_marginTop="4dp"/>
             </LinearLayout>
             
@@ -75,7 +78,7 @@
             android:layout_height="wrap_content"
             android:text="查看所有设备报警信息"
             android:textSize="14sp"
-            android:textColor="@color/text_secondary"
+            android:textColor="@color/text_hint"
             android:layout_marginTop="4dp"/>
     </LinearLayout>
 

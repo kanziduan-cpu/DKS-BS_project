@@ -30,52 +30,57 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * MQTT管理器 - 优化逻辑，增强Android 14稳定性
+ * MQTT管理器 - 负责与硬件（如STM32网关）进行无线通信的核心类。
+ * 它实现了 MqttCallback 接口，用于处理连接丢失、消息到达等事件。
  */
 public class MqttManager implements MqttCallback {
-    private static MqttManager instance;
+    private static MqttManager instance; // 单例模式实例
+    private static final String MCU_DEVICE_ID = "STM32_MAIN";
+    private static final String MCU_COMMAND_TOPIC = "warehouse/" + MCU_DEVICE_ID + "/command";
 
-    private final Context context;
-    private MqttAsyncClient mqttClient;
-    private MqttConnectOptions mqttOptions;
-    private final Gson gson;
-    private final Handler mainHandler;
-    private final ExecutorService executorService;
+    private MqttAsyncClient mqttClient; // MQTT 异步客户端
+    private MqttConnectOptions mqttOptions; // MQTT 连接参数（用户名、密码、心跳等）
+    private final Gson gson; // 用于 JSON 数据解析
+    private final Handler mainHandler; // 用于在主线程更新 UI
+    private final ExecutorService executorService; // 用于在后台线程处理耗时操作
 
-    private ConnectionStatus connectionStatus = ConnectionStatus.DISCONNECTED;
+    // 监听器列表：用于将接收到的数据分发给不同的 Fragment 界面
     private final List<OnConnectionStatusListener> connectionListeners = new ArrayList<>();
     private final List<OnEnvironmentDataListener> environmentListeners = new ArrayList<>();
     private final List<OnDeviceStatusListener> deviceStatusListeners = new ArrayList<>();
     private final List<OnAlarmListener> alarmListeners = new ArrayList<>();
 
+    /**
+     * 定义四种连接状态：未连接、连接中、已连接、连接错误
+     */
     public enum ConnectionStatus {
         DISCONNECTED, CONNECTING, CONNECTED, ERROR
     }
 
+    // --- 各类接口定义，用于 UI 界面订阅数据 ---
     public interface OnConnectionStatusListener {
         void onConnectionStatusChanged(ConnectionStatus status, String message);
     }
-
     public interface OnEnvironmentDataListener {
         void onEnvironmentDataReceived(EnvironmentData data);
     }
-
     public interface OnDeviceStatusListener {
         void onDeviceStatusReceived(String deviceId, boolean isOnline, boolean isRunning);
     }
-
     public interface OnAlarmListener {
         void onAlarmReceived(Alarm alarm);
     }
 
     private MqttManager(Context context) {
-        this.context = context.getApplicationContext();
         this.gson = new Gson();
         this.mainHandler = new Handler(Looper.getMainLooper());
         this.executorService = Executors.newSingleThreadExecutor();
-        initMqttOptions();
+        initMqttOptions(); // 初始化连接参数
     }
 
+    /**
+     * 获取 MqttManager 单例
+     */
     public static synchronized MqttManager getInstance(Context context) {
         if (instance == null) {
             instance = new MqttManager(context);
@@ -83,225 +88,218 @@ public class MqttManager implements MqttCallback {
         return instance;
     }
 
+    /**
+     * 配置 MQTT 的连接参数，如服务器地址、用户名、密码等
+     */
     private void initMqttOptions() {
         mqttOptions = new MqttConnectOptions();
         
-        // 安全处理认证信息
-        if (MqttConfig.USERNAME != null && !MqttConfig.USERNAME.trim().isEmpty()) {
+        // 如果配置了用户名和密码，则设置
+        if (!MqttConfig.USERNAME.isEmpty()) {
             mqttOptions.setUserName(MqttConfig.USERNAME);
         }
-        
-        if (MqttConfig.PASSWORD != null && !MqttConfig.PASSWORD.isEmpty()) {
+        if (!MqttConfig.PASSWORD.isEmpty()) {
             mqttOptions.setPassword(MqttConfig.PASSWORD.toCharArray());
         }
 
-        mqttOptions.setKeepAliveInterval(MqttConfig.KEEP_ALIVE_INTERVAL);
-        mqttOptions.setConnectionTimeout(MqttConfig.CONNECTION_TIMEOUT);
-        mqttOptions.setCleanSession(MqttConfig.CLEAN_SESSION);
-        mqttOptions.setAutomaticReconnect(MqttConfig.AUTO_RECONNECT);
+        mqttOptions.setKeepAliveInterval(MqttConfig.KEEP_ALIVE_INTERVAL); // 设置心跳间隔
+        mqttOptions.setConnectionTimeout(MqttConfig.CONNECTION_TIMEOUT); // 设置超时时间
+        mqttOptions.setCleanSession(MqttConfig.CLEAN_SESSION); // 设置是否清除 Session
+        mqttOptions.setAutomaticReconnect(MqttConfig.AUTO_RECONNECT); // 设置是否自动重连
     }
 
+    /**
+     * 开始连接 MQTT 服务器
+     */
     public void connect() {
         if (mqttClient != null && mqttClient.isConnected()) {
-            AppLogger.mqtt("MQTT already connected.");
+            AppLogger.mqtt("MQTT 已经连接，无需重复操作。");
             return;
         }
 
-        String clientId = MqttConfig.getClientId();
-        String serverUri = MqttConfig.getServerUri();
+        String clientId = MqttConfig.getClientId(); // 获取唯一客户端 ID
+        String serverUri = MqttConfig.getServerUri(); // 获取服务器地址
 
         try {
-            // 使用 MemoryPersistence 和 TimerPingSender 确保 Android 14 兼容性
+            // 初始化客户端，使用 MemoryPersistence 存储状态
             mqttClient = new MqttAsyncClient(serverUri, clientId, new MemoryPersistence(), new TimerPingSender());
-            mqttClient.setCallback(this);
+            mqttClient.setCallback(this); // 设置回调处理类
 
             updateConnectionStatus(ConnectionStatus.CONNECTING, "正在尝试建立连接...");
 
+            // 开始异步连接
             mqttClient.connect(mqttOptions, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    AppLogger.mqtt("Connected to " + serverUri);
+                    AppLogger.mqtt("成功连接到: " + serverUri);
                     updateConnectionStatus(ConnectionStatus.CONNECTED, "网络连接成功");
-                    subscribeToTopics();
+                    subscribeToTopics(); // 连接成功后立即订阅感兴趣的主题
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    AppLogger.error("MQTT", "Connect failed: " + (exception != null ? exception.getMessage() : "unknown"));
+                    AppLogger.error("MQTT", "连接失败: " + (exception != null ? exception.getMessage() : "未知错误"));
                     updateConnectionStatus(ConnectionStatus.ERROR, "网络连接失败");
                 }
             });
         } catch (MqttException e) {
-            AppLogger.error("MQTT", "Connect error: " + e.getMessage());
+            AppLogger.error("MQTT", "连接异常: " + e.getMessage());
             updateConnectionStatus(ConnectionStatus.ERROR, "连接异常: " + e.getMessage());
         }
     }
 
-    public boolean isConnected() {
-        return mqttClient != null && mqttClient.isConnected();
-    }
-
+    /**
+     * 断开 MQTT 连接
+     */
     public void disconnect() {
-        if (mqttClient != null) {
+        if (mqttClient != null && mqttClient.isConnected()) {
             try {
-                mqttClient.disconnect(null, new IMqttActionListener() {
-                    @Override
-                    public void onSuccess(IMqttToken asyncActionToken) {
-                        updateConnectionStatus(ConnectionStatus.DISCONNECTED, "已手动断开连接");
-                    }
-                    @Override
-                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {}
-                });
+                mqttClient.disconnect();
+                updateConnectionStatus(ConnectionStatus.DISCONNECTED, "已手动断开连接");
             } catch (MqttException e) {
-                AppLogger.error("MQTT", "Disconnect error: " + e.getMessage());
+                AppLogger.error("MQTT", "断开连接失败: " + e.getMessage());
             }
         }
     }
 
+    /**
+     * 清理资源
+     */
     public void cleanup() {
-        if (isConnected()) {
-            try { mqttClient.disconnect(); } catch (Exception ignored) {}
+        disconnect();
+        if (executorService != null) {
+            executorService.shutdown();
         }
-        connectionListeners.clear();
-        environmentListeners.clear();
-        deviceStatusListeners.clear();
-        alarmListeners.clear();
-        instance = null;
     }
 
+    /**
+     * 订阅主题：只有订阅了主题，才能收到硬件发来的温湿度、报警等数据
+     */
     private void subscribeToTopics() {
         if (mqttClient == null || !mqttClient.isConnected()) return;
         try {
-            // 订阅环境数据
+            // 订阅环境数据主题 (如 sensor/data)
             mqttClient.subscribe(MqttConfig.TOPIC_ENVIRONMENT, MqttConfig.QOS_AT_LEAST_ONCE, null, new IMqttActionListener() {
-                @Override public void onSuccess(IMqttToken t) { AppLogger.mqtt("Subscribed to Data"); }
-                @Override public void onFailure(IMqttToken t, Throwable e) { AppLogger.error("MQTT", "Data sub error"); }
+                @Override public void onSuccess(IMqttToken t) { AppLogger.mqtt("已订阅环境数据"); }
+                @Override public void onFailure(IMqttToken t, Throwable e) { AppLogger.error("MQTT", "数据订阅失败"); }
             });
-            // 订阅状态数据
+            // 订阅设备状态主题
             mqttClient.subscribe(MqttConfig.TOPIC_DEVICE_STATUS, MqttConfig.QOS_AT_LEAST_ONCE, null, new IMqttActionListener() {
-                @Override public void onSuccess(IMqttToken t) { AppLogger.mqtt("Subscribed to Status"); }
-                @Override public void onFailure(IMqttToken t, Throwable e) { AppLogger.error("MQTT", "Status sub error"); }
+                @Override public void onSuccess(IMqttToken t) { AppLogger.mqtt("已订阅状态数据"); }
+                @Override public void onFailure(IMqttToken t, Throwable e) { AppLogger.error("MQTT", "状态订阅失败"); }
             });
         } catch (MqttException e) {
-            AppLogger.error("MQTT", "Subscribe exception: " + e.getMessage());
+            AppLogger.error("MQTT", "订阅操作发生异常: " + e.getMessage());
         }
     }
 
-    // --- 指令发送函数族 ---
+    // --- 远程控制函数：将手机的点击转换成发送给硬件的 MQTT 消息 ---
 
-    public void sendVentControl(String deviceId, int angle) {
-        if (deviceId == null) return;
+    /**
+     * 发送设备控制指令 (通用)
+     */
+    public void publishDeviceControl(String deviceId, String command, String value) {
+        if (command == null || command.isEmpty()) return;
         JsonObject json = new JsonObject();
-        json.addProperty("type", "vent");
-        json.addProperty("angle", angle);
+        // 固定发给 STM32 主控，确保与单片机订阅主题一致
+        json.addProperty("deviceId", MCU_DEVICE_ID);
+        json.addProperty("action", command);
+        json.addProperty("value", value);
+        if (deviceId != null && !deviceId.isEmpty()) {
+            // 透传原始目标设备ID，便于网关做二级路由扩展
+            json.addProperty("targetDeviceId", deviceId);
+        }
         json.addProperty("timestamp", System.currentTimeMillis());
-        String topic = MqttConfig.TOPIC_DEVICE_CONTROL.replace("+", deviceId);
-        publishMessage(topic, json.toString());
+        publishMessage(MCU_COMMAND_TOPIC, json.toString());
     }
 
-    public void sendAlarmControl(String deviceId, boolean isOn, int mode) {
-        if (deviceId == null) return;
+    /**
+     * 发送通风口角度控制指令
+     */
+    public void sendVentControl(String deviceId, int angle) {
         JsonObject json = new JsonObject();
-        json.addProperty("type", "alarm");
-        json.addProperty("state", isOn ? 1 : 0);
-        json.addProperty("mode", mode);
-        String topic = MqttConfig.TOPIC_DEVICE_CONTROL.replace("+", deviceId);
-        publishMessage(topic, json.toString());
-    }
-
-    public void sendThresholdConfig(String deviceId, String configJson) {
-        if (deviceId == null || configJson == null) return;
-        try {
-            JsonObject json = new JsonObject();
-            json.addProperty("type", "config");
-            json.add("payload", JsonParser.parseString(configJson));
-            String topic = MqttConfig.TOPIC_DEVICE_CONTROL.replace("+", deviceId);
-            publishMessage(topic, json.toString());
-        } catch (Exception e) {
-            AppLogger.error("MQTT", "Config JSON error: " + e.getMessage());
+        json.addProperty("deviceId", MCU_DEVICE_ID);
+        json.addProperty("action", "servo_set");
+        json.addProperty("value", String.valueOf(Math.max(0, Math.min(angle, 180))));
+        if (deviceId != null && !deviceId.isEmpty()) {
+            json.addProperty("targetDeviceId", deviceId);
         }
+        json.addProperty("timestamp", System.currentTimeMillis());
+        publishMessage(MCU_COMMAND_TOPIC, json.toString());
     }
 
-    public void sendCalibrationRequest(String deviceId, String sensorType) {
-        if (deviceId == null || sensorType == null) return;
-        JsonObject json = new JsonObject();
-        json.addProperty("type", "calibration");
-        json.addProperty("target", sensorType);
-        String topic = MqttConfig.TOPIC_DEVICE_CONTROL.replace("+", deviceId);
-        publishMessage(topic, json.toString());
-    }
-
-    public void publishDeviceControl(String deviceId, String action, String value) {
-        if (deviceId == null) return;
-        try {
-            JsonObject json = new JsonObject();
-            json.addProperty("deviceId", deviceId);
-            json.addProperty("action", action);
-            json.addProperty("value", value);
-            json.addProperty("timestamp", System.currentTimeMillis());
-            String topic = MqttConfig.TOPIC_DEVICE_CONTROL.replace("+", deviceId);
-            publishMessage(topic, json.toString());
-        } catch (Exception e) {
-            AppLogger.error("MQTT", "Publish error: " + e.getMessage());
-        }
-    }
-
+    /**
+     * 核心发布函数：将字符串消息发送到指定的 MQTT 主题
+     */
     public void publishMessage(String topic, String payload) {
         if (!isConnected()) {
-            AppLogger.warn("MQTT", "Cannot publish: Not connected");
+            AppLogger.warn("MQTT", "发送失败：当前未连接到服务器");
             return;
         }
         try {
             MqttMessage message = new MqttMessage(payload.getBytes(StandardCharsets.UTF_8));
-            message.setQos(MqttConfig.QOS_AT_LEAST_ONCE);
+            message.setQos(MqttConfig.QOS_AT_LEAST_ONCE); // 保证消息至少送达一次
             mqttClient.publish(topic, message);
-            AppLogger.mqtt("Published to " + topic);
+            AppLogger.mqtt("消息已发布到主题: " + topic);
         } catch (MqttException e) {
-            AppLogger.error("MQTT", "Message publish error: " + e.getMessage());
+            AppLogger.error("MQTT", "消息发布异常: " + e.getMessage());
         }
     }
 
+    // --- MQTT 回调函数：处理服务器推送到手机的消息 ---
+
     @Override
     public void connectionLost(Throwable cause) {
-        AppLogger.warn("MQTT", "Connection lost: " + (cause != null ? cause.getMessage() : "unknown"));
+        AppLogger.warn("MQTT", "连接丢失: " + (cause != null ? cause.getMessage() : "原因未知"));
         updateConnectionStatus(ConnectionStatus.DISCONNECTED, "网络连接已断开");
     }
 
+    /**
+     * 当收到服务器发来的消息时，该方法会自动触发
+     */
     @Override
     public void messageArrived(String topic, MqttMessage message) {
         String payload = new String(message.getPayload(), StandardCharsets.UTF_8);
+        // 在后台线程处理数据解析，防止阻塞 UI
         executorService.execute(() -> processMessage(topic, payload));
     }
 
+    /**
+     * 解析 JSON 数据并根据 Topic 分发给相应的 Fragment
+     */
     private void processMessage(String topic, String payload) {
         try {
             JsonElement element = JsonParser.parseString(payload);
             if (!element.isJsonObject()) return;
             JsonObject json = element.getAsJsonObject();
 
+            // 如果是环境监测数据（温湿度等）
             if (topic.contains("sensor/data") || topic.contains("environment")) {
                 EnvironmentData data = gson.fromJson(json, EnvironmentData.class);
                 if (data != null) notifyEnvironmentListeners(data);
-            } else if (topic.contains("status")) {
+            } 
+            // 如果是设备在线/离线状态
+            else if (topic.contains("status")) {
                 String deviceId = json.has("deviceId") ? json.get("deviceId").getAsString() : "";
                 boolean online = json.has("status") && "ONLINE".equals(json.get("status").getAsString());
                 boolean run = json.has("isRunning") && json.get("isRunning").getAsBoolean();
                 notifyDeviceStatusListeners(deviceId, online, run);
-            } else if (topic.contains("alarm")) {
+            } 
+            // 如果是报警消息
+            else if (topic.contains("alarm")) {
                 Alarm alarm = gson.fromJson(json, Alarm.class);
                 if (alarm != null) notifyAlarmListeners(alarm);
             }
         } catch (Exception e) {
-            AppLogger.error("MQTT", "Parse error on topic " + topic + ": " + e.getMessage());
+            AppLogger.error("MQTT", "消息解析失败: " + e.getMessage());
         }
     }
 
     @Override public void deliveryComplete(IMqttDeliveryToken token) {}
 
-    // --- 监听器分发逻辑 (主线程) ---
+    // --- 状态通知逻辑：使用 Handler 回到主线程更新 UI ---
 
     private void updateConnectionStatus(ConnectionStatus status, String message) {
-        connectionStatus = status;
         mainHandler.post(() -> {
             for (OnConnectionStatusListener listener : new ArrayList<>(connectionListeners)) {
                 listener.onConnectionStatusChanged(status, message);
@@ -333,6 +331,7 @@ public class MqttManager implements MqttCallback {
         });
     }
 
+    // --- 注册/移除监听器的方法 ---
     public void addConnectionStatusListener(OnConnectionStatusListener l) { if (l != null && !connectionListeners.contains(l)) connectionListeners.add(l); }
     public void removeConnectionStatusListener(OnConnectionStatusListener l) { connectionListeners.remove(l); }
     public void addEnvironmentDataListener(OnEnvironmentDataListener l) { if (l != null && !environmentListeners.contains(l)) environmentListeners.add(l); }
@@ -341,4 +340,8 @@ public class MqttManager implements MqttCallback {
     public void removeDeviceStatusListener(OnDeviceStatusListener l) { deviceStatusListeners.remove(l); }
     public void addAlarmListener(OnAlarmListener l) { if (l != null && !alarmListeners.contains(l)) alarmListeners.add(l); }
     public void removeAlarmListener(OnAlarmListener l) { alarmListeners.remove(l); }
+
+    public boolean isConnected() {
+        return mqttClient != null && mqttClient.isConnected();
+    }
 }

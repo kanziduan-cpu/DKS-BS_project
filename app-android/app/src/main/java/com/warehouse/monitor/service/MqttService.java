@@ -6,7 +6,10 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
+import android.os.Build;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -34,11 +37,20 @@ public class MqttService extends Service {
     private MqttManager mqttManager;
     private SharedPreferencesHelper prefs;
     private NotificationManager notificationManager;
+
+    private MqttManager.OnConnectionStatusListener connectionStatusListener;
+    private MqttManager.OnEnvironmentDataListener environmentDataListener;
+    private MqttManager.OnDeviceStatusListener deviceStatusListener;
+    private MqttManager.OnAlarmListener alarmListener;
     
     public static void startConnect(Context context) {
         Intent intent = new Intent(context, MqttService.class);
         intent.setAction(ACTION_CONNECT);
-        context.startForegroundService(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
     }
     
     public static void startDisconnect(Context context) {
@@ -61,14 +73,27 @@ public class MqttService extends Service {
         mqttManager = MqttManager.getInstance(this);
         prefs = new SharedPreferencesHelper(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        
-        startForeground(NOTIFICATION_ID, createNotification("正在连接服务器..."));
-        
         setupMqttListeners();
     }
     
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // 关键点：在 Android 12+ 中，必须在 onStartCommand 中立即调用 startForeground
+        // 并且 NotificationChannel 必须已经存在且配置正确
+        try {
+            Notification notification = createNotification("监控服务正在运行...");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+            } else {
+                startForeground(NOTIFICATION_ID, notification);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to start foreground service: " + e.getMessage());
+            // 如果 startForeground 失败，尝试停止服务以避免系统抛出远程服务异常
+            stopSelf();
+            return START_NOT_STICKY;
+        }
+
         if (intent != null) {
             String action = intent.getAction();
             if (ACTION_CONNECT.equals(action)) {
@@ -97,31 +122,59 @@ public class MqttService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mqttManager.cleanup();
+        if (connectionStatusListener != null) {
+            mqttManager.removeConnectionStatusListener(connectionStatusListener);
+            connectionStatusListener = null;
+        }
+        if (environmentDataListener != null) {
+            mqttManager.removeEnvironmentDataListener(environmentDataListener);
+            environmentDataListener = null;
+        }
+        if (deviceStatusListener != null) {
+            mqttManager.removeDeviceStatusListener(deviceStatusListener);
+            deviceStatusListener = null;
+        }
+        if (alarmListener != null) {
+            mqttManager.removeAlarmListener(alarmListener);
+            alarmListener = null;
+        }
+        mqttManager.disconnect();
     }
     
     private void setupMqttListeners() {
-        mqttManager.addConnectionStatusListener((status, message) -> {
+        connectionStatusListener = (status, message) -> {
             updateNotification(getStatusText(status, message));
             Log.d(TAG, "连接状态: " + status + " - " + message);
-        });
-        
-        mqttManager.addEnvironmentDataListener(data -> {
-            Log.d(TAG, "收到环境数据: 温度=" + data.getTemperature() + ", 湿度=" + data.getHumidity());
-        });
-        
-        mqttManager.addDeviceStatusListener((deviceId, isOnline, isRunning) -> {
-            Log.d(TAG, "设备状态更新: " + deviceId + " - 在线:" + isOnline + ", 运行:" + isRunning);
-        });
-        
-        mqttManager.addAlarmListener(alarm -> {
-            handleAlarm(alarm);
-        });
+        };
+        mqttManager.addConnectionStatusListener(connectionStatusListener);
+
+        environmentDataListener = data ->
+                Log.d(TAG, "收到环境数据: 温度=" + data.getTemperature() + ", 湿度=" + data.getHumidity());
+        mqttManager.addEnvironmentDataListener(environmentDataListener);
+
+        deviceStatusListener = (deviceId, isOnline, isRunning) ->
+                Log.d(TAG, "设备状态更新: " + deviceId + " - 在线:" + isOnline + ", 运行:" + isRunning);
+        mqttManager.addDeviceStatusListener(deviceStatusListener);
+
+        alarmListener = this::handleAlarm;
+        mqttManager.addAlarmListener(alarmListener);
     }
     
     private void handleAlarm(Alarm alarm) {
+        if (alarm == null) {
+            Log.w(TAG, "收到空报警对象，忽略处理");
+            return;
+        }
+        if (TextUtils.isEmpty(alarm.getId())) {
+            alarm.setId("alarm_" + System.currentTimeMillis());
+        }
+        if (TextUtils.isEmpty(alarm.getAlarmTitle())) {
+            alarm.setAlarmTitle("仓库告警");
+        }
+        if (TextUtils.isEmpty(alarm.getAlarmMessage())) {
+            alarm.setAlarmMessage("收到新的设备异常信息，请及时检查。");
+        }
         prefs.addAlarm(alarm);
-        
         showAlarmNotification(alarm);
     }
     
@@ -141,7 +194,6 @@ public class MqttService extends Service {
                 .setContentTitle(alarm.getAlarmTitle())
                 .setContentText(alarm.getAlarmMessage())
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
         
@@ -163,8 +215,8 @@ public class MqttService extends Service {
                 .setSmallIcon(R.drawable.ic_warehouse)
                 .setContentTitle("仓库监控系统")
                 .setContentText(status)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setOngoing(true) // 前台服务通知通常应为 ongoing
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT) // 匹配渠道优先级
                 .setContentIntent(pendingIntent)
                 .build();
     }
@@ -176,16 +228,11 @@ public class MqttService extends Service {
     
     private String getStatusText(MqttManager.ConnectionStatus status, String message) {
         switch (status) {
-            case CONNECTED:
-                return "已连接到服务器";
-            case CONNECTING:
-                return "正在连接服务器...";
-            case DISCONNECTED:
-                return "已断开连接";
-            case ERROR:
-                return "连接错误: " + message;
-            default:
-                return "未知状态";
+            case CONNECTED: return "已连接到服务器";
+            case CONNECTING: return "正在连接服务器...";
+            case DISCONNECTED: return "已断开连接";
+            case ERROR: return "连接错误: " + message;
+            default: return "未知状态";
         }
     }
 }

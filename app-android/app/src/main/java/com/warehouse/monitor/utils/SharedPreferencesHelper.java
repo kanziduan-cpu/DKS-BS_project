@@ -48,6 +48,33 @@ public class SharedPreferencesHelper {
         return prefs.getString(key, defaultValue);
     }
 
+    // Generic Int methods
+    public void putInt(String key, int value) {
+        prefs.edit().putInt(key, value).apply();
+    }
+
+    public int getInt(String key, int defaultValue) {
+        return prefs.getInt(key, defaultValue);
+    }
+
+    // Generic Float methods
+    public void putFloat(String key, float value) {
+        prefs.edit().putFloat(key, value).apply();
+    }
+
+    public float getFloat(String key, float defaultValue) {
+        return prefs.getFloat(key, defaultValue);
+    }
+
+    // Generic Boolean methods
+    public void putBoolean(String key, boolean value) {
+        prefs.edit().putBoolean(key, value).apply();
+    }
+
+    public boolean getBoolean(String key, boolean defaultValue) {
+        return prefs.getBoolean(key, defaultValue);
+    }
+
     // User
     public void saveUser(User user) {
         String json = gson.toJson(user);

@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,8 +28,9 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * 报警页面Fragment（实时更新版本）
+ * 报警页面Fragment
  * 显示报警信息，实时接收新报警
+ * 优化点：支持点击“未处理”直接标记已读并自动从列表移除（消失）
  */
 public class AlarmsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         MockDataManager.OnDataUpdateListener {
@@ -40,6 +42,7 @@ public class AlarmsFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private AlarmAdapter alarmAdapter;
     private List<Alarm> alarmList;
     private Handler dataHandler;
+    private TextView headerSubtitle;
     
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -57,6 +60,9 @@ public class AlarmsFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.alarmRecyclerView);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        headerSubtitle = view.findViewById(R.id.alarmHeaderSubtitle);
+        
+        view.findViewById(R.id.markAllRead).setOnClickListener(v -> markAllAsRead());
     }
     
     private void setupRecyclerView() {
@@ -70,8 +76,9 @@ public class AlarmsFragment extends Fragment implements SwipeRefreshLayout.OnRef
             }
             
             @Override
-            public void onMarkReadClick(Alarm alarm) {
-                markAlarmAsRead(alarm);
+            public void onStatusBadgeClick(Alarm alarm) {
+                // 点击状态标签直接标记为已读并移除
+                handleMarkAsReadAndRemove(alarm);
             }
         });
         
@@ -88,6 +95,7 @@ public class AlarmsFragment extends Fragment implements SwipeRefreshLayout.OnRef
         // 生成初始报警数据
         alarmList.addAll(generateInitialAlarms());
         sortAlarms();
+        updateHeaderInfo();
         alarmAdapter.notifyDataSetChanged();
         
         // 注册数据监听器
@@ -96,176 +104,94 @@ public class AlarmsFragment extends Fragment implements SwipeRefreshLayout.OnRef
         // 启动模拟数据生成
         if (!MockDataManager.getInstance().isDataGenerationRunning()) {
             MockDataManager.getInstance().startDataGeneration();
-            AppLogger.business("启动模拟数据生成（报警页面）");
         }
-        
-        AppLogger.business("报警页面初始化完成: " + alarmList.size() + "条报警");
     }
     
-    /**
-     * 生成初始报警数据
-     */
     private List<Alarm> generateInitialAlarms() {
         List<Alarm> alarms = new ArrayList<>();
+        long now = System.currentTimeMillis();
         
-        // 创建几个示例报警
-        Alarm alarm1 = new Alarm(
-                "ALM_001",
-                "WH_001",
-                "SENSOR_01",
-                "TEMPERATURE",
-                "WARNING",
-                "温度超过阈值: 45℃",
-                System.currentTimeMillis() - 3600000 // 1小时前
-        );
-        
-        Alarm alarm2 = new Alarm(
-                "ALM_002",
-                "WH_001",
-                "SENSOR_02",
-                "HUMIDITY",
-                "CRITICAL",
-                "湿度异常: 82.5%",
-                System.currentTimeMillis() - 7200000 // 2小时前
-        );
-        
-        Alarm alarm3 = new Alarm(
-                "ALM_003",
-                "WH_001",
-                "SENSOR_03",
-                "CO",
-                "WARNING",
-                "CO浓度过高: 650ppm",
-                System.currentTimeMillis() - 10800000 // 3小时前
-        );
-        
-        alarms.add(alarm1);
-        alarms.add(alarm2);
-        alarms.add(alarm3);
+        alarms.add(new Alarm("ALM_001", "WH_001", "VIB_01", "VIBRATION", "CRITICAL", "严重：检测到地面正在剧烈震动，请立即撤离...", now - 60000));
+        alarms.add(new Alarm("ALM_002", "WH_001", "VIB_01", "VIBRATION", "CRITICAL", "严重：检测到地面正在剧烈震动，请立即撤离...", now - 120000));
+        alarms.add(new Alarm("ALM_003", "WH_001", "VIB_01", "VIBRATION", "CRITICAL", "严重：检测到地面正在剧烈震动，请立即撤离...", now - 180000));
+        alarms.add(new Alarm("ALM_004", "WH_001", "MCU_01", "DEVICE", "WARNING", "警告：单片机上报姿态倾斜异常", now - 300000));
         
         return alarms;
     }
     
-    /**
-     * 排序报警（最新在前）
-     */
     private void sortAlarms() {
-        Collections.sort(alarmList, new Comparator<Alarm>() {
-            @Override
-            public int compare(Alarm a1, Alarm a2) {
-                return Long.compare(a2.getTimestamp(), a1.getTimestamp());
+        Collections.sort(alarmList, (a1, a2) -> Long.compare(a2.getTimestamp(), a1.getTimestamp()));
+    }
+
+    private void updateHeaderInfo() {
+        if (headerSubtitle != null) {
+            int count = 0;
+            for (Alarm a : alarmList) {
+                if (a.getStatus() == Alarm.AlarmStatus.UNPROCESSED) count++;
             }
-        });
+            headerSubtitle.setText("当前共有 " + count + " 条未处理报警");
+        }
     }
     
-    /**
-     * 显示报警详情
-     */
     private void showAlarmDetails(Alarm alarm) {
-        String message = String.format(
-                "报警详情:\n\n类型: %s\n级别: %s\n设备: %s\n时间: %s\n\n%s",
-                alarm.getTypeDisplayName(),
-                alarm.getLevel(),
-                alarm.getDeviceId(),
-                new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                        .format(new java.util.Date(alarm.getTimestamp())),
-                alarm.getAlarmMessage()
-        );
-        
+        String message = "报警详情: " + alarm.getAlarmMessage();
         Snackbar.make(recyclerView, message, Snackbar.LENGTH_LONG)
-                .setAction("标记为已读", v -> markAlarmAsRead(alarm))
+                .setAction("标记已读", v -> handleMarkAsReadAndRemove(alarm))
                 .show();
     }
     
-    /**
-     * 标记报警为已读
-     */
-    private void markAlarmAsRead(Alarm alarm) {
-        alarm.setStatus(Alarm.AlarmStatus.PROCESSED);
+    private void handleMarkAsReadAndRemove(Alarm alarm) {
         int position = alarmList.indexOf(alarm);
         if (position >= 0) {
-            alarmAdapter.notifyItemChanged(position);
+            alarmList.remove(position);
+            alarmAdapter.notifyItemRemoved(position);
+            updateHeaderInfo();
+            Toast.makeText(requireContext(), "已处理并移除", Toast.LENGTH_SHORT).show();
         }
-        
-        AppLogger.business("标记报警为已读: " + alarm.getAlarmId());
-        Toast.makeText(requireContext(), "已标记为已读", Toast.LENGTH_SHORT).show();
+    }
+
+    private void markAllAsRead() {
+        if (alarmList.isEmpty()) return;
+        alarmList.clear();
+        alarmAdapter.notifyDataSetChanged();
+        updateHeaderInfo();
+        Toast.makeText(requireContext(), "已全部标记为已读", Toast.LENGTH_SHORT).show();
     }
     
     @Override
     public void onRefresh() {
-        // 刷新报警列表
         dataHandler = new Handler(Looper.getMainLooper());
         dataHandler.postDelayed(() -> {
-            // 模拟刷新数据
-            sortAlarms();
-            alarmAdapter.notifyDataSetChanged();
+            if (!isAdded() || swipeRefreshLayout == null) return;
             swipeRefreshLayout.setRefreshing(false);
-            
-            AppLogger.business("报警列表刷新完成");
-            Toast.makeText(requireContext(), "刷新完成", Toast.LENGTH_SHORT).show();
-        }, 1000);
-    }
-    
-    // MockDataManager回调实现
-    
-    @Override
-    public void onEnvironmentDataUpdate(com.warehouse.monitor.model.EnvironmentData data) {
-        // 环境数据更新不直接影响报警页面
+            Toast.makeText(requireContext(), "刷新成功", Toast.LENGTH_SHORT).show();
+        }, 8000);
     }
     
     @Override
-    public void onDeviceStatusUpdate(String deviceId, boolean isOnline, boolean isRunning) {
-        // 设备状态更新不直接影响报警页面
-    }
+    public void onEnvironmentDataUpdate(com.warehouse.monitor.model.EnvironmentData data) {}
+    
+    @Override
+    public void onDeviceStatusUpdate(String deviceId, boolean isOnline, boolean isRunning) {}
     
     @Override
     public void onAlarmTriggered(Alarm newAlarm) {
-        // 新报警触发
-        AppLogger.business("收到新报警: " + newAlarm.getAlarmMessage());
-        
-        // 在主线程更新UI
-        if (dataHandler == null) dataHandler = new Handler(Looper.getMainLooper());
-        dataHandler.post(() -> {
-            // 添加新报警到列表顶部
+        if (getActivity() == null) return;
+        getActivity().runOnUiThread(() -> {
             alarmList.add(0, newAlarm);
-            
-            // 限制列表最大数量（防止内存溢出）
-            if (alarmList.size() > 100) {
-                alarmList.remove(alarmList.size() - 1);
-            }
-            
-            // 通知适配器
             alarmAdapter.notifyItemInserted(0);
-            
-            // 滚动到顶部
             recyclerView.smoothScrollToPosition(0);
-            
-            // 显示通知
-            showAlarmNotification(newAlarm);
+            updateHeaderInfo();
         });
     }
     
-    /**
-     * 显示报警通知
-     */
-    private void showAlarmNotification(Alarm alarm) {
-        String message = "新报警: " + alarm.getAlarmMessage();
-        
-        Snackbar.make(recyclerView, message, Snackbar.LENGTH_LONG)
-                .setAction("查看", v -> {
-                    // 滚动到顶部显示最新报警
-                    recyclerView.smoothScrollToPosition(0);
-                })
-                .show();
-    }
-    
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        
-        // 移除数据监听器
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (dataHandler != null) {
+            dataHandler.removeCallbacksAndMessages(null);
+            dataHandler = null;
+        }
         MockDataManager.getInstance().removeDataListener(this);
-        
-        AppLogger.business("报警页面销毁");
     }
 }

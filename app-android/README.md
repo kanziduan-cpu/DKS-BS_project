@@ -1,263 +1,99 @@
-# 智能地下仓库环境监测调控系统 - Android移动端
+# WarehouseMonitor 仓储监控系统 - 项目说明文档
 
-基于STM32的智能地下仓库环境监测调控系统Android移动端应用，采用微信风格界面设计，支持远程监控和控制。
-
-## 项目简介
-
-本应用是智能仓库环境监测系统的Android客户端，用于实时监控地下仓库的环境数据（温度、湿度、有害气体浓度等），远程控制设备（通风扇、除湿机、排气装置等），接收和处理报警信息。
-
-## 核心功能
-
-### 1. 用户认证
-- 用户登录/注册
-- 记住密码功能
-- 登录状态持久化
-- 安全退出登录
-
-### 2. 环境数据监测（首页）
-- 实时显示温度、湿度、甲醛、CO、CO₂、AQI等参数
-- 卡片化展示，超阈值红色预警
-- 历史数据查询与图表分析
-- 下拉刷新功能
-
-### 3. 设备远程控制（设备页）
-- 设备列表展示（通风扇、除湿机、排气装置、STM32边缘端）
-- 在线/离线状态显示
-- 远程启停控制
-- 档位调节（低/中/高）
-
-### 4. 报警管理（报警页）
-- 实时报警推送
-- 报警列表展示（环境异常、设备异常、系统异常）
-- 未读/已读状态标识
-- 一键标为已读功能
-- 按时间倒序排列
-
-### 5. 个人中心（我的页）
-- 用户信息展示
-- 仓库管理
-- 系统设置
-- 账号安全
-- 退出登录
-
-### 6. 系统设置
-- 报警阈值设置（温度、湿度等）
-- 温度单位切换（摄氏度/华氏度）
-- 提示音开关
-- 数据上传频率设置
-
-## 技术架构
-
-### 开发环境
-- **语言**: Java 17
-- **最低SDK**: API 26 (Android 8.0)
-- **目标SDK**: API 34 (Android 14)
-- **构建工具**: Gradle 8.0
-- **IDE**: Android Studio
-
-### 核心技术栈
-- **UI框架**: Material Design Components
-- **网络通信**: 
-  - Retrofit2 + OkHttp3 (HTTPS)
-  - MQTT (阿里云EMQX)
-- **数据存储**: SharedPreferences
-- **JSON解析**: Gson
-- **架构模式**: MVVM
-
-### 项目结构
-```
-WarehouseMonitor/
-├── app/
-│   ├── src/
-│   │   └── main/
-│   │       ├── java/com/warehouse/monitor/
-│   │       │   ├── adapter/          # RecyclerView适配器
-│   │       │   ├── model/            # 数据模型
-│   │       │   ├── network/          # 网络API接口
-│   │       │   ├── ui/               # Activity和Fragment
-│   │       │   │   ├── fragments/    # Fragment页面
-│   │       │   │   └── ...          # Activity页面
-│   │       │   └── utils/            # 工具类
-│   │       ├── res/                   # 资源文件
-│   │       │   ├── layout/           # 布局文件
-│   │       │   ├── drawable/         # 图标资源
-│   │       │   ├── values/           # 值资源
-│   │       │   └── menu/            # 菜单文件
-│   │       └── AndroidManifest.xml    # 应用清单
-│   └── build.gradle                 # 应用级构建配置
-├── build.gradle                      # 项目级构建配置
-├── settings.gradle                  # Gradle设置
-└── README.md                       # 项目说明
-```
-
-## 界面设计
-
-### 设计风格
-- **配色方案**: 微信绿色主题 (#07C160)
-- **布局风格**: 微信式底部导航、卡片化设计
-- **字体大小**: 适配手机端，支持单手操作
-- **交互设计**: 大尺寸触控按钮，即时反馈
-
-### 主要页面
-1. **登录页**: 居中表单设计，简洁明了
-2. **首页**: 数据看板 + 设备快捷栏，仿微信"发现"页
-3. **设备页**: 列表式展示，仿微信"聊天"列表
-4. **报警页**: 时间倒序列表，仿微信"消息"页
-5. **我的页**: 微信"我"页风格，功能入口列表
-
-## 快速开始
-
-### 环境要求
-- Android Studio Hedgehog (2023.1.1) 或更高版本
-- JDK 17
-- Android SDK API 26+
-- Gradle 8.0+
-
-### 构建步骤
-
-1. **克隆项目**
-```bash
-git clone <repository-url>
-cd WarehouseMonitor
-```
-
-2. **打开项目**
-- 使用Android Studio打开项目根目录
-- 等待Gradle同步完成
-
-3. **配置服务器地址**
-- 修改 `ApiService.java` 中的 `BASE_URL`
-- 替换为实际的阿里云EMQX服务器地址
-
-4. **构建APK**
-```bash
-# 在Android Studio中
-Build -> Build Bundle(s) / APK(s) -> Build APK(s)
-
-# 或使用命令行
-./gradlew assembleDebug
-```
-
-5. **安装到设备**
-```bash
-adb install app/build/outputs/apk/debug/app-debug.apk
-```
-
-### 运行应用
-
-1. **连接Android设备**
-- 开启开发者选项
-- 启用USB调试
-
-2. **运行项目**
-- 在Android Studio中点击运行按钮
-- 或使用命令: `adb install app-debug.apk`
-
-3. **登录测试**
-- 用户名: 任意用户名
-- 密码: 任意密码
-- （演示模式无需真实服务器）
-
-## 核心依赖
-
-### 第三方库
-```gradle
-// Material Design
-implementation 'com.google.android.material:material:1.11.0'
-
-// 网络请求
-implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
-
-// JSON解析
-implementation 'com.google.code.gson:gson:2.10.1'
-
-// ViewPager2
-implementation 'androidx.viewpager2:viewpager2:1.0.0'
-
-// SwipeRefreshLayout
-implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-```
-
-## 网络通信
-
-### HTTPS API
-- 基于Retrofit2实现RESTful API
-- 支持JWT Token认证
-- 自动处理请求/响应拦截
-
-### MQTT协议
-- 连接阿里云EMQX服务器
-- 订阅实时环境数据主题
-- 发布设备控制指令
-- 自动重连机制
-
-## 数据存储
-
-### SharedPreferences
-- 用户登录信息
-- 报警阈值设置
-- 个性化设置（主题、单位等）
-- 历史报警记录缓存
-
-## 待完成功能
-
-- [ ] 实际API接口对接
-- [ ] MQTT实时数据订阅
-- [ ] 推送通知集成
-- [ ] 图表数据展示（MPAndroidChart）
-- [ ] 仓库切换功能
-- [ ] 用户注册功能
-- [ ] 密码修改功能
-- [ ] 数据导出功能
-- [ ] 深色模式支持
-- [ ] 多语言支持
-
-## 注意事项
-
-### 网络权限
-应用需要以下权限（已在AndroidManifest.xml中声明）：
-- `INTERNET` - 网络访问
-- `ACCESS_NETWORK_STATE` - 网络状态检查
-- `VIBRATE` - 震动提醒
-- `POST_NOTIFICATIONS` - 通知权限（Android 13+）
-
-### 安全建议
-1. 生产环境应使用HTTPS证书校验
-2. Token应定期刷新
-3. 敏感数据应加密存储
-4. 建议添加ProGuard混淆
-
-## 故障排查
-
-### 编译错误
-1. 清理项目: `Build -> Clean Project`
-2. 重新构建: `Build -> Rebuild Project`
-3. 更新SDK: `Tools -> SDK Manager`
-
-### 运行时错误
-1. 检查网络连接
-2. 查看Logcat日志
-3. 验证服务器地址配置
-
-## 开发者信息
-
-- **项目名称**: 智能地下仓库环境监测调控系统
-- **版本**: 1.0.0
-- **开发语言**: Java 17
-- **UI框架**: Material Design
-- **设计风格**: 微信风格
-
-## 许可证
-
-本项目仅供学习和研究使用。
-
-## 联系方式
-
-如有问题或建议，请联系开发团队。
+本项目是一款基于 Android 的智能仓储监控与管理系统，通过 MQTT 协议与底层硬件（如 STM32 边缘网关）通信，实现环境数据的实时监控、设备远程控制、报警处理及自动化场景管理。
 
 ---
 
-**最后更新**: 2026年3月3日
+## 一、 项目目录结构
+
+```text
+app/src/main/java/com/warehouse/monitor/
+├── WarehouseMonitorApp.java    # 全局 Application 类，负责初始化工作
+├── adapter/                    # 适配器：用于 RecyclerView 等列表的数据绑定
+│   ├── DeviceAdapter.java      # 设备列表适配器
+│   └── WarehouseAdapter.java   # 仓库/场景相关适配器
+├── db/                         # 数据库层：基于 Room 实现本地数据持久化
+│   ├── AppDatabase.java        # 数据库主入口（含设备与场景预置数据）
+│   ├── DeviceDao.java          # 设备数据访问接口
+│   └── SceneDao.java           # 场景数据访问接口
+├── model/                      # 数据模型：定义实体类
+│   ├── Alarm.java              # 报警信息模型
+│   ├── Device.java             # 设备实体（风扇、水泵、网关等）
+│   ├── EnvironmentData.java    # 环境数据模型（温湿度、CO2等）
+│   └── Scene.java              # 自动化场景模型
+├── mqtt/                       # 通信层：基于 Paho MQTT 实现异步通信
+│   ├── MqttConfig.java         # MQTT 服务器地址、端口及主题配置
+│   └── MqttManager.java        # MQTT 连接管理、订阅分发、指令发送核心类
+├── network/                    # 网络层：Retrofit/OkHttp 接口定义（预留）
+├── service/                    # 后台服务：负责 MQTT 的长连接保持
+├── ui/                         # 界面层：Activity 与 Fragment
+│   ├── fragments/              # 主要功能模块
+│   │   ├── HomeFragment.java    # 首页：实时数据显示与图表展示
+│   │   ├── DevicesFragment.java # 设备页：设备列表展示与开关控制
+│   │   ├── AlarmsFragment.java  # 报警页：历史报警记录查看
+│   │   └── ProfileFragment.java # 个人页：设置与账号管理
+│   └── ...                     # 各类 Activity 界面
+└── utils/                      # 工具类：日志处理、通知推送等
+    ├── AppLogger.java          # 统一日志打印工具
+    └── NotificationHelper.java # 系统通知弹出工具
+```
+
+---
+
+## 二、 核心功能实现说明
+
+### 1. 实时通信 (MQTT)
+项目采用 `MqttManager` 作为通信枢纽：
+*   **连接管理**：采用异步连接方式，并配合 `TimerPingSender` 提高在 Android 高版本系统上的稳定性。
+*   **指令分发**：定义了 `OnEnvironmentDataListener` 等多个监听接口。当接收到 MQTT 消息时，解析 JSON 负载并通过 Handler 将数据分发至 UI 线程。
+*   **远程控制**：封装了 `sendVentControl`（通风控制）、`sendAlarmControl`（报警控制）等方法，通过发布特定的 JSON 指令到控制主题实现硬件交互。
+
+### 2. 数据持久化 (Room)
+`AppDatabase` 负责本地数据的存储：
+*   **预置数据**：在数据库首次创建时，自动插入 5 个初始设备（如 STM32 边缘网关、工业除湿系统）和 4 个默认场景（回家、离家、睡眠等）。
+*   **自动管理**：支持数据库版本迁移和主线程查询（开发调试阶段）。
+
+### 3. 环境监测与报警
+*   **数据采集**：从网关接收温湿度、二氧化碳、烟雾浓度等数据，并通过图表（MPAndroidChart）实时动态展示。
+*   **报警逻辑**：当传感器数值超过设定的阈值时，系统会收到报警消息，通过 `NotificationHelper` 弹出系统通知提醒管理员，并记录在报警页面。
+
+### 4. 自动化场景
+用户可以通过“场景”功能一键控制多个设备的运行状态。例如，“睡眠模式”可一键关闭照明并开启通风系统。场景数据存储在本地数据库中，支持自定义配置。
+
+---
+
+## 三、 重要代码片段注释
+
+### MQTT 管理器 (`MqttManager.java`)
+```java
+// 建立 MQTT 连接并订阅主题
+public void connect() {
+    // ... 初始化配置
+    mqttClient.connect(mqttOptions, null, new IMqttActionListener() {
+        @Override
+        public void onSuccess(IMqttToken asyncActionToken) {
+            // 连接成功后立即订阅环境数据和设备状态主题
+            subscribeToTopics();
+        }
+    });
+}
+
+// 处理接收到的消息并分发
+private void processMessage(String topic, String payload) {
+    // 根据 Topic 区分数据类型：传感器数据、设备状态或报警
+    if (topic.contains("sensor/data")) {
+        EnvironmentData data = gson.fromJson(payload, EnvironmentData.class);
+        notifyEnvironmentListeners(data); // 通知 UI 更新图表
+    }
+}
+```
+
+### 数据库初始化 (`AppDatabase.java`)
+```java
+@Override
+public void onCreate(@NonNull SupportSQLiteDatabase db) {
+    // 数据库第一次创建时，自动填充默认的设备列表和场景模式
+    deviceDao.insertDevice(new Device("STM32_MAIN", "STM32 边缘网关", ...));
+    sceneDao.insert(new Scene("回家模式", ...));
+}
+```

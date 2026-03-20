@@ -9,12 +9,12 @@
         <item name="android:layout_margin">8dp</item>
     </style>
 
-    <!-- 线性图标容器样式 -->
+    <!-- 线性图标容器样式 - 暖色调适配 -->
     <style name="LinearIconContainer">
         <item name="android:layout_width">44dp</item>
         <item name="android:layout_height">44dp</item>
         <item name="android:background">@drawable/mi_avatar_background</item>
-        <item name="android:backgroundTint">#F0F9F0</item>
+        <item name="android:backgroundTint">#FFF4E5</item>
     </style>
 
     <!-- 工业风按钮样式 -->

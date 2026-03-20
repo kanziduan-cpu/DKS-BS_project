@@ -1,5 +1,6 @@
 package com.warehouse.monitor.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -72,7 +74,16 @@ public class DevicesFragment extends Fragment {
                 new Thread(() -> {
                     device.setRunning(isChecked);
                     database.deviceDao().updateDevice(device);
-                    mqttManager.publishDeviceControl(device.getDeviceId(), isChecked ? "turn_on" : "turn_off", "1");
+                    if (mqttManager.isConnected()) {
+                        mqttManager.publishDeviceControl(device.getDeviceId(), isChecked ? "turn_on" : "turn_off", "1");
+                    } else {
+                        if (!isAdded()) return;
+                        Context context = getContext();
+                        FragmentActivity activity = getActivity();
+                        if (context == null || activity == null) return;
+                        activity.runOnUiThread(() ->
+                                Toast.makeText(context, "未连接云端：请先在首页开启「实时模式」", Toast.LENGTH_SHORT).show());
+                    }
                 }).start();
             }
         });
