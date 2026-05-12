@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2024-2026 Rightware
+  Author: kaisheng.duan
+  Date: 2026-05-11
+  All rights reserved.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:alpha="0.3" android:color="@color/primary" android:state_checked="true" />
+    <item android:alpha="0.3" android:color="@color/divider" android:state_checked="false" />
+</selector>

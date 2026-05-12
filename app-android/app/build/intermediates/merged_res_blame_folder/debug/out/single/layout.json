@@ -1,0 +1,146 @@
+[
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_sensor_group.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_sensor_group.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\fragment_automation.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\fragment_automation.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\dialog_bind_device.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\dialog_bind_device.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\dialog_birthday_greeting.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\dialog_birthday_greeting.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_profile_list_new.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_profile_list_new.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\activity_login.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\skeleton_device_list.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\skeleton_device_list.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_profile_list.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_profile_list.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-47:/layout/fragment_home.xml",
+        "source": "com.warehouse.monitor.app-main-50:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\fragment_alarms.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\fragment_alarms.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_control_square.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_control_square.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\activity_warehouse_manage.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\activity_warehouse_manage.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_sensor_mini.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_sensor_mini.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\fragment_devices.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\fragment_devices.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\activity_register.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\activity_register.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\fragment_profile.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\fragment_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_device.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_device.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_alarm.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_alarm.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_parameter.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_parameter.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\activity_account_security.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\activity_account_security.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_network_status.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_network_status.xml"
+    },
+    {
+        "merged": "com.warehouse.monitor.app-mergeDebugResources-47:/layout/dialog_about_system.xml",
+        "source": "com.warehouse.monitor.app-main-50:/layout/dialog_about_system.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_warehouse.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_warehouse.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_sensor_mini_industrial.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_sensor_mini_industrial.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_device_grid.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_device_grid.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\dialog_edit_profile.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\dialog_edit_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\dialog_change_password.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\dialog_change_password.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_sensor_square.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_sensor_square.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\activity_splash.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\activity_splash.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\activity_threshold_settings.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\activity_threshold_settings.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\activity_device_manage.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\activity_device_manage.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\fragment_home.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\fragment_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\activity_settings.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\activity_settings.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\item_sensor_item.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\item_sensor_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-mergeDebugResources-47:\\layout\\dialog_add_warehouse.xml",
+        "source": "C:\\Users\\TSBJ\\.gradle\\daemon\\8.5\\com.warehouse.monitor.app-main-50:\\layout\\dialog_add_warehouse.xml"
+    }
+]

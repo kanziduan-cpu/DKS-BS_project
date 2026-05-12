@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PromptTemplates">
+    <option name="builtInPromptOverrides">
+      <list>
+        <BuiltInPromptOverride>
+          <option name="groupId" value="rules" />
+          <option name="promptId" value="project" />
+          <option name="text" value="# 项目核心配置&#10;- 开发类型：安卓（Android）原生应用开发&#10;- 编程语言：仅使用Java（不使用Kotlin），遵循Android官方Java编码规范&#10;- 最低兼容版本：默认适配Android 7.0（API 24）及以上（可根据你的实际需求修改）&#10;- 代码风格：符合Google Android开源项目（AOSP）Java编码风格，缩进4个空格，命名遵循驼峰式（如：MainActivity、getUserInfo()）&#10;&#10;# 输出要求&#10;1. 所有代码示例必须是纯Java实现，不包含任何Kotlin语法，且能直接在Android Studio中编译运行&#10;2. 代码需包含完整的包名、导入语句（import），关键逻辑添加中文注释&#10;3. 解答时优先使用Android SDK原生API，避免推荐第三方框架（除非明确要求）&#10;4. 针对安卓特有的问题（如Activity生命周期、权限申请、UI布局、数据存储等），给出符合官方最佳实践的解决方案&#10;5. 输出的代码需考虑兼容性，避免使用高API版本独有的方法，必要时给出兼容方案（如ContextCompat、ActivityCompat）&#10;&#10;# 回答风格&#10;- 语言：简体中文，通俗易懂，避免过多专业术语；针对新手友好，关键概念会附带简单解释&#10;- 结构：先给出核心解决方案，再分步解释逻辑，最后补充注意事项（如权限、内存泄漏、性能优化）" />
+        </BuiltInPromptOverride>
+      </list>
+    </option>
+  </component>
+</project>

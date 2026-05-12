@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2024-2026 Rightware
+  Author: kaisheng.duan
+  Date: 2026-05-11
+  All rights reserved.
+-->
+<resources>
+    <!-- 宸ヤ笟鐩戞帶APP涓撳睘鑹插僵浣撶郴 - 鍐烽潤钃濈伆涓昏皟 -->
+    <color name="primary_color">#2F6F8F</color>
+    <color name="primary_light">#E7F1F6</color>
+    <!-- 鍛婅鑹?- 楂橀ケ鍜岀孩鑹?-->
+    <color name="alarm_color">#F53F3F</color>
+    <color name="alarm_light">#FFF5F5</color>
+    <color name="mi_red_light">#FFF0F0</color>
+    <!-- 姝ｅ父鑹?- 缁胯壊 -->
+    <color name="normal_color">#00B42A</color>
+    <color name="normal_light">#E8F5E9</color>
+    <!-- 棰勮鑹?- 姗欒壊 -->
+    <color name="warning_color">#FF7D00</color>
+    <color name="warning_light">#FFF3E0</color>
+    <!-- 鏂囧瓧鑹?-->
+    <color name="text_primary">#1D2129</color>
+    <color name="text_secondary">#86909C</color>
+    <!-- 鑳屾櫙鑹?- 鏌斿拰钃濈伆 -->
+    <color name="background_color">#F5F8FA</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="mi_light_grey">#F6F8FA</color>
+    <color name="mi_card_grey">#FFFFFF</color>
+
+    <!-- Mi Home / WeChat Hybrid Style - Calm Blue Theme -->
+    <color name="mi_blue">#2F6F8F</color>
+    <color name="mi_blue_2">#1F5672</color>
+    <color name="mi_blue_light">#E7F1F6</color>
+    <color name="mi_blue_gradient_end">#D8E6EF</color>
+    <color name="mi_bg_grey">#F4F7FA</color>
+    <color name="mi_translucent_white">#CCFFFFFF</color>
+
+    <color name="status_connecting">#FFF3E0</color>
+    <color name="status_error">#FFEBEE</color>
+    <color name="text_connecting">#FF7D00</color>
+    <color name="text_error">#F53F3F</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="text_hint">#999999</color>
+    <color name="text_title">#1D2129</color>
+
+    <color name="success_bg">#E8F5E9</color>
+    <color name="success_text">#00B42A</color>
+    <color name="mi_green">#00B42A</color>
+    <color name="mi_red">#F53F3F</color>
+    <color name="mi_purple">#9C27B0</color>
+
+    <!-- Palette for Device/Parameter Cards -->
+    <color name="card_border">#E0E0E0</color>
+    <color name="grey_divider">#EEEEEE</color>
+    <color name="divider_light">#F5F5F5</color>
+
+    <!-- Legacy / Compatibility - Mapped to Calm Palette -->
+    <color name="primary">#2F6F8F</color>
+    <color name="primary_dark">#214F67</color>
+    <color name="qq_blue">#2F6F8F</color>
+    <color name="qq_bg">#F5F8FA</color>
+    <color name="background">#F5F8FA</color>
+    <color name="online">#00B42A</color>
+    <color name="offline">#86909C</color>
+    <color name="bulb_on">#FFD600</color>
+    <color name="bulb_off">#BDBDBD</color>
+    <color name="water_flow">#2F6F8F</color>
+    <color name="fan_blue">#2F6F8F</color>
+    <color name="tab_selected">#2F6F8F</color>
+    <color name="tab_normal">#86909C</color>
+    <color name="divider">#E8E9EB</color>
+    <color name="alarm_red">#F53F3F</color>
+    <color name="alarm_bg">#FFF5F5</color>
+    <color name="error">#F53F3F</color>
+    <color name="success">#00B42A</color>
+    <color name="device_icon_grey">#86909C</color>
+</resources>

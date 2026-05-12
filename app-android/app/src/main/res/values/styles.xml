@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2024-2026 Rightware
+  Author: kaisheng.duan
+  Date: 2026-05-11
+  All rights reserved.
+-->
+<resources xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- 鍏ㄥ眬 12px (24dp) 鍦嗚鍗＄墖鏍峰紡 -->
+    <style name="IndustrialCard" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">24dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardBackgroundColor">#CCFFFFFF</item>
+        <item name="android:layout_margin">8dp</item>
+    </style>
+
+    <!-- 绾挎€у浘鏍囧鍣ㄦ牱寮?- 鏆栬壊璋冮€傞厤 -->
+    <style name="LinearIconContainer">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:background">@drawable/mi_avatar_background</item>
+        <item name="android:backgroundTint">#FFF4E5</item>
+    </style>
+
+    <!-- 宸ヤ笟椋庢寜閽牱寮?-->
+    <style name="IndustrialButton" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">28dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- 鍦嗗舰澶村儚鏍峰紡 -->
+    <style name="CircleAppearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- 鍩虹涓婚 -->
+    <style name="Theme.WarehouseMonitor" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/mi_blue</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <!-- 鏃犳爣棰樻爮涓婚 (鍚屾 AndroidManifest 寮曠敤) -->
+    <style name="Theme.WarehouseMonitor.NoActionBar" parent="Theme.WarehouseMonitor">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- 鍚姩椤典富棰?-->
+    <style name="Theme.WarehouseMonitor.Splash" parent="Theme.WarehouseMonitor.NoActionBar">
+        <item name="android:windowBackground">@drawable/mi_sky_gradient</item>
+    </style>
+
+</resources>

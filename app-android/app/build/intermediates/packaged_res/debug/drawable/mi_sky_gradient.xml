@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2024-2026 Rightware
+  Author: kaisheng.duan
+  Date: 2026-05-11
+  All rights reserved.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+    android:startColor="#D2E0EB"
+    android:centerColor="#E7EFF5"
+    android:endColor="#F7FAFC"
+        android:type="linear" />
+</shape>

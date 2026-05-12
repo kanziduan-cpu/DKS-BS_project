@@ -1,0 +1,995 @@
+function normalizeEnvValue(rawValue) {
+  const trimmed = String(rawValue || '').trim();
+
+  if ((trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+      (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
+    return trimmed.slice(1, -1).trim();
+  }
+
+  return trimmed;
+}
+
+// ========== 原生读取 .env 文件（不依赖任何库，彻底解决 PM2 报错）==========
+const fs = require('fs');
+const path = require('path');
+
+try {
+  const envPath = path.resolve(__dirname, '.env');
+  const envData = fs.readFileSync(envPath, 'utf8');
+  
+  envData.split('\n').forEach(line => {
+    const trimmedLine = line.trim();
+    if (!trimmedLine || trimmedLine.startsWith('#')) return;
+    
+    const [key, ...values] = trimmedLine.split('=');
+    if (key) {
+      process.env[key.trim()] = normalizeEnvValue(values.join('='));
+    }
+  });
+} catch (err) {}
+// ======================================================================
+
+const express = require('express');
+const mqtt = require('mqtt');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const { createClient } = require('@supabase/supabase-js');
+
+const app = express();
+const PORT = Number(process.env.PORT || 3001);
+const DEFAULT_DEVICE_ID = process.env.DEFAULT_DEVICE_ID || 'STM32_MAIN';
+const DEFAULT_WAREHOUSE_ID = process.env.DEFAULT_WAREHOUSE_ID || 'WH001';
+const HISTORY_LIMIT = Number(process.env.HISTORY_LIMIT || 100);
+
+function toBoolean(value) {
+  return value === true || value === 1 || value === '1' || value === 'true' || value === 'TRUE';
+}
+
+const MQTT_ENABLED = process.env.MQTT_ENABLED === undefined ? true : toBoolean(process.env.MQTT_ENABLED);
+const MQTT_HOST = process.env.MQTT_HOST || '127.0.0.1';
+const MQTT_PORT = Number(process.env.MQTT_PORT || 1883);
+
+app.use(cors());
+app.use(bodyParser.json());
+
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+const mqttClient = MQTT_ENABLED
+  ? mqtt.connect(`mqtt://${MQTT_HOST}:${MQTT_PORT}`, {
+      clientId: process.env.MQTT_CLIENT_ID || 'warehouse-cloud-server',
+      username: process.env.MQTT_USERNAME || undefined,
+      password: process.env.MQTT_PASSWORD || undefined,
+      reconnectPeriod: 3000,
+      clean: true
+    })
+  : null;
+
+const thresholds = {
+  temperature: {
+    min: Number(process.env.TEMP_MIN || 15),
+    max: Number(process.env.TEMP_MAX || 35)
+  },
+  humidity: {
+    min: Number(process.env.HUM_MIN || 30),
+    max: Number(process.env.HUM_MAX || 80)
+  },
+  airQuality: {
+    max: Number(process.env.AIR_QUALITY_MAX || 150)
+  },
+  waterLevel: {
+    max: Number(process.env.WATER_LEVEL_MAX || 70)
+  },
+  tiltAngle: {
+    max: Number(process.env.TILT_ANGLE_MAX || 5)
+  },
+  vibrationLevel: {
+    max: Number(process.env.VIBRATION_LEVEL_MAX || 2)
+  }
+};
+
+const latestSensorCache = new Map();
+const sensorHistoryCache = new Map();
+const latestStatusCache = new Map();
+const alarmCache = [];
+const pendingCommandQueues = new Map();
+const commandAuditCache = [];
+
+function logEvent(event, payload = {}) {
+  const time = new Date().toISOString();
+  console.log(`[${time}] ${event} ${JSON.stringify(payload)}`);
+}
+
+function summarizeSensorData(data) {
+  return {
+    device_id: data.device_id,
+    temperature: data.temperature,
+    humidity: data.humidity,
+    air_quality: data.air_quality,
+    water_level: data.water_level,
+    tilt_angle: data.tilt_angle,
+    vibration_level: data.vibration_level,
+    wifi_connected: data.wifi_connected,
+    cloud_connected: data.cloud_connected
+  };
+}
+
+function summarizeStatusData(data) {
+  return {
+    device_id: data.device_id,
+    is_online: data.is_online,
+    is_running: data.is_running,
+    wifi_connected: data.wifi_connected,
+    cloud_connected: data.cloud_connected,
+    firmware_version: data.firmware_version
+  };
+}
+
+function normalizeCommandRecord(topic, payload, source, status = 'received') {
+  const topicParts = topic.split('/');
+  const topicDeviceId = topicParts[1] || DEFAULT_DEVICE_ID;
+  const gatewayDeviceId = payload.gateway_device_id || payload.gatewayDeviceId || payload.device_id || payload.deviceId || topicDeviceId;
+  const targetDeviceId = payload.target_device_id || payload.targetDeviceId || topicDeviceId || gatewayDeviceId;
+
+  return {
+    topic,
+    source,
+    status,
+    gateway_device_id: gatewayDeviceId,
+    target_device_id: targetDeviceId,
+    payload,
+    queued_at: new Date().toISOString()
+  };
+}
+
+function rememberCommandAudit(record) {
+  commandAuditCache.unshift(record);
+  if (commandAuditCache.length > HISTORY_LIMIT) {
+    commandAuditCache.length = HISTORY_LIMIT;
+  }
+}
+
+function enqueuePendingCommand(record) {
+  const queue = pendingCommandQueues.get(record.gateway_device_id) || [];
+  queue.push(record);
+  pendingCommandQueues.set(record.gateway_device_id, queue);
+}
+
+function dequeuePendingCommand(deviceId) {
+  const queue = pendingCommandQueues.get(deviceId) || [];
+  const record = queue.shift() || null;
+
+  if (queue.length > 0) {
+    pendingCommandQueues.set(deviceId, queue);
+  } else {
+    pendingCommandQueues.delete(deviceId);
+  }
+
+  return record;
+}
+
+function getDeviceCloudConnected(deviceId) {
+  const latestSensor = latestSensorCache.get(deviceId);
+  if (latestSensor && latestSensor.cloud_connected !== undefined && latestSensor.cloud_connected !== null) {
+    return Boolean(latestSensor.cloud_connected);
+  }
+
+  const latestStatus = latestStatusCache.get(deviceId);
+  if (latestStatus && latestStatus.cloud_connected !== undefined && latestStatus.cloud_connected !== null) {
+    return Boolean(latestStatus.cloud_connected);
+  }
+
+  return null;
+}
+
+function safeJsonParse(buffer) {
+  try {
+    return JSON.parse(buffer.toString());
+  } catch (error) {
+    console.error('JSON parse failed:', error.message);
+    return null;
+  }
+}
+
+function toNumber(value, fallback = null) {
+  if (value === null || value === undefined || value === '') {
+    return fallback;
+  }
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function toIsoTimestamp(value, fallback = new Date()) {
+  if (value === null || value === undefined || value === '') {
+    return fallback.toISOString();
+  }
+
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString();
+  }
+
+  const numericValue = Number(value);
+  if (Number.isFinite(numericValue)) {
+    if (numericValue > 1e12) {
+      return new Date(numericValue).toISOString();
+    }
+
+    if (numericValue > 1e9) {
+      return new Date(numericValue * 1000).toISOString();
+    }
+  }
+
+  const parsed = new Date(value);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toISOString();
+  }
+
+  return fallback.toISOString();
+}
+
+function isMqttConnected() {
+  return Boolean(mqttClient && mqttClient.connected);
+}
+
+function formatMqttError(error) {
+  if (!error) {
+    return 'unknown mqtt error';
+  }
+
+  const parts = [
+    error.message,
+    error.code,
+    error.errno,
+    error.syscall,
+    error.address,
+    error.port
+  ].filter((value) => value !== undefined && value !== null && value !== '');
+
+  return parts.length ? parts.join(' | ') : JSON.stringify(error);
+}
+
+function publishHttpBridgeToMqtt(topic, payload, event) {
+  if (!isMqttConnected()) {
+    return;
+  }
+
+  mqttClient.publish(topic, JSON.stringify({
+    ...payload,
+    bridge_origin: 'http-api'
+  }), { qos: 1 }, (error) => {
+    if (error) {
+      console.error('http bridge publish failed:', error.message);
+      return;
+    }
+
+    logEvent(event, {
+      topic,
+      device_id: payload.device_id || payload.deviceId || null
+    });
+  });
+}
+
+function vibrationLevelToAppValue(level) {
+  switch (Number(level)) {
+    case 3:
+      return 90;
+    case 2:
+      return 70;
+    case 1:
+      return 30;
+    default:
+      return 0;
+  }
+}
+
+function rememberSensorData(data) {
+  latestSensorCache.set(data.device_id, data);
+  const history = sensorHistoryCache.get(data.device_id) || [];
+  history.unshift(data);
+  if (history.length > HISTORY_LIMIT) {
+    history.length = HISTORY_LIMIT;
+  }
+  sensorHistoryCache.set(data.device_id, history);
+}
+
+function rememberDeviceStatus(data) {
+  latestStatusCache.set(data.device_id, data);
+}
+
+function rememberAlarm(alarm) {
+  alarmCache.unshift(alarm);
+  if (alarmCache.length > HISTORY_LIMIT) {
+    alarmCache.length = HISTORY_LIMIT;
+  }
+}
+
+function normalizeSensorPayload(topic, payload) {
+  const topicParts = topic.split('/');
+  const topicDeviceId = topicParts[1] || DEFAULT_DEVICE_ID;
+  const params = payload.params || payload;
+
+  return {
+    device_id: params.device_id || payload.device_id || topicDeviceId,
+    machine_code: params.machine_code || payload.machine_code || null,
+    temperature: toNumber(params.temp ?? params.temperature, null),
+    humidity: toNumber(params.hum ?? params.humidity, null),
+    air_quality: toNumber(params.air_quality ?? params.aqi, null),
+    mq135_raw: toNumber(params.mq135_raw, null),
+    water_level: toNumber(params.water_level ?? params.waterLevel, null),
+    rain_detected: toBoolean(params.rain_detected),
+    vibration_level: toNumber(params.vibration_level ?? params.vibration, 0),
+    tilt_angle: toNumber(params.tilt_angle ?? params.tiltAngle ?? params.tilt_x ?? params.tiltX, 0),
+    servo_angle: toNumber(params.servo_angle, 0),
+    servo_state: toBoolean(params.servo_state),
+    buzzer_enabled: toBoolean(params.buzzer_enabled),
+    buzzer_active: toBoolean(params.buzzer_active),
+    wifi_connected: toBoolean(params.wifi_connected),
+    cloud_connected: toBoolean(params.cloud_connected),
+    alarm_active: toBoolean(params.alarm_active),
+    created_at: new Date().toISOString()
+  };
+}
+
+function normalizeDeviceStatusPayload(topic, payload) {
+  const topicParts = topic.split('/');
+  const topicDeviceId = topicParts[1] || DEFAULT_DEVICE_ID;
+  const params = payload.params || payload;
+
+  return {
+    device_id: params.device_id || payload.device_id || topicDeviceId,
+    machine_code: params.machine_code || payload.machine_code || null,
+    is_online: toBoolean(params.is_online ?? payload.is_online),
+    is_running: toBoolean(params.is_running ?? payload.is_running),
+    wifi_connected: toBoolean(params.wifi_connected ?? payload.wifi_connected),
+    cloud_connected: toBoolean(params.cloud_connected ?? payload.cloud_connected),
+    firmware_version: params.firmware_version || payload.firmware_version || null,
+    last_seen: new Date().toISOString(),
+    reported_at: (() => {
+      const val = params.reported_at ?? payload.reported_at;
+      if (!val) return new Date().toISOString();
+      const d = new Date(val);
+      return Number.isFinite(d.getTime()) ? d.toISOString() : new Date().toISOString();
+    })(),
+    updated_at: new Date().toISOString()
+  };
+}
+
+function toAppEnvironmentPayload(data) {
+  return {
+    id: `${data.device_id}-${Date.now()}`,
+    deviceId: data.device_id,
+    warehouseId: DEFAULT_WAREHOUSE_ID,
+    temperature: data.temperature || 0,
+    humidity: data.humidity || 0,
+    aqi: Math.round(data.air_quality || 0),
+    airQuality: data.air_quality || 0,
+    formaldehyde: 0,
+    co: 0,
+    co2: 0,
+    tiltX: data.tilt_angle || 0,
+    tiltY: 0,
+    tiltZ: 0,
+    vibration: vibrationLevelToAppValue(data.vibration_level),
+    waterLevel: data.water_level || 0,
+    timestamp: new Date(data.created_at || Date.now()).getTime()
+  };
+}
+
+function toAppAlarmPayload(alarm) {
+  const createdAt = alarm.created_at || new Date().toISOString();
+  return {
+    id: String(alarm.id || `alarm_${alarm.device_id}_${Date.now()}`),
+    warehouseId: alarm.warehouse_id || DEFAULT_WAREHOUSE_ID,
+    deviceId: alarm.device_id,
+    type: alarm.alarm_type,
+    level: String(alarm.level || 'warning').toUpperCase(),
+    alarmTitle: alarm.alarm_title || '仓库环境告警',
+    alarmMessage: alarm.alarm_message,
+    alarmValue: alarm.alarm_value || '',
+    thresholdValue: Number(alarm.threshold_value || 0),
+    status: alarm.status || 'UNPROCESSED',
+    timestamp: new Date(createdAt).getTime()
+  };
+}
+
+function buildAlarmRecords(cleanData) {
+  const alarms = [];
+
+  if (cleanData.temperature != null && cleanData.temperature > thresholds.temperature.max) {
+    alarms.push({
+      warehouse_id: DEFAULT_WAREHOUSE_ID,
+      device_id: cleanData.device_id,
+      alarm_type: 'TEMPERATURE_HIGH',
+      level: 'warning',
+      alarm_title: '温度过高',
+      alarm_message: `设备 ${cleanData.device_id} 温度过高`,
+      alarm_value: String(cleanData.temperature),
+      threshold_value: thresholds.temperature.max,
+      status: 'UNPROCESSED',
+      created_at: new Date().toISOString()
+    });
+  }
+
+  if (cleanData.temperature != null && cleanData.temperature < thresholds.temperature.min) {
+    alarms.push({
+      warehouse_id: DEFAULT_WAREHOUSE_ID,
+      device_id: cleanData.device_id,
+      alarm_type: 'TEMPERATURE_LOW',
+      level: 'warning',
+      alarm_title: '温度过低',
+      alarm_message: `设备 ${cleanData.device_id} 温度过低`,
+      alarm_value: String(cleanData.temperature),
+      threshold_value: thresholds.temperature.min,
+      status: 'UNPROCESSED',
+      created_at: new Date().toISOString()
+    });
+  }
+
+  if (cleanData.humidity != null && cleanData.humidity > thresholds.humidity.max) {
+    alarms.push({
+      warehouse_id: DEFAULT_WAREHOUSE_ID,
+      device_id: cleanData.device_id,
+      alarm_type: 'HUMIDITY_HIGH',
+      level: 'warning',
+      alarm_title: '湿度过高',
+      alarm_message: `设备 ${cleanData.device_id} 湿度过高`,
+      alarm_value: String(cleanData.humidity),
+      threshold_value: thresholds.humidity.max,
+      status: 'UNPROCESSED',
+      created_at: new Date().toISOString()
+    });
+  }
+
+  if (cleanData.air_quality != null && cleanData.air_quality > thresholds.airQuality.max) {
+    alarms.push({
+      warehouse_id: DEFAULT_WAREHOUSE_ID,
+      device_id: cleanData.device_id,
+      alarm_type: 'AIR_QUALITY_HIGH',
+      level: 'critical',
+      alarm_title: '空气质量异常',
+      alarm_message: `设备 ${cleanData.device_id} 空气质量超阈值`,
+      alarm_value: String(cleanData.air_quality),
+      threshold_value: thresholds.airQuality.max,
+      status: 'UNPROCESSED',
+      created_at: new Date().toISOString()
+    });
+  }
+
+  if (cleanData.water_level != null && cleanData.water_level > thresholds.waterLevel.max) {
+    alarms.push({
+      warehouse_id: DEFAULT_WAREHOUSE_ID,
+      device_id: cleanData.device_id,
+      alarm_type: 'WATER_LEVEL_HIGH',
+      level: 'critical',
+      alarm_title: '积水风险',
+      alarm_message: `设备 ${cleanData.device_id} 水位超阈值`,
+      alarm_value: String(cleanData.water_level),
+      threshold_value: thresholds.waterLevel.max,
+      status: 'UNPROCESSED',
+      created_at: new Date().toISOString()
+    });
+  }
+
+  if (cleanData.tilt_angle != null && cleanData.tilt_angle > thresholds.tiltAngle.max) {
+    alarms.push({
+      warehouse_id: DEFAULT_WAREHOUSE_ID,
+      device_id: cleanData.device_id,
+      alarm_type: 'TILT_HIGH',
+      level: 'critical',
+      alarm_title: '倾斜异常',
+      alarm_message: `设备 ${cleanData.device_id} 倾斜角超阈值`,
+      alarm_value: String(cleanData.tilt_angle),
+      threshold_value: thresholds.tiltAngle.max,
+      status: 'UNPROCESSED',
+      created_at: new Date().toISOString()
+    });
+  }
+
+  if (cleanData.vibration_level != null && cleanData.vibration_level >= thresholds.vibrationLevel.max) {
+    alarms.push({
+      warehouse_id: DEFAULT_WAREHOUSE_ID,
+      device_id: cleanData.device_id,
+      alarm_type: 'VIBRATION_HIGH',
+      level: 'critical',
+      alarm_title: '震动异常',
+      alarm_message: `设备 ${cleanData.device_id} 震动等级异常`,
+      alarm_value: String(cleanData.vibration_level),
+      threshold_value: thresholds.vibrationLevel.max,
+      status: 'UNPROCESSED',
+      created_at: new Date().toISOString()
+    });
+  }
+
+  return alarms;
+}
+
+async function insertReading(data) {
+  const { error } = await supabase.from('readings').insert(data);
+  if (error) {
+    console.error('insertReading failed:', error.message);
+  }
+}
+
+async function upsertDeviceStatus(data) {
+  const { error } = await supabase.from('device_status').upsert(data, {
+    onConflict: 'device_id'
+  });
+  if (error) {
+    console.error('upsertDeviceStatus failed:', error.message);
+  }
+}
+
+async function insertAlarms(alarms) {
+  if (!alarms.length) {
+    return [];
+  }
+
+  const inserted = [];
+  for (const alarm of alarms) {
+    const { data: existing } = await supabase
+      .from('alarms')
+      .select('id')
+      .eq('device_id', alarm.device_id)
+      .eq('alarm_type', alarm.alarm_type)
+      .eq('status', 'UNPROCESSED')
+      .limit(1);
+
+    if (existing && existing.length > 0) {
+      continue;
+    }
+
+    const { data, error } = await supabase.from('alarms').insert(alarm).select();
+    if (error) {
+      console.error('insertAlarms failed:', error.message);
+    } else if (data) {
+      inserted.push(...data);
+    }
+  }
+  return inserted;
+}
+
+function publishAppAlarm(alarm) {
+  const payload = toAppAlarmPayload(alarm);
+  rememberAlarm(payload);
+
+  if (!isMqttConnected()) {
+    return;
+  }
+
+  const topic = `warehouse/${alarm.device_id}/alarm`;
+  mqttClient.publish(topic, JSON.stringify(payload), { qos: 1 });
+}
+
+function buildMcuCommand(body) {
+  const gatewayDeviceId = body.gatewayDeviceId || body.gateway_device_id || DEFAULT_DEVICE_ID;
+  const targetDeviceId = body.targetDeviceId || body.target_device_id || body.deviceId || body.device_id || gatewayDeviceId;
+  const action = String(body.action || body.command || '').trim().toLowerCase();
+
+  if (!action) {
+    throw new Error('missing action');
+  }
+
+  if (action === 'control_servo' || action === 'set_angle' || action === 'set_servo_angle') {
+    return {
+      topic: `warehouse/${gatewayDeviceId}/command`,
+      payload: {
+        device_id: gatewayDeviceId,
+        target_device_id: targetDeviceId,
+        servo_angle: Number(body.value ?? body.angle ?? body?.params?.angle ?? 0),
+        timestamp: Date.now()
+      }
+    };
+  }
+
+  if (action === 'enable_auto' || action === 'auto_on') {
+    return {
+      topic: `warehouse/${gatewayDeviceId}/command`,
+      payload: {
+        device_id: gatewayDeviceId,
+        target_device_id: targetDeviceId,
+        auto_control_enabled: true,
+        timestamp: Date.now()
+      }
+    };
+  }
+
+  if (action === 'disable_auto' || action === 'auto_off') {
+    return {
+      topic: `warehouse/${gatewayDeviceId}/command`,
+      payload: {
+        device_id: gatewayDeviceId,
+        target_device_id: targetDeviceId,
+        auto_control_enabled: false,
+        timestamp: Date.now()
+      }
+    };
+  }
+
+  if (action === 'enable_buzzer' || action === 'buzzer_on') {
+    return {
+      topic: `warehouse/${gatewayDeviceId}/command`,
+      payload: {
+        device_id: gatewayDeviceId,
+        target_device_id: targetDeviceId,
+        buzzer_enabled: true,
+        timestamp: Date.now()
+      }
+    };
+  }
+
+  if (action === 'disable_buzzer' || action === 'buzzer_off') {
+    return {
+      topic: `warehouse/${gatewayDeviceId}/command`,
+      payload: {
+        device_id: gatewayDeviceId,
+        target_device_id: targetDeviceId,
+        buzzer_enabled: false,
+        timestamp: Date.now()
+      }
+    };
+  }
+
+  return {
+    topic: `warehouse/${gatewayDeviceId}/command`,
+    payload: {
+      device_id: gatewayDeviceId,
+      target_device_id: targetDeviceId,
+      action: action.toUpperCase(),
+      value: String(body.value ?? 1),
+      timestamp: Date.now()
+    }
+  };
+}
+
+async function getLatestReading(deviceId) {
+  const { data, error } = await supabase
+    .from('readings')
+    .select('*')
+    .eq('device_id', deviceId)
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error('getLatestReading failed:', error.message);
+    return latestSensorCache.get(deviceId) || null;
+  }
+
+  return data?.[0] || latestSensorCache.get(deviceId) || null;
+}
+
+async function getReadingHistory(deviceId, limit) {
+  const { data, error } = await supabase
+    .from('readings')
+    .select('*')
+    .eq('device_id', deviceId)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('getReadingHistory failed:', error.message);
+    return (sensorHistoryCache.get(deviceId) || []).slice(0, limit);
+  }
+
+  return data || (sensorHistoryCache.get(deviceId) || []).slice(0, limit);
+}
+
+async function getDeviceStatus(deviceId) {
+  const { data, error } = await supabase
+    .from('device_status')
+    .select('*')
+    .eq('device_id', deviceId)
+    .limit(1);
+
+  if (error) {
+    console.error('getDeviceStatus failed:', error.message);
+    return latestStatusCache.get(deviceId) || null;
+  }
+
+  return data?.[0] || latestStatusCache.get(deviceId) || null;
+}
+
+async function getAlarmList(deviceId, status, limit) {
+  let query = supabase
+    .from('alarms')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (deviceId) {
+    query = query.eq('device_id', deviceId);
+  }
+  if (status) {
+    query = query.eq('status', status);
+  }
+
+  const { data, error } = await query;
+  if (error) {
+    console.error('getAlarmList failed:', error.message);
+    return alarmCache
+      .filter((alarm) => (!deviceId || alarm.deviceId === deviceId) && (!status || alarm.status === status))
+      .slice(0, limit);
+  }
+
+  return (data || []).map(toAppAlarmPayload);
+}
+
+if (mqttClient) {
+  mqttClient.on('connect', () => {
+    console.log(`✅ MQTT 已连接到 Broker: mqtt://${MQTT_HOST}:${MQTT_PORT}`);
+    mqttClient.subscribe([
+      'warehouse/+/sensor/data',
+      'warehouse/+/device/status',
+      'warehouse/+/command'
+    ], (error) => {
+      if (error) {
+        console.error('订阅失败:', error.message);
+        return;
+      }
+      console.log('👂 正在监听 [单片机] 传感器数据、设备状态与控制指令...');
+    });
+  });
+
+  mqttClient.on('error', (error) => {
+    console.error('MQTT 错误:', formatMqttError(error));
+  });
+
+  mqttClient.on('offline', () => {
+    console.warn(`MQTT 客户端离线: mqtt://${MQTT_HOST}:${MQTT_PORT}`);
+  });
+
+  mqttClient.on('message', async (topic, message) => {
+    const payload = safeJsonParse(message);
+    if (!payload) {
+      return;
+    }
+
+    if (payload.bridge_origin === 'http-api') {
+      logEvent('mqtt_bridge_message_ignored', { topic });
+      return;
+    }
+
+    logEvent('mqtt_message_received', { topic, payload });
+
+    if (topic.endsWith('/sensor/data')) {
+      const cleanData = normalizeSensorPayload(topic, payload);
+      rememberSensorData(cleanData);
+      await insertReading(cleanData);
+      logEvent('sensor_data_processed', summarizeSensorData(cleanData));
+
+      const alarms = await insertAlarms(buildAlarmRecords(cleanData));
+      alarms.forEach(publishAppAlarm);
+      return;
+    }
+
+    if (topic.endsWith('/device/status')) {
+      const statusData = normalizeDeviceStatusPayload(topic, payload);
+      rememberDeviceStatus(statusData);
+      await upsertDeviceStatus(statusData);
+      logEvent('device_status_processed', summarizeStatusData(statusData));
+      return;
+    }
+
+    if (topic.endsWith('/command')) {
+      const record = normalizeCommandRecord(topic, payload, 'mqtt', 'broker-observed');
+      const topicDeviceId = topic.split('/')[1] || DEFAULT_DEVICE_ID;
+      const needsGatewayRelay = topicDeviceId !== record.gateway_device_id;
+      const deviceCloudConnected = getDeviceCloudConnected(record.gateway_device_id);
+      const queueForHttpFallback = deviceCloudConnected === false && !needsGatewayRelay;
+
+      rememberCommandAudit(record);
+
+      if (queueForHttpFallback) {
+        enqueuePendingCommand({ ...record, status: 'queued' });
+        logEvent('command_queued_from_mqtt_for_http_fallback', {
+          gateway_device_id: record.gateway_device_id,
+          target_device_id: record.target_device_id,
+          topic: record.topic,
+          deviceCloudConnected
+        });
+      }
+
+      if (needsGatewayRelay && isMqttConnected()) {
+        const relayTopic = `warehouse/${record.gateway_device_id}/command`;
+        mqttClient.publish(relayTopic, JSON.stringify(record.payload), { qos: 1 }, (error) => {
+          if (error) {
+            console.error('command relay failed:', error.message);
+            return;
+          }
+
+          logEvent('command_relayed_to_gateway_topic', {
+            sourceTopic: topic,
+            relayTopic,
+            gateway_device_id: record.gateway_device_id,
+            target_device_id: record.target_device_id
+          });
+        });
+      }
+
+      logEvent('command_observed', {
+        topic,
+        payload,
+        gateway_device_id: record.gateway_device_id,
+        target_device_id: record.target_device_id,
+        queueForHttpFallback,
+        needsGatewayRelay
+      });
+    }
+  });
+} else {
+  console.warn('MQTT 已禁用，服务端将以 HTTP-only 模式运行。');
+}
+
+app.get('/', (req, res) => {
+  const runtimeMode = MQTT_ENABLED ? 'MQTT + HTTP' : 'HTTP-only';
+  res.send(`🚀 仓库监控系统 API 运行中，当前模式: ${runtimeMode}`);
+});
+
+app.get('/api/health', (req, res) => {
+  res.json({
+    ok: true,
+    mqttEnabled: MQTT_ENABLED,
+    mqttConnected: isMqttConnected(),
+    mqttBroker: {
+      host: MQTT_HOST,
+      port: MQTT_PORT
+    },
+    pendingCommandDevices: Array.from(pendingCommandQueues.keys()),
+    serverTime: new Date().toISOString()
+  });
+});
+
+app.get('/api/sensor/latest/:deviceId', async (req, res) => {
+  const latest = await getLatestReading(req.params.deviceId);
+  res.json(latest);
+});
+
+app.get('/api/sensor/history/:deviceId', async (req, res) => {
+  const limit = Number(req.query.limit || HISTORY_LIMIT);
+  const history = await getReadingHistory(req.params.deviceId, limit);
+  res.json(history);
+});
+
+app.get('/api/environment/current', async (req, res) => {
+  const deviceId = req.query.deviceId || DEFAULT_DEVICE_ID;
+  const latest = await getLatestReading(deviceId);
+  res.json(latest ? toAppEnvironmentPayload(latest) : null);
+});
+
+app.get('/api/environment/history', async (req, res) => {
+  const deviceId = req.query.deviceId || DEFAULT_DEVICE_ID;
+  const limit = Number(req.query.limit || HISTORY_LIMIT);
+  const history = await getReadingHistory(deviceId, limit);
+  res.json(history.map(toAppEnvironmentPayload));
+});
+
+app.get('/api/device/status/:deviceId', async (req, res) => {
+  const status = await getDeviceStatus(req.params.deviceId);
+  res.json(status);
+});
+
+app.get('/api/alarm/list', async (req, res) => {
+  const deviceId = req.query.deviceId || null;
+  const status = req.query.status || null;
+  const limit = Number(req.query.limit || HISTORY_LIMIT);
+  const alarms = await getAlarmList(deviceId, status, limit);
+  res.json(alarms);
+});
+
+app.post('/api/sensor/report', async (req, res) => {
+  try {
+    const body = req.body || {};
+    const deviceId = body.device_id || body.deviceId || DEFAULT_DEVICE_ID;
+    const topic = `warehouse/${deviceId}/sensor/data`;
+
+    const cleanData = normalizeSensorPayload(topic, body);
+    rememberSensorData(cleanData);
+    await insertReading(cleanData);
+    logEvent('sensor_report_http', summarizeSensorData(cleanData));
+    publishHttpBridgeToMqtt(topic, body, 'sensor_report_http_forwarded_to_mqtt');
+
+    const alarms = await insertAlarms(buildAlarmRecords(cleanData));
+    alarms.forEach(publishAppAlarm);
+
+    res.json({ success: true, device_id: cleanData.device_id });
+  } catch (error) {
+    console.error('sensor report failed:', error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+app.post('/api/device/status/report', async (req, res) => {
+  try {
+    const body = req.body || {};
+    const deviceId = body.device_id || body.deviceId || DEFAULT_DEVICE_ID;
+    const topic = `warehouse/${deviceId}/device/status`;
+    const statusData = normalizeDeviceStatusPayload(topic, body);
+
+    rememberDeviceStatus(statusData);
+    await upsertDeviceStatus(statusData);
+    logEvent('device_status_http', summarizeStatusData(statusData));
+    publishHttpBridgeToMqtt(topic, body, 'device_status_http_forwarded_to_mqtt');
+
+    res.json({ success: true, device_id: statusData.device_id });
+  } catch (error) {
+    console.error('device status report failed:', error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+app.get('/api/control/pending/:deviceId', (req, res) => {
+  const deviceId = req.params.deviceId || DEFAULT_DEVICE_ID;
+  const command = dequeuePendingCommand(deviceId);
+
+  logEvent('command_poll', {
+    device_id: deviceId,
+    hasCommand: Boolean(command),
+    pendingAfterPoll: (pendingCommandQueues.get(deviceId) || []).length
+  });
+
+  res.json({
+    success: true,
+    device_id: deviceId,
+    hasCommand: Boolean(command),
+    command
+  });
+});
+
+app.post('/api/control/command', (req, res) => {
+  try {
+    const command = buildMcuCommand(req.body || {});
+    const deviceCloudConnected = getDeviceCloudConnected(command.payload.device_id);
+    const queueForHttpFallback = !MQTT_ENABLED || !isMqttConnected() || deviceCloudConnected === false;
+    const record = normalizeCommandRecord(command.topic, command.payload, 'http-api', queueForHttpFallback ? 'queued' : 'published');
+
+    rememberCommandAudit(record);
+
+    if (queueForHttpFallback) {
+      enqueuePendingCommand(record);
+      logEvent('command_queued_for_http_fallback', {
+        device_id: record.gateway_device_id,
+        target_device_id: record.target_device_id,
+        topic: record.topic,
+        mqttEnabled: MQTT_ENABLED,
+        mqttConnected: isMqttConnected(),
+        deviceCloudConnected
+      });
+    }
+
+    if (MQTT_ENABLED && isMqttConnected()) {
+      mqttClient.publish(command.topic, JSON.stringify(command.payload), { qos: 1 }, (error) => {
+        if (error) {
+          console.error('指令发布失败:', error.message);
+          return res.status(500).json({ success: false, message: error.message });
+        }
+
+        logEvent('command_published', {
+          topic: command.topic,
+          payload: command.payload,
+          queuedForFallback: queueForHttpFallback
+        });
+
+        res.json({
+          success: true,
+          topic: command.topic,
+          payload: command.payload,
+          queued: queueForHttpFallback,
+          mqttDelivered: true
+        });
+      });
+      return;
+    }
+
+    res.json({
+      success: true,
+      topic: command.topic,
+      payload: command.payload,
+      queued: true,
+      mqttDelivered: false,
+      message: '命令已入队，等待设备通过 HTTP 降级链路轮询获取'
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🌍 API 服务已启动: http://0.0.0.0:${PORT}`);
+});

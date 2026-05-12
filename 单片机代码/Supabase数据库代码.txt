@@ -1,0 +1,210 @@
+-- ============================================================
+-- 仓库监控系统 - 数据库初始化脚本
+-- 与 server.js 完全对齐，确保单片机/移动端字段一致
+-- 使用方式：在 Supabase SQL Editor 中执行此脚本
+-- ============================================================
+
+-- ============================================================
+-- 0. 清除所有旧表（按依赖顺序删除，先删子表再删主表）
+-- ============================================================
+DROP TABLE IF EXISTS device_commands CASCADE;
+DROP TABLE IF EXISTS alarms CASCADE;
+DROP TABLE IF EXISTS readings CASCADE;
+DROP TABLE IF EXISTS device_status CASCADE;
+DROP FUNCTION IF EXISTS update_device_status_on_data() CASCADE;
+DROP FUNCTION IF EXISTS clean_old_data() CASCADE;
+
+-- ============================================================
+-- 1. 创建数据表结构
+-- ============================================================
+
+-- 1.1 传感器读数表（对应 server.js 的 insertReading / getLatestReading / getReadingHistory）
+--     字段完全对齐 normalizeSensorPayload() 的输出
+CREATE TABLE readings (
+    id BIGSERIAL PRIMARY KEY,
+    device_id TEXT NOT NULL,
+    machine_code TEXT,
+    temperature NUMERIC,
+    humidity NUMERIC,
+    air_quality NUMERIC,
+    mq135_raw NUMERIC,
+    water_level NUMERIC,
+    rain_detected BOOLEAN DEFAULT FALSE,
+    vibration_level INT DEFAULT 0,
+    tilt_angle NUMERIC DEFAULT 0.0,
+    servo_angle NUMERIC DEFAULT 0,
+    servo_state BOOLEAN DEFAULT FALSE,
+    buzzer_enabled BOOLEAN DEFAULT FALSE,
+    buzzer_active BOOLEAN DEFAULT FALSE,
+    wifi_connected BOOLEAN DEFAULT FALSE,
+    cloud_connected BOOLEAN DEFAULT FALSE,
+    alarm_active BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 1.2 设备状态表（对应 server.js 的 upsertDeviceStatus / getDeviceStatus）
+--     字段完全对齐 normalizeDeviceStatusPayload() 的输出
+CREATE TABLE device_status (
+    device_id TEXT PRIMARY KEY,
+    machine_code TEXT,
+    is_online BOOLEAN DEFAULT FALSE,
+    is_running BOOLEAN DEFAULT FALSE,
+    wifi_connected BOOLEAN DEFAULT FALSE,
+    cloud_connected BOOLEAN DEFAULT FALSE,
+    firmware_version TEXT,
+    last_seen TIMESTAMPTZ DEFAULT NOW(),
+    reported_at TIMESTAMPTZ,
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 1.3 告警记录表（对应 server.js 的 insertAlarms / getAlarmList）
+--     字段完全对齐 buildAlarmRecords() 的输出
+CREATE TABLE alarms (
+    id BIGSERIAL PRIMARY KEY,
+    warehouse_id TEXT,
+    device_id TEXT NOT NULL,
+    alarm_type TEXT NOT NULL,
+    level TEXT DEFAULT 'warning',
+    alarm_title TEXT,
+    alarm_message TEXT,
+    alarm_value TEXT,
+    threshold_value NUMERIC DEFAULT 0,
+    status TEXT DEFAULT 'UNPROCESSED',
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 1.4 设备指令表（预留，供未来扩展使用）
+CREATE TABLE device_commands (
+    id BIGSERIAL PRIMARY KEY,
+    device_id TEXT NOT NULL,
+    command_type TEXT NOT NULL,
+    payload JSONB,
+    status TEXT DEFAULT 'pending',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    executed_at TIMESTAMPTZ
+);
+
+-- ============================================================
+-- 2. 创建索引
+-- ============================================================
+
+-- readings 表索引
+CREATE INDEX idx_readings_device_time ON readings(device_id, created_at DESC);
+CREATE INDEX idx_readings_device ON readings(device_id);
+CREATE INDEX idx_readings_created_at ON readings(created_at DESC);
+
+-- alarms 表索引
+CREATE INDEX idx_alarms_device_status ON alarms(device_id, status, created_at DESC);
+CREATE INDEX idx_alarms_created_at ON alarms(created_at DESC);
+
+-- 防重复告警索引（同一设备同一类型1分钟内不重复）
+CREATE UNIQUE INDEX idx_alarm_duplicate
+ON alarms (
+    device_id,
+    alarm_type,
+    DATE_TRUNC('minute', (created_at AT TIME ZONE 'UTC'))
+);
+
+-- device_commands 表索引
+CREATE INDEX idx_commands_pending ON device_commands(status, created_at ASC) WHERE status = 'pending';
+
+-- device_status 表索引
+CREATE INDEX idx_device_status_online ON device_status(is_online);
+
+-- ============================================================
+-- 3. 创建触发器
+-- ============================================================
+
+-- 3.1 传感器数据写入时自动更新设备状态
+--     仅更新 is_online 和 last_seen，不覆盖 wifi_connected/cloud_connected 等字段
+--     （这些字段由 upsertDeviceStatus 专门处理）
+CREATE OR REPLACE FUNCTION update_device_status_on_data()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO device_status (device_id, is_online, last_seen, updated_at)
+    VALUES (NEW.device_id, TRUE, NEW.created_at, NOW())
+    ON CONFLICT (device_id) DO UPDATE
+    SET is_online = TRUE,
+        last_seen = NEW.created_at,
+        updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_update_status_on_data ON readings;
+CREATE TRIGGER trg_update_status_on_data
+AFTER INSERT ON readings
+FOR EACH ROW
+EXECUTE FUNCTION update_device_status_on_data();
+
+-- 3.2 自动更新 updated_at 字段
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_update_device_status_updated_at ON device_status;
+CREATE TRIGGER trg_update_device_status_updated_at
+BEFORE UPDATE ON device_status
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================================
+-- 4. 定时清理任务（数据保留策略）
+--    - 传感器数据保留 7 天
+--    - 告警记录保留 7 天
+--    - 已执行/失败的指令保留 3 天
+-- ============================================================
+CREATE OR REPLACE FUNCTION clean_old_data()
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM readings WHERE created_at < NOW() - INTERVAL '7 days';
+    DELETE FROM alarms WHERE created_at < NOW() - INTERVAL '7 days';
+    DELETE FROM device_commands
+    WHERE status IN ('executed', 'failed')
+      AND created_at < NOW() - INTERVAL '3 days';
+END;
+$$ LANGUAGE plpgsql;
+
+-- 使用 pg_cron 创建定时任务（每天凌晨1点执行清理）
+-- 如果 pg_cron 扩展未启用，请先在 Supabase Dashboard 中启用
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pg_cron') THEN
+        IF EXISTS (SELECT 1 FROM cron.job WHERE jobname = 'clean-old-data') THEN
+            PERFORM cron.unschedule('clean-old-data');
+        END IF;
+        PERFORM cron.schedule('clean-old-data', '0 1 * * *', 'SELECT clean_old_data();');
+    ELSE
+        RAISE NOTICE 'pg_cron 扩展未启用，请手动启用后重新执行此部分，或使用外部定时任务调用 clean_old_data()';
+    END IF;
+END $$;
+
+-- ============================================================
+-- 5. 权限设置 (RLS) - 开发阶段允许全部访问
+-- ============================================================
+ALTER TABLE readings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE alarms ENABLE ROW LEVEL SECURITY;
+ALTER TABLE device_commands ENABLE ROW LEVEL SECURITY;
+ALTER TABLE device_status ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Enable all access" ON readings;
+CREATE POLICY "Enable all access" ON readings FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Enable all access" ON alarms;
+CREATE POLICY "Enable all access" ON alarms FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Enable all access" ON device_commands;
+CREATE POLICY "Enable all access" ON device_commands FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Enable all access" ON device_status;
+CREATE POLICY "Enable all access" ON device_status FOR ALL USING (true) WITH CHECK (true);
+
+-- ============================================================
+-- 6. 验证
+-- ============================================================
+SELECT '✅ 数据库初始化完成' AS result;
+SELECT tablename AS 已创建的表 FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename;

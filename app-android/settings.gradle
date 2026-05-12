@@ -1,0 +1,26 @@
+/**
+ * Copyright (c) 2024-2026 Rightware
+ * Author: kaisheng.duan
+ * Date: 2026-05-11
+ * All rights reserved.
+ */
+pluginManagement {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://jitpack.io' }
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "WarehouseMonitor"
+include ':app'

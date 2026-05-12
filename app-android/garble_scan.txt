@@ -1,0 +1,377 @@
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\WarehouseMonitorApp.java:45:// 鎶ヨ娓犻亾锛氶珮浼樺厛�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\WarehouseMonitorApp.java:51:alarmChannel.setDescription("鐜寮傚父鍜岃澶囨姤璀﹂€氱煡");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\WarehouseMonitorApp.java:53:// 鏁版嵁鏈嶅姟娓犻亾锛氶粯璁や紭鍏堢骇锛堣В�?Android 14 闂€€鍏抽敭鐐癸級
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\WarehouseMonitorApp.java:56:"鐩戞帶鏈嶅姟鐘舵�?",
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\WarehouseMonitorApp.java:59:dataChannel.setDescription("缁存寔瀹炴椂鏁版嵁閲囬泦鐨勫墠鍙版湇鍔?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\WarehouseMonitorApp.java:61:// MQTT 鐘舵€佹笭閬?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\WarehouseMonitorApp.java:64:"MQTT鏈嶅姟鐘舵€?",
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\adapter\AlarmAdapter.java:113:statusText = "鏈鐞?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\adapter\AlarmAdapter.java:118:statusText = "宸插鐞?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\adapter\DeviceAdapter.java:120:// 閲嶇疆鐘舵€?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\adapter\DeviceAdapter.java:126:// 绫冲椋庢牸娣卞害閫傞厤閫昏�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\adapter\DeviceAdapter.java:155:// 鏇存柊鐘舵€佹弿�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\adapter\DeviceAdapter.java:158:statusDesc = device.isRunning() ? "宸叉墦寮�?" : "宸插叧闂?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\adapter\DeviceAdapter.java:165:statusDesc = "绂荤�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\adapter\SensorGroupAdapter.java:29:* 浼犳劅鍣ㄥ垎缁勯€傞厤鍣?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\adapter\SensorGroupAdapter.java:61:* 鏇存柊鏁版嵁
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\AppDatabase.java:36:deviceDao.insertDevice(new Device("WINDOW_CTRL", "绐楁埛寮€鍏?", Device.DeviceType.WINDOW_ACTUATOR));
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\AppDatabase.java:39:deviceDao.insertDevice(new Device("FAN_CTRL", "椋庢墖寮€鍏?", Device.DeviceType.FAN_ACTUATOR));
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\AppDatabase.java:43:sceneDao.insert(new Scene("閫氶宸℃", "home", 0xFFFF8C00, "[\"WINDOW_CTRL\"]", "[\"true\"]"));
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\AppDatabase.java:45:sceneDao.insert(new Scene("鏁ｇ儹鎹㈡皵", "alarms", 0xFF9C27B0, "[\"FAN_CTRL\"]", "[\"true\"]"));
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\AppDatabase.java:56:Log.d("DatabaseLogger", "寮€濮嬪垵濮嬪寲鏁版嵁搴?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\AppDatabase.java:64:Log.d("DatabaseLogger", "鏁版嵁搴撳垱寤哄畬鎴愶紝寮€濮嬮缃暟�?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\AppDatabase.java:75:Log.d("DatabaseLogger", String.format("鏁版嵁搴撳垵濮嬪寲瀹屾垚锛岃€楁椂: %dms", endTime - startTime));
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\DatabaseLogger.java:15:* 璁板綍鏁版嵁搴撴搷浣滄棩�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\DatabaseLogger.java:20:Log.d(TAG, String.format("鏁版嵁搴撴搷�?- 鎿嶄�? %s, 瀹炰綋绫诲�? %s, 鑰楁�? %dms, 鐘舵�? %s",
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\DatabaseLogger.java:25:* 璁板綍鏁版嵁搴撴煡璇㈢粨�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\DatabaseLogger.java:29:Log.d(TAG, String.format("鏁版嵁搴撴煡�?- 鏌ヨ绫诲�? %s, 缁撴灉鏁伴噺: %d, 鑰楁�? %dms",
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\DatabaseLogger.java:34:* 璁板綍鏁版嵁搴撻敊璇?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\DatabaseLogger.java:37:Log.e(TAG, String.format("鏁版嵁搴撻敊�?- 鎿嶄�? %s, 閿欒�? %s", operation, throwable.getMessage()));
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\DatabaseLogger.java:41:* 璁板綍鏁版嵁搴撳垵濮嬪寲鐘舵�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\DatabaseLogger.java:44:String status = initialized ? "鍒濆鍖栨垚�?" : "鍒濆鍖栧け�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\db\DatabaseLogger.java:45:Log.d(TAG, String.format("鏁版嵁搴撳垵濮嬪�?- 鏁版嵁搴撳悕: %s, 鐘舵�? %s, 鍒濆鍖栨椂�? %dms",
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Alarm.java:14:DEVICE,         // 璁惧寮傚父
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Alarm.java:15:SYSTEM,          // 绯荤粺寮傚父
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Alarm.java:22:UNPROCESSED,   // 鏈鐞?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Alarm.java:23:PROCESSED       // 宸插鐞?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Alarm.java:165:if (type == null) return "绯荤粺鍛婅";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Alarm.java:170:return (status == null || status == AlarmStatus.UNPROCESSED) ? "鏈鐞?" : "宸插鐞?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Device.java:18:WINDOW_ACTUATOR,    // 绐楁埛鑸垫満
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Device.java:20:VENTILATION_FAN,    // 閫氶鎵?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Device.java:95:if (type == null) return "鏈煡璁惧";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Device.java:97:case WINDOW_ACTUATOR: return "绐楁埛鎺у�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Device.java:99:case VENTILATION_FAN: return "閫氶绯荤粺";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Device.java:103:case LIGHTING: return "鐓ф槑绯荤�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\model\Device.java:105:default: return "閫氱敤璁惧";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:127:AppLogger.mqtt("MQTT 宸茬粡杩炴帴锛屾棤闇€閲嶅鎿嶄綔銆?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:150:AppLogger.error("MQTT", "杩炴帴澶辫触: " + (exception != null ? exception.getMessage() : "鏈煡閿欒"));
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:166:AppLogger.error("MQTT", "鏂紑杩炴帴澶辫�? " + e.getMessage());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:183:@Override public void onFailure(IMqttToken t, Throwable e) { AppLogger.error("MQTT", "鏁版嵁璁㈤槄澶辫�?"); }
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:190:@Override public void onSuccess(IMqttToken t) { AppLogger.mqtt("宸茶闃呮姤璀︽暟�?"); }
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:194:AppLogger.error("MQTT", "璁㈤槄鎿嶄綔鍙戠敓寮傚父: " + e.getMessage());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:241:* 澶у箙杞姩鑸垫満锛氳繛缁彂�?娆℃寚浠わ紝瀹炵幇澶у箙鏃嬭浆锛堢�?0掳锛?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:242:* @param deviceId 璁惧ID
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:243:* @param turnLeft true=鍚戝乏杞?�? false=鍚戝彸杞?�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:247:AppLogger.warn("MQTT", "鍙戦€佸け璐ワ細褰撳墠鏈繛鎺ュ埌鏈嶅姟�?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:254:AppLogger.mqtt("鑸垫満澶у箙杞姩鎸囦护宸插彂閫?" + 5 + "�? " + cmd);
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:258:* 閫氶寮€鍏筹細寮€=鍚戝乏杞?娆★紙鎵撳紑绐楁埛锛夛紝�?鍚戝彸杞?娆★紙鍏抽棴绐楁埛锛?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:259:* 鏇夸唬鍘熸潵�?sendVentControl(deviceId, angle) 瑙掑害鎺у�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:260:* @param deviceId 璁惧ID
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:374:AppLogger.warn("MQTT", "鍙戦€佸け璐ワ細褰撳墠鏈繛鎺ュ埌鏈嶅姟�?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:381:AppLogger.mqtt("娑堟伅宸插彂甯冨埌涓婚: " + topic);
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:383:AppLogger.error("MQTT", "娑堟伅鍙戝竷寮傚�? " + e.getMessage());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:390:updateConnectionStatus(ConnectionStatus.DISCONNECTED, "缃戠粶杩炴帴宸叉柇寮�?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:420:AppLogger.error("MQTT", "娑堟伅瑙ｆ瀽澶辫触: " + e.getMessage());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:560:String.format("娓╁害寮傚父: %.1f�?", data.getTemperature()),
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:565:String.format("婀垮害寮傚�? %.1f%%", data.getHumidity()),
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:570:String.format("CO 娴撳害寮傚父: %.1f ppm", data.getCo()),
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\mqtt\MqttManager.java:575:String.format("CO2 娴撳害寮傚父: %.1f ppm", data.getCo2()),
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:44:* 鐢ㄤ簬涓庨儴缃插湪闃块噷浜戠�?API 鏈嶅姟閫氫俊
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:62:* 涓婁紶鐜鏁版嵁鍒颁簯�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:78:AppLogger.network("涓婁紶鐜鏁版嵁鍒颁簯�? " + jsonBody);
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:118:"鎵归噺涓婁紶瀹屾�? 鎴愬�?%d, 澶辫�?%d",
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:126:* 娴嬭瘯浜戠鏈嶅姟鍣ㄨ繛�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:141:AppLogger.network("浜戠鏈嶅姟鍣ㄨ繛鎺ユ祴�? 鎴愬�?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:150:AppLogger.warn("CloudServer", "浜戠鏈嶅姟鍣ㄨ繛鎺ユ祴璇曞け璐?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:155:* 鑾峰彇璁惧褰撳墠鐜鏁版嵁锛坒rom /api/environment/current?deviceId=�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:196:* 鑾峰彇璁惧鐘舵�?(/api/device/status/{deviceId})
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:205:AppLogger.error("CloudServer", "鑾峰彇璁惧鐘舵€佸け璐? " + response.code());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:215:AppLogger.error("CloudServer", "鑾峰彇璁惧鐘舵€佸紓甯? " + e.getMessage());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:248:* 鍙戦€佹帶鍒跺懡浠ゅ埌鏈嶅姟�?(/api/control/command)
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:261:AppLogger.network("鍙戦€佹帶鍒跺懡�? " + jsonBody);
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:265:AppLogger.error("CloudServer", "鎺у埗鍛戒护鍙戦€佸け�? " + response.code());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:282:AppLogger.error("CloudServer", "鍙戦€佹帶鍒跺紓�? " + e.getMessage());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:303:* 涓婁紶璁惧鐘舵€佸埌浜戠
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:319:AppLogger.network("涓婁紶璁惧鐘舵�? " + device.getDeviceId());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:323:AppLogger.network("璁惧鐘舵€佷笂浼犳垚鍔? " + device.getDeviceId());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:326:AppLogger.error("CloudServer", "璁惧鐘舵€佷笂浼犲け璐? " + response.code());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\CloudServerClient.java:331:AppLogger.error("CloudServer", "璁惧鐘舵€佷笂浼犲紓甯? " + e.getMessage());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkConnectionChecker.java:21:* 检测网络状态并测试服务器连�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkConnectionChecker.java:61:* 检查网络连接状�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:17:* 妫€鏌ユ湇鍔″櫒鏄惁鍦ㄧ嚎
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:21:// 绠€鍗曟鏌RL鏄惁鏈夋晥
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:25:Log.d(TAG, "妫€鏌ユ湇鍔″櫒杩炴�? " + baseUrl);
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:28:Log.e(TAG, "鏈嶅姟鍣ㄦ鏌ュけ璐? " + e.getMessage());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:34:* 澶勭悊缃戠粶璇锋眰閿欒
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:38:Log.e(TAG, "缃戠粶IO閿欒�? " + throwable.getMessage());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:39:return "缃戠粶杩炴帴澶辫触锛岃妫€鏌ョ綉缁滆�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:41:Log.e(TAG, "杩愯鏃堕敊�? " + throwable.getMessage());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:42:return "鏈嶅姟鍣ㄥ搷搴旈敊璇?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:44:Log.e(TAG, "鏈煡閿欒: " + throwable.getMessage());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:45:return "璇锋眰澶辫触: " + throwable.getMessage();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:55:return "璇锋眰鎴愬姛";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:57:return "璇锋眰鍙傛暟閿欒�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:59:return "璁よ瘉澶辫触锛岃閲嶆柊鐧诲�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:61:return "鏉冮檺涓嶈冻";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:63:return "璧勬簮涓嶅瓨�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:65:return "鏈嶅姟鍣ㄥ唴閮ㄩ敊璇?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:67:return "鏈嶅姟鍣ㄤ笉鍙�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:69:return "HTTP閿欒�? " + statusCode;
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\NetworkUtils.java:78:Log.d(TAG, String.format("缃戠粶璇锋眰鐘舵�?- 绔�? %s, 鑰楁�? %dms, 鐘舵�? %s",
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\SupabaseClient.java:33:// Supabase閰嶇�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\SupabaseClient.java:34:private static final String SUPABASE_URL = "https://your-project.supabase.co"; // 鏇挎崲涓哄疄闄呯殑Supabase URL
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\SupabaseClient.java:35:private static final String SUPABASE_ANON_KEY = "your-anon-key"; // 鏇挎崲涓哄疄闄呯殑鍖垮悕瀵嗛�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\SupabaseClient.java:37:// 绔�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\SupabaseClient.java:88:AppLogger.network("涓婁紶鐜鏁版嵁鍒癝upabase: " + jsonBody);
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\SupabaseClient.java:90:// 鍙戦€佽姹?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\SupabaseClient.java:125:"鎵归噺涓婁紶瀹屾�? 鎴愬�?%d, 澶辫�?%d",
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\SupabaseClient.java:133:* 娴嬭瘯Supabase杩炴�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\network\SupabaseClient.java:155:* 浼犳劅鍣ㄦ暟鎹笂浼犲�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\service\MqttService.java:96:// 濡傛�?startForeground 澶辫触锛屽皾璇曞仠姝㈡湇鍔′互閬垮厤绯荤粺鎶涘嚭杩滅▼鏈嶅姟寮傚父
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\AccountSecurityActivity.java:64:phoneTv.setText("鏈粦瀹氭墜鏈哄彿");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\AccountSecurityActivity.java:103:Toast.makeText(this, "璇疯緭鍏ュ綋鍓嶅瘑鐮?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\AccountSecurityActivity.java:108:Toast.makeText(this, "璇疯緭鍏ユ柊瀵嗙�?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\AccountSecurityActivity.java:113:Toast.makeText(this, "鏂板瘑鐮侀暱搴︿笉鑳藉皯浜?6 �?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\DeviceManageActivity.java:52:// 娌夋蹈寮忕姸鎬佹爮閫傞厤
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\DeviceManageActivity.java:86:getSupportActionBar().setTitle("璁惧绠＄悊");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\DeviceManageActivity.java:109:Toast.makeText(DeviceManageActivity.this, ok ? "鎺у埗鎸囦护宸插彂�?" : "鎺у埗鎸囦护鍙戦€佸け�?", Toast.LENGTH_SHORT).show());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\DeviceManageActivity.java:133:Toast.makeText(this, "鏁版嵁宸插悓�?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\DeviceManageActivity.java:220:nameInput.setError("璇疯緭鍏ヨ澶囧悕绉?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\DeviceManageActivity.java:229:Toast.makeText(this, "璁惧缁戝畾鎴愬�?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\DeviceManageActivity.java:242:.setMessage("璁惧�?ID: " + device.getDeviceId())
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\DeviceManageActivity.java:243:.setPositiveButton("绉婚櫎璁惧", (dialog, which) -> {
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\LoginActivity.java:66:Toast.makeText(this, "璇疯緭鍏ョ敤鎴峰悕鍜屽瘑�?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\LoginActivity.java:80:Toast.makeText(this, "鐧诲綍鎴愬姛锛屾杩庡洖�?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\MainActivity.java:48:// 1. 銆愭牳蹇冧慨澶嶃€戣缃矇娴稿紡骞跺紑鍚€滄繁鑹插浘鏍団€濇ā�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\MainActivity.java:49:// 鍥犱负鑳屾櫙鏄祬鑹茬殑璞嗘矙缁匡紝蹇呴』鐢ㄦ繁鑹插浘鏍囷紙榛戣壊鐨勬椂闂淬€佺數閲忕瓑�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\MainActivity.java:129:subtitleView.setText("鎰夸綘浠婂ぉ鏀跺埌寰堝濂芥秷鎭紝涔熸効璁惧绋冲畾鍦ㄧ嚎銆佺敓娲讳竴璺『椋庛€俓n鏂扮殑杩欎竴宀侊紝缁х画鎶婃兂鍋氱殑浜嬮兘鍋氭垚銆俓n");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\MainActivity.java:130:dateView.setText(new SimpleDateFormat("浠婂ぉ鏄?MM �?dd �?", Locale.CHINA).format(new Date()));
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\RegisterActivity.java:134:Toast.makeText(this, "璇ョ敤鎴峰悕宸插瓨鍦紝璇锋洿鎹㈠悗鍐嶈�?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\RegisterActivity.java:139:Toast.makeText(this, "璇疯緭鍏ユ樀�?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\RegisterActivity.java:144:Toast.makeText(this, "璇疯緭鍏ユ纭�?1浣嶆墜鏈哄彿�?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\RegisterActivity.java:149:Toast.makeText(this, "瀵嗙爜闀垮害闇€�?-20浣嶄箣闂?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\RegisterActivity.java:174:Toast.makeText(this, "娉ㄥ唽鎴愬姛锛屽凡涓轰綘鑷姩鐧诲綍", Toast.LENGTH_LONG).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\SettingsActivity.java:47:// 璐︽埛瀹夊叏椤典粎绠＄悊瀵嗙爜锛岄槇鍊艰縼绉诲埌鐙珛椤?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\SettingsActivity.java:66:Toast.makeText(this, "瀵嗙爜闀垮害涓嶈兘灏戜簬6�?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\ThresholdSettingsActivity.java:92:Toast.makeText(this, "鎭㈠姘翠綅闇€灏忎簬鍚姩闃堝�?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\ThresholdSettingsActivity.java:120:Toast.makeText(this, "闃堝€煎拰鑷姩妯″紡宸插悓姝ヨ嚦鍗曠墖鏈?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\ThresholdSettingsActivity.java:122:Toast.makeText(this, "鍙傛暟宸蹭繚瀛樺埌鏈満锛孧QTT 鏈繛鎺ワ紝鏈笅鍙戝埌璁惧�?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\fragments\AlarmsFragment.java:35:* 鏄剧ず鎶ヨ淇℃伅锛屽疄鏃舵帴鏀舵柊鎶ヨ�? */
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\fragments\AlarmsFragment.java:80:// 鐐瑰嚮鐘舵€佹爣绛剧洿鎺ユ爣璁颁负宸茶骞剁Щ�?                handleMarkAsReadAndRemove(alarm);
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\fragments\HomeFragment.java:47:* 鏀归€犲悗鐨勯椤?Fragment - 鍙鍖栫洃鎺уぇ�? */
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\fragments\HomeFragment.java:50:// 鏅鸿兘閫氶绯荤�?UI
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\fragments\HomeFragment.java:54:// 闃叉稘鎺掓按鏈虹�?UI
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\fragments\HomeFragment.java:62:// 閫氱�?UI
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\fragments\HomeFragment.java:70:/** 绋嬪簭鍖栧浣嶉€氶寮€鍏虫椂涓嶅�?MQTT銆佷笉寮?Toast */
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\fragments\HomeFragment.java:73:/** MQTT 杩炴帴澶辫触鏃舵彁绀猴紙涓荤嚎绋嬶級 */
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\fragments\HomeFragment.java:128:/** 鍚姩鍓嶅彴 MQTT 鏈嶅姟锛涙竻鍗曟湭娉ㄥ唽鏈嶅姟鏃朵細鎶涘紓甯革紝姝ゅ鎹曡幏骞舵彁绀?*/
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\fragments\HomeFragment.java:138:// 閫氶�?        ventTemp = view.findViewById(R.id.ventTemp);
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\ui\fragments\ProfileFragment.java:56:// 鐢ㄤ簬閫夋嫨鍥剧墖鐨勫洖�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\AppLogger.java:13:* 提供统一的日志输出格式，便于调试和监�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:25:* 璁惧鍔ㄧ敾绠＄悊鍣?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:26:* 绠＄悊璁惧杩愯鐘舵€佺殑鍔ㄧ敾鏁堟灉
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:47:* 璁惧鍔ㄧ敾鐘舵�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:67:* 娉ㄥ唽璁惧瑙嗗浘鍔ㄧ敾
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:73:AppLogger.business("娉ㄥ唽璁惧鍔ㄧ�? " + deviceId);
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:77:* 鏇存柊璁惧鍔ㄧ敾鐘舵€?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:82:AppLogger.warn("Animation", "璁惧鍔ㄧ敾鏈敞鍐? " + deviceId);
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:120:// 鏇存柊鐘舵€佹枃�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:142:// 閲嶇疆瑙嗗浘鐘舵�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:150:// 鏇存柊鐘舵€佹枃�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:164:rotationAnimator.setDuration(1000); // 1绉掍竴鍦?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:241:* 閫氱敤鑴夊啿鍔ㄧ敾锛堢敤浜庡叾浠栬澶囷�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:261:* 璁惧鐐瑰嚮鍙嶉鍔ㄧ敾
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:273:AppLogger.business("璁惧鐐瑰嚮鍔ㄧ�?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:277:* 娓呯悊鎵€鏈夊姩�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:287:AppLogger.business("娓呯悊璁惧鍔ㄧ�?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:291:* 鏆傚仠鎵€鏈夊姩�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:299:AppLogger.business("鏆傚仠鎵€鏈夎澶囧姩鐢?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:303:* 鎭㈠鎵€鏈夊姩�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\DeviceAnimationManager.java:311:AppLogger.business("鎭㈠鎵€鏈夎澶囧姩鐢?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\MockDataManager.java:21:* 鏈湴娴嬭瘯鏁版嵁鐢熸垚�?- 宸查拡瀵瑰€炬枩鍙傛暟鍜屾姤璀﹂€昏緫杩涜娣卞害閫傞�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\MockDataManager.java:83:// 銆愭柊澧炪€戝畬鍠勫€炬枩鍙傛暟妯℃�?(MPU6050)
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\MockDataManager.java:86:double combinedTilt = Math.sqrt(tiltX*tiltX + tiltY*tiltY); // 鍚堟垚瑙掑害
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\MockDataManager.java:103:// 闅忔満瑙﹀彂澶嶆潅鍛婅锛岀敤浜庢祴璇曟姤璀﹂〉甯冨眬
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\MockDataManager.java:124:list.add(new Device("WINDOW_CTRL", "绐楁埛寮€鍏?", Device.DeviceType.WINDOW_ACTUATOR));
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\MockDataManager.java:125:list.add(new Device("FAN_CTRL", "椋庢墖寮€鍏?", Device.DeviceType.FAN_ACTUATOR));
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\NotificationHelper.java:25:private static final String CHANNEL_NAME = "璁惧鎶ヨ閫氱�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\SceneManager.java:59:// 瑙ｆ瀽璁惧鐘舵€佸垪琛?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\SceneManager.java:63:Toast.makeText(context, "鍦烘櫙閰嶇疆鏃犳�?", Toast.LENGTH_SHORT).show();
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\SceneManager.java:67:// TODO: 杩欓噷璋冪敤璁惧鎺у埗閫昏緫
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\SceneManager.java:68:// 鐩墠鍏堟洿鏂版渶鍚庤Е鍙戞椂�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\SharedPreferencesHelper.java:361:admin.setNickname("绠＄悊鍛?");
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:44:private String currentWeather = "�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:63:// 妫€鏌ョ紦瀛樻槸鍚﹁繃�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:75:// 娌℃湁鏉冮檺锛屼娇鐢ㄩ粯璁や綅缃?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:120:// 閮戒笉鍙敤锛屼娇鐢ㄩ粯璁や綅缃?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:124:// 璁剧疆瓒呮椂
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:141:// 娉ㄥ唽鍦板潃锛歨ttps://dev.qweather.com/
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:147:// 妯℃嫙缃戠粶璇锋眰锛堝疄闄呬娇鐢ㄦ椂鍙栨秷娉ㄩ噴�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:169:// 浣跨敤妯℃嫙鏁版�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:185:// 鏍规嵁缁忕含搴﹀垽鏂煄甯傦紙绠€鍖栫増�?
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:192:city = "娣卞�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:195:// 妯℃嫙澶╂皵鏁版嵁锛堟牴鎹綋鍓嶆椂闂寸敓鎴愶級
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:201:weather = "�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:207:weather = "�?";
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:248:Log.e(TAG, "瑙ｆ瀽澶╂皵鏁版嵁澶辫触: " + e.getMessage());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\java\com\warehouse\monitor\utils\WeatherHelper.java:257:return new SimpleDateFormat("MM鏈坉d�?E", Locale.getDefault()).format(new Date());
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_account_security.xml:36:<!-- 娣囶喗鏁肩€靛棛�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_account_security.xml:50:android:text="娣囶喗鏁奸惂璇茬秿鐎靛棛�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_account_security.xml:67:<!-- 閹靛婧€閸?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_account_security.xml:79:android:text="閹靛婧€閸?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_account_security.xml:99:android:text="婵″倹鐏夐幃銊ф畱鐠愶箑褰跨€涙ê婀悮顐ゆ磵妞嬪酣娅撻敍宀冾嚞閸欏﹥妞傛穱顔芥暭鐎靛棛鐖滈�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_device_manage.xml:32:<!-- 閸愬懎顔愰崠鍝勭�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_device_manage.xml:60:android:text="�?5 娑擃亣顔曟径?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_device_manage.xml:66:<!-- 鐠佹儳顦崚妤勩�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_device_manage.xml:105:android:text="閺嗗倹妫ょ紒鎴濈暰鐠佹儳�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_device_manage.xml:113:android:text="閻愮懓鍤稉瀣煙閹稿鎸冲ǎ璇插鐠佹儳�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_device_manage.xml:121:<!-- 濞ｈ濮炵拋鎯ь槵閹稿鎸?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_login.xml:36:android:text="鏀寔澶氳处鍙锋湰鍦扮櫥褰曪紝缁熶竴杩炴帴 EMQX"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_login.xml:106:android:text="杩樻病鏈夎处鍙凤紵绔嬪嵆娉ㄥ�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_register.xml:98:android:hint="鏄电О"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_settings.xml:23:app:title="绯荤粺璁剧疆"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_settings.xml:40:<!-- 璐︽埛瀹夊�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_settings.xml:44:android:text="璐︽埛瀹夊�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_settings.xml:67:android:hint="鏂板瘑鐮?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_settings.xml:82:android:text="鏇存柊瀵嗙�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_settings.xml:88:<!-- 鍗曠墖鏈哄弬�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_settings.xml:92:android:text="鍗曠墖鏈哄弬�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_settings.xml:115:android:text="灏嗛槇鍊笺€佽嚜鍔ㄦ帶鍒跺拰鐏垫晱搴﹀弬鏁板崟鐙鐞嗭紝閬垮厤涓庤处鍙峰畨鍏ㄦ贩鍚堛�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_settings.xml:124:android:text="杩涘叆鍗曠墖鏈洪槇鍊艰�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_threshold_settings.xml:26:app:title="闁告娲滄晶鏍嫉濞差亝顫岄柛濠呭椤旀洜绱?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_threshold_settings.xml:62:android:text="闁煎浜滄慨鈺呭箳閵壯屽悁婵☆垪鈧磭纭�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_threshold_settings.xml:79:android:text="闂傚啫鐗嗛埀顒€鍚嬬划锕傚礉閵娿倛绀嬮柡浣哥摠閺嗙喎顫㈤妷銊х闁挎稑鏈〒鑸垫媴鎼粹€崇厒濞戞搩浜欑紞鍛村�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_threshold_settings.xml:92:android:text="闁圭儤甯楅幐澶愬触椤栨艾袟婵绻濈紞鍛存⒓閸績鍋?(cm)"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_threshold_settings.xml:112:android:text="閻庣懓顦崣蹇涘箒閵忕媭妲绘慨妯肩節�?(cm)"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_threshold_settings.xml:135:android:text="闂傚洤娲ゆ慨?闁稿﹦鍋撻弸鈺呭箮閵夘煈鍔呴柣蹇撶仛閺呰鲸鎯?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_threshold_settings.xml:181:android:text="闁告艾鏈鐐烘⒓閸績鍋撻悡搴℃闁轰焦濯介崵锕傚础閺囩姴顣婚柡?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_warehouse_manage.xml:20:app:title="娴犳挸绨辩粻锛勬�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\activity_warehouse_manage.xml:37:android:text="缂佹垵鐣鹃弬棰佺波鎼?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_add_warehouse.xml:18:android:hint="娴犳挸绨遍崥宥囆?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_add_warehouse.xml:33:android:hint="娴犳挸绨遍崷鏉挎�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_bind_device.xml:16:<!-- 閺嶅洭顣?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_bind_device.xml:20:android:text="缂佹垵鐣鹃弬鎷岊啎婢?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_bind_device.xml:29:android:text="鐠囧嘲锝為崘娆掝啎婢跺洣淇婇幁顖欎簰鐎瑰本鍨氱紒鎴濈�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_bind_device.xml:60:<!-- 鐠佹儳顦崷鏉挎絻鏉堟挸鍙嗗�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_bind_device.xml:65:android:hint="鐠佹儳顦崷鏉挎�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_bind_device.xml:73:app:helperText="缁€杞扮伐閿?92.168.1.100 �?10.0.0.1"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_bind_device.xml:101:app:helperText="缁€杞扮伐閿涙瓫dmin123 �?888888"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_bind_device.xml:118:<!-- 閹稿鎸抽崠鍝勭�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_bind_device.xml:129:android:text="閸欐牗绉?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_bind_device.xml:141:android:text="绾喖鐣?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_birthday_greeting.xml:49:android:text="閻㈢喐妫╄箛顐＄�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_birthday_greeting.xml:60:android:text="閹板じ缍樻禒濠傘亯閺€璺哄煂瀵板牆顦挎總鑺ョХ閹垬鈧?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_birthday_greeting.xml:72:android:text="娴犲﹤銇夐弰?05 �?06 �?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_birthday_greeting.xml:83:android:text="鏉╂稑鍙嗘＃鏍�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_change_password.xml:34:android:hint="鏂板瘑鐮?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_edit_profile.xml:24:android:text="缂栬緫涓汉璧勬�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\dialog_edit_profile.xml:41:android:hint="鏄电О"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_alarms.xml:15:<!-- 缁啿顔嶆搴㈢壐妞ゅ爼鍎撮弽鍥暯 - 娴兼ê瀵叉禍鍡楃摟娴ｆ捇顤侀懝韫簰閹绘劙鐝崷銊︾ガ閼硅尪鍎楅弲顖欑瑓閻ㄥ嫬褰茬憴浣稿 -->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_alarms.xml:91:<!-- 閸涘﹨顒熼崚妤勩€冮�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:23:<!-- 瀹革缚鏅堕敍姘崇箲閸ョ偟顔勬�?+ 閺嶅洭顣?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:40:android:text="閼奉亜濮╅崠鏍ㄥ付閸?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:48:<!-- 閼奉亜濮╅崠鏍ㄥ付閸掕泛宕遍�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:64:<!-- 閸︾儤娅欓幒褍鍩楅弽鍥�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:68:android:text="閸︾儤娅欓幒褍鍩?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:73:<!-- 閸︾儤娅欓幒褍鍩楅崚妤勩�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:80:<!-- 閼奉亜濮╅柅姘额�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:95:android:text="閼奉亜濮╅柅姘额�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:106:<!-- 閼奉亜濮╅悡褎妲?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:121:android:text="閼奉亜濮╅悡褎妲?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:132:<!-- 閼奉亜濮╅幒鎺撴�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:147:android:text="閼奉亜濮╅幒鎺撴�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:160:<!-- 閸掑棝娈х�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:168:<!-- 閸欏倹鏆熺拫鍐╂殻閺嶅洭�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:172:android:text="閸欏倹鏆熺拫鍐╂�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:200:android:text="0�?- 40�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_automation.xml:242:android:text="�?50ppm"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_home.xml:50:<!-- 1. 鏅鸿兘閫氶绯荤粺鍗＄墖 (SG90 + DHT11) -->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_home.xml:107:<!-- 2. 闃叉稘鎺掓按鏈虹粍鍗＄墖 (姘翠綅浼犳劅�? -->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_home.xml:215:<!-- 4. 閲庣伀灏忔櫤澶氭簮鏁版嵁鎶樼嚎�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\fragment_profile.xml:142:<!-- 閫€鍑虹櫥褰曟寜�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_alarm.xml:25:<!-- 绫冲椋庢牸宸︿晶鍥炬爣 -->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_alarm.xml:47:android:text="娓╁害寮傚父鎶ヨ�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_alarm.xml:59:android:text="鏍稿績鍖哄煙娓╁害瓒呰繃闃堝�?35掳C"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_alarm.xml:76:<!-- 鐘舵€佹爣绛?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_alarm.xml:81:android:text="鏈鐞?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_device.xml:47:android:text="ESP8266 鏉堝湱绱粩?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_device.xml:59:android:text="閸︺劎鍤?| 鏉╂劘顢戝锝呯�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_network_status.xml:21:android:text="缃戠粶杩炴帴鐘舵�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_network_status.xml:61:<!-- 鏈嶅姟鍣ㄧ姸�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_network_status.xml:68:<!-- API鏈嶅姟鍣?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_network_status.xml:87:android:text="API鏈嶅姟鍣?(3001)"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_network_status.xml:95:android:text="鏈�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_network_status.xml:100:<!-- MQTT鏈嶅姟鍣?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_network_status.xml:127:android:text="鏈�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_network_status.xml:151:android:text="Supabase鏁版嵁搴?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_network_status.xml:159:android:text="鏈�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_network_status.xml:166:<!-- 鏁版嵁鍚屾鎸夐�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_network_status.xml:181:android:text="绛夊緟鍚屾..."
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_parameter.xml:27:<!-- 椤堕儴浠〃鐩樻晥�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_parameter.xml:86:android:text="娓╁�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_parameter.xml:91:<!-- 鐘舵€佹寚绀?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_sensor_group.xml:24:<!-- 鏍囬�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_sensor_group.xml:75:<!-- 鍔ㄦ€佹坊鍔犱紶鎰熷櫒椤?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_sensor_item.xml:17:<!-- 鏁板�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_sensor_item.xml:43:android:text="娓╁�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_sensor_mini_industrial.xml:34:android:text="娓╁�?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_sensor_square.xml:34:<!-- 銆愭牳蹇冧慨澶嶃€戞暟鍊间笌鍗曚綅鍚岃鎺掑�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_sensor_square.xml:49:<!-- 棰勭暀鍗曚綅绌洪棿锛岀敱浠ｇ爜鍔ㄦ€佸～鍏呮垨鐩存帴鍦ㄤ唬鐮佷腑鎷兼帴 -->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_warehouse.xml:28:<!-- 娴犳挸绨遍崶鐐�?-->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_warehouse.xml:37:android:contentDescription="娴犳挸绨遍崶鐐�? "/>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_warehouse.xml:51:android:text="1 閸欒渹绮ㄦ惔?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\layout\item_warehouse.xml:63:android:text="閸栨ぞ鍚敮鍌涙篂闂冨啿�?xx 鐞涙浜?xx �?"
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\colors.xml:16:<!-- 正常�?- 绿色 -->
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:20:<string name="settings">璁剧�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:26:<string name="done">瀹屾�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:31:<string name="register_title">娉ㄥ�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:32:<string name="username_hint">璇疯緭鍏ョ敤鎴峰�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:33:<string name="password_hint">璇疯緭鍏ュ瘑�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:35:<string name="register_btn">娉ㄥ�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:37:<string name="remember_password">璁颁綇瀵嗙�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:39:<string name="create_account">绔嬪嵆娉ㄥ唽</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:41:<string name="go_login">绔嬪嵆鐧诲綍</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:45:<string name="temperature">娓╁�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:46:<string name="humidity">婀垮害</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:54:<string name="aqi">绌烘皵璐ㄩ噺鎸囨�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:55:<string name="device_status">璁惧鐘舵€?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:57:<string name="offline">绂荤�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:60:<string name="home_title_prefix">鏅烘収浠撳簱鐩戞�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:68:<string name="status_wet">娼�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:69:<string name="status_comfort">鑸掗�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:72:<string name="status_notice">娉ㄦ�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:78:<string name="data_chart">鏁版嵁鍥捐�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:84:<string name="ventilation_fan">閫氶鎵?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:87:<string name="air_circulation">绌烘皵寰幆绯荤�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:88:<string name="temperature_control">娓╂帶璁惧</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:89:<string name="humidity_control">婀垮害鎺у埗�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:90:<string name="air_purifier">绌烘皵鍑€鍖栧櫒</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:91:<string name="ventilation_damper">閫氶椋庨榾</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:94:<string name="air_quality_sensor">绌烘皵璐ㄩ噺浼犳劅鍣?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:96:<string name="emergency_light">搴旀€ョ収鏄?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:114:<string name="speed">椋庨�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:123:<string name="device_cmd_http">MQTT 鏈繛鎺ワ紝宸查€氳繃浜戠鎺ュ彛鍥為€€鍙戦€?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:129:<string name="device_alarm">璁惧寮傚父</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:130:<string name="system_alarm">绯荤粺寮傚父</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:131:<string name="alarm_processed">宸插鐞?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:132:<string name="alarm_unprocessed">鏈鐞?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:134:<string name="no_alarms">鏆傛棤鎶ヨ璁板�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:138:<string name="account_security">璐﹀彿瀹夊�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:140:<string name="system_settings">绯荤粺璁剧疆</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:142:<string name="logout">閫€鍑虹櫥褰?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:143:<string name="logout_confirm">纭畾瑕侀€€鍑虹櫥褰曞悧?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:148:<string name="add_warehouse">娣诲姞浠撳簱</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:157:<string name="data_upload_freq">鏁版嵁涓婁紶棰戠�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:158:<string name="personalization">涓€у寲璁剧�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:159:<string name="notification_settings">閫氱煡绠＄悊</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:160:<string name="clear_cache">娓呴櫎缂撳瓨</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:164:<string name="temp_upper_limit">娓╁害涓婇檺(�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:165:<string name="temp_lower_limit">娓╁害涓嬮檺(�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:166:<string name="humidity_upper_limit">婀垮害涓婇�?%)</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:167:<string name="humidity_lower_limit">婀垮害涓嬮�?%)</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:171:<string name="aqi_limit">绌烘皵璐ㄩ噺闃堝�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:172:<string name="reset_default">鎭㈠榛樿</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:175:<string name="freq_10s">10�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:176:<string name="freq_30s">30�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:182:<string name="theme_light">娴呰�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:183:<string name="theme_dark">娣辫�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:184:<string name="temp_unit">娓╁害鍗曚綅</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:190:<string name="request_timeout">璇锋眰瓒呮椂</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:191:<string name="server_error">鏈嶅姟鍣ㄩ敊�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:192:<string name="no_data">鏆傛棤鏁版嵁</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:197:<string name="mqtt_disconnected">MQTT宸叉柇寮�?</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:203:<string name="scene_away">绂诲妯″紡</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:210:<string name="register_success">娉ㄥ唽鎴愬姛</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:211:<string name="register_failed">娉ㄥ唽澶辫触</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:217:<string name="not_impl">鍔熻兘寮€鍙戜腑</string>
+C:\Users\TSBJ\Desktop\BS_project\app-android\app\src\main\res\values\strings.xml:218:<string name="data_updated_toast">瀹炴椂鐩戞帶鏁版嵁宸叉洿�?</string>
